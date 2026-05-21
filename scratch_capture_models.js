@@ -38,6 +38,9 @@ const MODELS = [
     console.log(`Capturing ${modelId}...`);
     const page = await context.newPage();
     
+    page.on('console', msg => console.log('BROWSER CONSOLE:', msg.text()));
+    page.on('pageerror', err => console.log('BROWSER ERROR:', err.message));
+
     await page.goto(`http://localhost:5173/?inspector=true&model=${modelId}`, {
       waitUntil: 'networkidle',
     });

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import {
   DockMesh, BufferMesh, InspectionMesh, StoreMesh, SMTMesh,
