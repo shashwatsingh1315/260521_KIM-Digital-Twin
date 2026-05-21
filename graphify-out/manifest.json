@@ -1,0 +1,122 @@
+{
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/package.json": {
+    "mtime": 1779355448.7410095,
+    "ast_hash": "4c73e37c8ff4ce10537c1632a322a163",
+    "semantic_hash": "4c73e37c8ff4ce10537c1632a322a163"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/playwright.config.js": {
+    "mtime": 1779355455.1092913,
+    "ast_hash": "40bc946f23a7fb812dddb1bedaf4277f",
+    "semantic_hash": "40bc946f23a7fb812dddb1bedaf4277f"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/vite.config.js": {
+    "mtime": 1779355452.324263,
+    "ast_hash": "9e664085d15bcec9b8c2ac87afff1256",
+    "semantic_hash": "9e664085d15bcec9b8c2ac87afff1256"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/tests/factory.spec.js": {
+    "mtime": 1779356442.4526174,
+    "ast_hash": "8de5dae5323d2ddeb98dfe06625bff30",
+    "semantic_hash": "8de5dae5323d2ddeb98dfe06625bff30"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/src/App.jsx": {
+    "mtime": 1779356431.1724033,
+    "ast_hash": "b04a0c2fddcb88ec3bb565b5de348cd8",
+    "semantic_hash": "b04a0c2fddcb88ec3bb565b5de348cd8"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/src/main.jsx": {
+    "mtime": 1779356366.8202488,
+    "ast_hash": "89fe151564e32a66fc2328f0fc92c486",
+    "semantic_hash": "89fe151564e32a66fc2328f0fc92c486"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/src/components/FactoryTwin.jsx": {
+    "mtime": 1779356405.427743,
+    "ast_hash": "29e6e807256613d3706bea1e84004812",
+    "semantic_hash": "29e6e807256613d3706bea1e84004812"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/src/hooks/usePullEngine.js": {
+    "mtime": 1779355489.9480934,
+    "ast_hash": "1c90c4208b82f540dae7a487db2546ad",
+    "semantic_hash": "1c90c4208b82f540dae7a487db2546ad"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/src/hooks/usePullEngine.test.js": {
+    "mtime": 1779356449.8791368,
+    "ast_hash": "0e3c537284617a1537f35c43507608ea",
+    "semantic_hash": "0e3c537284617a1537f35c43507608ea"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/test-results/.last-run.json": {
+    "mtime": 1779356902.5252426,
+    "ast_hash": "2902924725185b764c0292a09752f888",
+    "semantic_hash": "2902924725185b764c0292a09752f888"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/TODOS.md": {
+    "mtime": 1779350797.9069297,
+    "ast_hash": "e5547ec7102f4878d483a5d7f22ede93",
+    "semantic_hash": "e5547ec7102f4878d483a5d7f22ede93"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/index.html": {
+    "mtime": 1779355456.3326852,
+    "ast_hash": "8118e9296a8d0223f9c9f0fc05d2d0dc",
+    "semantic_hash": "8118e9296a8d0223f9c9f0fc05d2d0dc"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/gstack-sketch.html": {
+    "mtime": 1779348192.5120065,
+    "ast_hash": "0a5bff8a4918e5e97178a6b092c3d3a7",
+    "semantic_hash": "0a5bff8a4918e5e97178a6b092c3d3a7"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md": {
+    "mtime": 1777979074.6218352,
+    "ast_hash": "122b5467321c1e1ac6c93217b727b462",
+    "semantic_hash": "122b5467321c1e1ac6c93217b727b462"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/docs/superpowers/plans/2025-05-15-critical-fixes.md": {
+    "mtime": 1778006258.3958852,
+    "ast_hash": "85d36fe8a79215091c03a73f43d96d3e",
+    "semantic_hash": "85d36fe8a79215091c03a73f43d96d3e"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md": {
+    "mtime": 1777978978.306195,
+    "ast_hash": "a196dde0e552385dc8864bd29764627f",
+    "semantic_hash": "a196dde0e552385dc8864bd29764627f"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/docs/designs/factory-pull-digital-twin.md": {
+    "mtime": 1779355433.9454067,
+    "ast_hash": "71d0e114b6e0e54c14eebde60525b076",
+    "semantic_hash": "71d0e114b6e0e54c14eebde60525b076"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/test-results/factory-Factory-Twin-E2E-should-manipulate-timeline-chromium/error-context.md": {
+    "mtime": 1779356902.1448722,
+    "ast_hash": "d9017cea898e7164038bca24fa1be262",
+    "semantic_hash": "d9017cea898e7164038bca24fa1be262"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/test-results/factory-Factory-Twin-E2E-should-render-3D-viewport-canvas-chromium/error-context.md": {
+    "mtime": 1779356902.1448722,
+    "ast_hash": "3dcd95349ec856e4ddcdabd30aa05720",
+    "semantic_hash": "3dcd95349ec856e4ddcdabd30aa05720"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/test-results/factory-Factory-Twin-E2E-s-6a5b5-e-shock-state-and-update-UI-chromium/error-context.md": {
+    "mtime": 1779356902.1490066,
+    "ast_hash": "bc3473cd52b4587211503457294f7300",
+    "semantic_hash": "bc3473cd52b4587211503457294f7300"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/playwright-report/index.html": {
+    "mtime": 1779356902.5252426,
+    "ast_hash": "bab91c2405af2b64ea82d4b46774a648",
+    "semantic_hash": "bab91c2405af2b64ea82d4b46774a648"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/playwright-report/data/2940d901ae42ffb082e6709541f8490c39cb4de2.md": {
+    "mtime": 1779356902.4880326,
+    "ast_hash": "3dcd95349ec856e4ddcdabd30aa05720",
+    "semantic_hash": "3dcd95349ec856e4ddcdabd30aa05720"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/playwright-report/data/2dd8b78088a4fb68b8ed7f811074aae9d61afcf7.md": {
+    "mtime": 1779356902.4880326,
+    "ast_hash": "bc3473cd52b4587211503457294f7300",
+    "semantic_hash": "bc3473cd52b4587211503457294f7300"
+  },
+  "/home/shashwatsingh/250620_Project/260521_Digital Twin/playwright-report/data/d626c15d04632fd13e6452d0c81ea032f15ba92d.md": {
+    "mtime": 1779356902.4880326,
+    "ast_hash": "d9017cea898e7164038bca24fa1be262",
+    "semantic_hash": "d9017cea898e7164038bca24fa1be262"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv tool *)",
+      "Bash(graphify export *)",
+      "Bash(graphify benchmark *)",
+      "Bash(npm run *)",
+      "Bash(node --input-type=module)",
+      "Bash(curl -s http://localhost:5174/)",
+      "Bash(npx vite *)",
+      "Bash(node *)"
+    ]
+  }
+}
