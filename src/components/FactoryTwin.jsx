@@ -157,10 +157,8 @@ export default function FactoryTwin({ simState, layout, sceneRef, isMobile, onSe
     >
       <TwinScene ref={sceneRef} simState={simState} layout={layout} onSelectLoc={onSelectLoc} selectedLocId={selectedLocId} />
       <OrbitControls makeDefault enableDamping enablePan={!isMobile} />
-    </Canvas>
-  );
-}
-r intensity={1.5} />
+      <EffectComposer disableNormalPass>
+        <Bloom luminanceThreshold={0.5} mipmapBlur intensity={1.5} />
       </EffectComposer>
     </Canvas>
   );
