@@ -1,15 +1,16 @@
 import { useRef } from 'react';
+import { Environment, ContactShadows } from '@react-three/drei';
 
 export default function SceneAtmosphere() {
   return (
     <>
       {/* Soft ambient fill to avoid pitch black areas */}
-      <ambientLight intensity={0.7} />
+      <ambientLight intensity={0.4} />
       
       {/* Primary directional light (Sun-like) for clear shadows and specular highlights */}
       <directionalLight
         position={[25, 45, 20]}
-        intensity={1.4}
+        intensity={1.2}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -33,6 +34,20 @@ export default function SceneAtmosphere() {
         position={[0, -15, 0]} 
         intensity={0.35} 
         color="#fef08a" 
+      />
+
+      {/* Environment map for realistic PBR reflections on metals and glass */}
+      <Environment preset="city" />
+
+      {/* Contact shadows to ground the entire facility */}
+      <ContactShadows 
+        position={[0, -0.05, 0]} 
+        opacity={0.6} 
+        scale={80} 
+        blur={2.5} 
+        far={10} 
+        resolution={512} 
+        color="#0b0f19" 
       />
     </>
   );

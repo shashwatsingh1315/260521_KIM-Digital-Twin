@@ -116,6 +116,13 @@ export default function AssetInspector({ onClose }) {
                 {SelectedComponent && <SelectedComponent fillRatio={0.5} />}
               </group>
 
+              <Environment preset="city" />
+              <ContactShadows position={[0, 0.01, 0]} opacity={0.6} scale={10} blur={2} resolution={512} color="#000000" />
+
+              <EffectComposer disableNormalPass>
+                <Bloom luminanceThreshold={0.5} mipmapBlur intensity={1.5} />
+              </EffectComposer>
+
               <InspectorCameraControls autoRotate={autoRotate} />
             </Canvas>
           </div>

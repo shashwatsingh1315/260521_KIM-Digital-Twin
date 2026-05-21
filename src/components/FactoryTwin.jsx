@@ -1,6 +1,7 @@
 import React, { useMemo, forwardRef, useImperativeHandle, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { location_node, path } from '../data/m800_model.js';
 import SceneAtmosphere from '../scene/SceneAtmosphere.jsx';
@@ -156,6 +157,11 @@ export default function FactoryTwin({ simState, layout, sceneRef, isMobile, onSe
     >
       <TwinScene ref={sceneRef} simState={simState} layout={layout} onSelectLoc={onSelectLoc} selectedLocId={selectedLocId} />
       <OrbitControls makeDefault enableDamping enablePan={!isMobile} />
+    </Canvas>
+  );
+}
+r intensity={1.5} />
+      </EffectComposer>
     </Canvas>
   );
 }
