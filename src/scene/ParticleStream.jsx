@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const MAX_PARTICLES = 600;
+const MAX_PARTICLES = 150;
 const DUMMY = new THREE.Object3D();
 
 function particleColor(pathId) {
@@ -57,8 +57,8 @@ export default function ParticleStream({ simState, pathSegments, layout }) {
 
   return (
     <instancedMesh ref={meshRef} args={[null, null, MAX_PARTICLES]} renderOrder={3}>
-      <sphereGeometry args={[0.25, 8, 8]} />
-      <meshBasicMaterial />
+      <sphereGeometry args={[0.18, 6, 6]} />
+      <meshBasicMaterial transparent opacity={0.85} />
     </instancedMesh>
   );
 }

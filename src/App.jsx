@@ -27,6 +27,7 @@ function App() {
   const [mobileUnlocked, setMobileUnlocked] = useState(false);
   const [selectedLoc, setSelectedLoc] = useState(null);
   const [showInspector, setShowInspector] = useState(false);
+  const [activeFloor, setActiveFloor] = useState('all');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -79,6 +80,20 @@ function App() {
                 <button className="btn-ctrl" onClick={() => handleViewPreset('wh')}>WH →</button>
                 <button className="btn-ctrl" onClick={() => handleViewPreset('top')}>Top</button>
                 <div style={{ width: 1, height: 16, background: 'var(--border-color)', margin: '0 4px' }} />
+                {['all', 'GF', 'FF', 'SF', '3F'].map(f => (
+                  <button
+                    key={f}
+                    className="btn-ctrl"
+                    onClick={() => setActiveFloor(f)}
+                    style={{
+                      background: activeFloor === f ? 'rgba(245, 158, 11, 0.2)' : undefined,
+                      borderColor: activeFloor === f ? '#f59e0b' : undefined,
+                    }}
+                  >
+                    {f === 'all' ? 'All' : f}
+                  </button>
+                ))}
+                <div style={{ width: 1, height: 16, background: 'var(--border-color)', margin: '0 4px' }} />
                 <button
                   className="btn-ctrl"
                   onClick={() => setShowEditor(true)}
@@ -112,6 +127,7 @@ function App() {
                 isMobile={isMobile}
                 onSelectLoc={setSelectedLoc}
                 selectedLocId={selectedLoc?.location_id}
+                activeFloor={activeFloor}
               />
             </div>
           </div>

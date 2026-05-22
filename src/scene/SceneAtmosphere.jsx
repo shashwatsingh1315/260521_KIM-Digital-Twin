@@ -1,54 +1,30 @@
-import { useRef } from 'react';
-import { Environment, ContactShadows } from '@react-three/drei';
-
+// ─── Ops-grade lighting ───────────────────────────────────────────────────
+// Goal: flat, even illumination so semantic colors (buffer fill, zone accents,
+// blocked particles) read truthfully from every angle. No "city" envmap, no
+// rim lights, no dramatic shadows — this is a data viz, not a beauty render.
 export default function SceneAtmosphere() {
   return (
     <>
-      {/* Soft ambient fill to avoid pitch black areas */}
-      <ambientLight intensity={0.4} />
-      
-      {/* Primary directional light (Sun-like) for clear shadows and specular highlights */}
+      {/* Bright ambient so machines never sit in shadow */}
+      <ambientLight intensity={0.85} color="#e2e8f0" />
+
+      {/* Single soft directional key from above to give shape, no harsh shadow */}
       <directionalLight
-        position={[25, 45, 20]}
-        intensity={1.2}
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-far={100}
-        shadow-camera-left={-30}
-        shadow-camera-right={30}
-        shadow-camera-top={30}
-        shadow-camera-bottom={-30}
-        shadow-bias={-0.0005}
-      />
-      
-      {/* Cool blue fill light from opposite angle to add dimension to metallic surfaces */}
-      <directionalLight 
-        position={[-25, 15, -20]} 
-        intensity={0.6} 
-        color="#3b82f6" 
-      />
-      
-      {/* Soft warm uplight to illuminate bottom faces of floating platforms/floors */}
-      <directionalLight 
-        position={[0, -15, 0]} 
-        intensity={0.35} 
-        color="#fef08a" 
+        position={[15, 40, 20]}
+        intensity={0.55}
+        color="#ffffff"
+        castShadow={false}
       />
 
-      {/* Environment map for realistic PBR reflections on metals and glass */}
-      <Environment preset="city" />
-
-      {/* Contact shadows to ground the entire facility */}
-      <ContactShadows 
-        position={[0, -0.05, 0]} 
-        opacity={0.6} 
-        scale={80} 
-        blur={2.5} 
-        far={10} 
-        resolution={512} 
-        color="#0b0f19" 
+      {/* Cool fill from the opposite side to avoid flat-dead look */}
+      <directionalLight
+        position={[-20, 25, -10]}
+        intensity={0.3}
+        color="#cbd5e1"
       />
+
+      {/* Subtle warm rim from below to lift dark undersides */}
+      <hemisphereLight args={['#475569', '#0e1726', 0.35]} />
     </>
   );
 }

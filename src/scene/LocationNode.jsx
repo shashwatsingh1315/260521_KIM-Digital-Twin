@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Html, useGLTF } from '@react-three/drei';
 import { buffer_capacity } from '../data/m800_model.js';
 import { modelPath } from './ModelRegistry.js';
-import { getMeshComponent } from './MachineMeshes.jsx';
+import { getMeshComponent, familyMatKey } from './MachineMeshes.jsx';
+import { MAT } from '../materials/factoryMaterials.js';
 
 // ─── GLB model ────────────────────────────────────────────────────────────────
 function GlbModel({ glbPath }) {
@@ -20,13 +21,17 @@ class ModelBoundary extends Component {
 }
 
 // ─── Buffer label ─────────────────────────────────────────────────────────────
-function BufferLabel({ loc, simState }) {
+function BufferLabel({ loc, simState, isSelected, dimmed }) {
   const bufVal = simState?.buffers?.[loc.location_id] ?? null;
   const cap    = buffer_capacity[loc.location_id] ?? null;
   if (bufVal === null || cap === null) return null;
 
   const fillRatio  = bufVal / cap;
   const isCritical = fillRatio >= 0.9;
+  
+  if (dimmed) return null;
+  if (!isSelected && !isCritical) return null;
+
   const color = isCritical ? '#ef4444' : fillRatio >= 0.6 ? '#f59e0b' : '#e2e8f0';
 
   return (
@@ -49,7 +54,7 @@ function BufferLabel({ loc, simState }) {
 }
 
 // ─── Procedural mesh ─────────────────────────────────────────────────────────
-function ProcMesh({ loc, simState }) {
+function ProcMesh({ loc, simState, dimmed }) {
   const bufVal    = simState?.buffers?.[loc.location_id] ?? null;
   const cap       = buffer_capacity[loc.location_id] ?? null;
   const fillRatio = (bufVal !== null && cap) ? bufVal / cap : 0.5;
@@ -59,14 +64,17 @@ function ProcMesh({ loc, simState }) {
     return (
       <mesh>
         <boxGeometry args={[1.2, 0.6, 1.2]} />
-        <meshStandardMaterial color="#334155" roughness={0.6} metalness={0.2} />
+        <meshLambertMaterial color="#334155" transparent={dimmed} opacity={dimmed ? 0.12 : 1} />
       </mesh>
     );
   }
+  
+  const familyMat = MAT[familyMatKey(loc)];
+  
   // Scale machines up so they're proportionate to the floor size
   return (
     <group scale={[1.6, 1.6, 1.6]}>
-      <MeshComp fillRatio={fillRatio} />
+      <MeshComp fillRatio={fillRatio} familyMat={familyMat} dimmed={dimmed} />
     </group>
   );
 }
@@ -82,10 +90,10 @@ function SelectRing() {
 }
 
 // ─── LocationNode ─────────────────────────────────────────────────────────────
-export default function LocationNode({ loc, pos, simState, onSelect, isSelected }) {
+export default function LocationNode({ loc, pos, simState, onSelect, isSelected, dimmed }) {
   if (!pos) return null;
   const glbPath = modelPath(loc);
-  const fallback = <ProcMesh loc={loc} simState={simState} />;
+  const fallback = <ProcMesh loc={loc} simState={simState} dimmed={dimmed} />;
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -111,7 +119,7 @@ export default function LocationNode({ loc, pos, simState, onSelect, isSelected 
         fallback
       )}
 
-      <BufferLabel loc={loc} simState={simState} />
+      <BufferLabel loc={loc} simState={simState} isSelected={isSelected} dimmed={dimmed} />
     </group>
   );
 }

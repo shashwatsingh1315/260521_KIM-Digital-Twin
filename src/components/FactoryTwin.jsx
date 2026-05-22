@@ -1,7 +1,6 @@
 import React, { useMemo, forwardRef, useImperativeHandle, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html } from '@react-three/drei';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { location_node, path } from '../data/m800_model.js';
 import SceneAtmosphere from '../scene/SceneAtmosphere.jsx';
@@ -15,52 +14,61 @@ const FLOOR_Y = { GF: 0, FF: 5, SF: 10, '3F': 15 };
 // Fixed floor plates — bounds match the building shell columns exactly.
 // KMP and WH share the same floor heights (GF=0, FF=5, SF=10, 3F=15)
 // so their SF floors align at the same y=10 level.
+// Floor tones are intentionally a clean dark navy — close to the background
+// but uniform, so machines (lighter, saturated accents) pop in silhouette.
 const FLOOR_PLATES = [
   // ── KMP (production building) ──────────────────────────────────────────────
-  { key: 'kmp-gf', cx: KMP_BOUNDS.x, y: FLOOR_Y.GF,    cz: KMP_BOUNDS.z, w: KMP_BOUNDS.w, d: KMP_BOUNDS.d, color: '#1e2a42', label: 'KMP · GF' },
-  { key: 'kmp-ff', cx: KMP_BOUNDS.x, y: FLOOR_Y.FF,    cz: KMP_BOUNDS.z, w: KMP_BOUNDS.w, d: KMP_BOUNDS.d, color: '#1c2740', label: 'KMP · FF' },
-  { key: 'kmp-sf', cx: KMP_BOUNDS.x, y: FLOOR_Y.SF,    cz: KMP_BOUNDS.z, w: KMP_BOUNDS.w, d: KMP_BOUNDS.d, color: '#1a243c', label: 'KMP · SF' },
-  { key: 'kmp-3f', cx: KMP_BOUNDS.x, y: FLOOR_Y['3F'], cz: KMP_BOUNDS.z, w: 30,           d: 10,           color: '#182038', label: 'KMP · 3F' },
+  { key: 'kmp-gf', cx: KMP_BOUNDS.x, y: FLOOR_Y.GF,    cz: KMP_BOUNDS.z, w: KMP_BOUNDS.w, d: KMP_BOUNDS.d, color: '#2b3954', label: 'KMP · GF' },
+  { key: 'kmp-ff', cx: KMP_BOUNDS.x, y: FLOOR_Y.FF,    cz: KMP_BOUNDS.z, w: KMP_BOUNDS.w, d: KMP_BOUNDS.d, color: '#2b3954', label: 'KMP · FF' },
+  { key: 'kmp-sf', cx: KMP_BOUNDS.x, y: FLOOR_Y.SF,    cz: KMP_BOUNDS.z, w: KMP_BOUNDS.w, d: KMP_BOUNDS.d, color: '#2b3954', label: 'KMP · SF' },
+  { key: 'kmp-3f', cx: KMP_BOUNDS.x, y: FLOOR_Y['3F'], cz: KMP_BOUNDS.z, w: 30,           d: 10,           color: '#2b3954', label: 'KMP · 3F' },
   // ── WH (warehouse) — GF + matching SF at same y as KMP SF ─────────────────
-  { key: 'wh-gf',  cx: WH_BOUNDS.x,  y: FLOOR_Y.GF,   cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#10202e', label: 'WH · GF'  },
-  { key: 'wh-sf',  cx: WH_BOUNDS.x,  y: FLOOR_Y.SF,   cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#0e1e2c', label: 'WH · SF'  },
+  { key: 'wh-gf',  cx: WH_BOUNDS.x,  y: FLOOR_Y.GF,   cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · GF'  },
+  { key: 'wh-sf',  cx: WH_BOUNDS.x,  y: FLOOR_Y.SF,   cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · SF'  },
   // ── Ramp bridge: connects KMP SF RAMP (x=3) ↔ WH SF RAMP (x=6) at y=10 ──
-  { key: 'bridge', cx: 4.5,           y: FLOOR_Y.SF,   cz: 0,            w: 7,            d: 5,            color: '#141e30', label: '' },
+  { key: 'bridge', cx: 4.5,           y: FLOOR_Y.SF,   cz: 0,            w: 7,            d: 5,            color: '#243149', label: '' },
 ];
 
 // ─── Floor surface plates ──────────────────────────────────────────────────────
-function FloorSurfaces() {
+// Plain matte floors. Single corner label per plate at small size, no grid
+// overlay, no emissive — floors are background, not foreground.
+function FloorSurfaces({ activeFloor }) {
+  const dimmedOpacity = 0.12;
+  const isFloorActive = (floor) => activeFloor === 'all' || activeFloor === floor;
+
   return (
     <>
-      {FLOOR_PLATES.map(({ key, cx, y, cz, w, d, color, label }) => (
-        <group key={key} position={[cx, y - 0.01, cz]}>
-          {/* Solid floor */}
-          <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow renderOrder={2}>
-            <planeGeometry args={[w, d]} />
-            <meshStandardMaterial
-              color={color}
-              roughness={0.85}
-              metalness={0.05}
-              emissive={color}
-              emissiveIntensity={0.18}
-            />
-          </mesh>
-          {/* Grid overlay */}
-          <mesh rotation={[-Math.PI / 2, 0, 0]} renderOrder={3}>
-            <planeGeometry args={[w, d]} />
-            <meshBasicMaterial color="#2a3860" wireframe depthWrite={false} transparent opacity={0.4} />
-          </mesh>
-          <Html position={[-w / 2 + 1, 0.5, d / 2 - 0.5]} distanceFactor={25}>
-            <div style={{ fontSize: 9, color: '#4a5568', whiteSpace: 'nowrap' }}>{label}</div>
-          </Html>
-        </group>
-      ))}
+      {FLOOR_PLATES.map(({ key, cx, y, cz, w, d, color, label }) => {
+        let f = key === 'bridge' ? 'SF' : key.split('-')[1].toUpperCase();
+        const active = isFloorActive(f);
+        return (
+          <group key={key} position={[cx, y - 0.01, cz]}>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow renderOrder={2}>
+              <planeGeometry args={[w, d]} />
+              <meshLambertMaterial color={color} transparent={!active} opacity={active ? 1 : dimmedOpacity} />
+            </mesh>
+            {label && (
+              <Html position={[-w / 2 + 1, 0.05, d / 2 - 0.6]} distanceFactor={30}>
+                <div style={{
+                  fontSize: 10,
+                  color: 'rgba(148, 163, 184, 0.7)',
+                  fontFamily: 'monospace',
+                  letterSpacing: '0.05em',
+                  whiteSpace: 'nowrap',
+                  pointerEvents: 'none',
+                  opacity: active ? 1 : dimmedOpacity,
+                }}>{label}</div>
+              </Html>
+            )}
+          </group>
+        );
+      })}
     </>
   );
 }
 
 // ─── Scene ────────────────────────────────────────────────────────────────────
-const TwinScene = forwardRef(({ simState, layout, onSelectLoc, selectedLocId }, ref) => {
+const TwinScene = forwardRef(({ simState, layout, onSelectLoc, selectedLocId, activeFloor }, ref) => {
   const { camera, controls } = useThree();
   const [targetPos, setTargetPos] = useState(null);
   const [targetCtrl, setTargetCtrl] = useState(null);
@@ -107,30 +115,36 @@ const TwinScene = forwardRef(({ simState, layout, onSelectLoc, selectedLocId }, 
 
   // Deselect when clicking empty space
   const handleBgClick = () => onSelectLoc?.(null);
+  
+  const isFloorActive = (floor) => activeFloor === 'all' || activeFloor === floor;
 
   return (
     <group onClick={handleBgClick}>
       <SceneAtmosphere />
       <BuildingShells />
-      <FloorSurfaces />
-      {leaves.map(loc => (
-        <LocationNode
-          key={loc.location_id}
-          loc={loc}
-          pos={layout[loc.location_id]}
-          simState={simState}
-          onSelect={onSelectLoc}
-          isSelected={selectedLocId === loc.location_id}
-        />
-      ))}
-      <FloorPaths path={path} layout={layout} />
+      <FloorSurfaces activeFloor={activeFloor} />
+      {leaves.map(loc => {
+        const active = isFloorActive(loc.floor);
+        return (
+          <LocationNode
+            key={loc.location_id}
+            loc={loc}
+            pos={layout[loc.location_id]}
+            simState={simState}
+            onSelect={onSelectLoc}
+            isSelected={selectedLocId === loc.location_id}
+            dimmed={!active}
+          />
+        );
+      })}
+      {/* Paths removed based on instruction 4.2 Option B */}
       <ParticleStream simState={simState} pathSegments={pathSegments} layout={layout} />
     </group>
   );
 });
 
 // ─── Wrapper ──────────────────────────────────────────────────────────────────
-export default function FactoryTwin({ simState, layout, sceneRef, isMobile, onSelectLoc, selectedLocId }) {
+export default function FactoryTwin({ simState, layout, sceneRef, isMobile, onSelectLoc, selectedLocId, activeFloor }) {
   const [hasWebGL, setHasWebGL] = React.useState(true);
 
   React.useEffect(() => {
@@ -150,16 +164,12 @@ export default function FactoryTwin({ simState, layout, sceneRef, isMobile, onSe
 
   return (
     <Canvas
-      shadows
       camera={{ position: [0, 30, 40], fov: 45 }}
       style={{ background: 'transparent' }}
       dpr={[1, 2]}
     >
-      <TwinScene ref={sceneRef} simState={simState} layout={layout} onSelectLoc={onSelectLoc} selectedLocId={selectedLocId} />
+      <TwinScene ref={sceneRef} simState={simState} layout={layout} onSelectLoc={onSelectLoc} selectedLocId={selectedLocId} activeFloor={activeFloor} />
       <OrbitControls makeDefault enableDamping enablePan={!isMobile} />
-      <EffectComposer disableNormalPass>
-        <Bloom luminanceThreshold={0.5} mipmapBlur intensity={1.5} />
-      </EffectComposer>
     </Canvas>
   );
 }
