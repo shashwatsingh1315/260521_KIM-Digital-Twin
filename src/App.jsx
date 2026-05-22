@@ -80,7 +80,7 @@ function App() {
                 <button className="btn-ctrl" onClick={() => handleViewPreset('wh')}>WH →</button>
                 <button className="btn-ctrl" onClick={() => handleViewPreset('top')}>Top</button>
                 <div style={{ width: 1, height: 16, background: 'var(--border-color)', margin: '0 4px' }} />
-                {['all', 'GF', 'FF', 'SF', '3F'].map(f => (
+                {['all', 'GF', 'FF', 'SF', '3F', '4F'].map(f => (
                   <button
                     key={f}
                     className="btn-ctrl"

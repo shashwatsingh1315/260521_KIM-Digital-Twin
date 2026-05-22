@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { MAT } from '../materials/factoryMaterials.js';
 
 export const KMP_BOUNDS = { x: -16, z: 0, w: 38, d: 10, floors: 4, floorH: 5 };
-export const WH_BOUNDS  = { x: 22,  z: 1.5, w: 28, d: 12, h: 15 };
+export const WH_BOUNDS  = { x: 22,  z: 1.5, w: 28, d: 12, h: 25 };
 
 function BuildingVolume({ bounds, label }) {
   const { x, z, w, d } = bounds;

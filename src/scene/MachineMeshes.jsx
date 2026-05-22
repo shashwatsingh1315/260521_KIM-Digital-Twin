@@ -272,7 +272,7 @@ export function ExternalMesh({ fillRatio = 0, familyMat, dimmed }) {
 
 export function ASRSMesh({ fillRatio = 0, familyMat, dimmed }) {
   const levels = 10;
-  const levelH = 0.75;
+  const levelH = 1.55;
   const baseH = 0.15;
   return (
     <group>

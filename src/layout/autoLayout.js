@@ -3,7 +3,7 @@
 // y = elevation (floor). x, z = horizontal plane (top-down layout).
 // Manual overrides from localStorage are merged on top — those win.
 
-const FLOOR_Y = { GF: 0, FF: 5, SF: 10, '3F': 15 };
+const FLOOR_Y = { GF: 0, FF: 5, SF: 10, '3F': 15, '4F': 20 };
 
 // Per-location explicit positions (auto-layout baseline).
 // x/z are the top-down coordinates. y is computed from floor.
@@ -41,11 +41,11 @@ const BASELINE = {
   'LOC-WH-GF-FG-ASRS':    { x: 14,  z: 4  },
   'LOC-WH-GF-VC':         { x: 17,  z: 0  },
   'LOC-WH-GF-PACK':       { x: 21,  z: 0  },
-  // FF Line A and SF Line B — same x/z column as GF, elevated by floor y
-  'LOC-WH-FF-VC':         { x: 17,  z: 0  },
-  'LOC-WH-FF-PACK':       { x: 21,  z: 0  },
-  'LOC-WH-SF-VC':         { x: 17,  z: 0  },
-  'LOC-WH-SF-PACK':       { x: 21,  z: 0  },
+  // FF Line A (-z side) and SF Line B (+z side) — offset so they're distinct in layout view
+  'LOC-WH-FF-VC':         { x: 17,  z: -3 },
+  'LOC-WH-FF-PACK':       { x: 21,  z: -3 },
+  'LOC-WH-SF-VC':         { x: 17,  z: 3  },
+  'LOC-WH-SF-PACK':       { x: 21,  z: 3  },
   'LOC-WH-GF-IQC':        { x: 26,  z: 0  },
   'LOC-WH-GF-INWARD':     { x: 29,  z: 0  },
   'LOC-WH-GF-GATE':       { x: 34,  z: 0  },

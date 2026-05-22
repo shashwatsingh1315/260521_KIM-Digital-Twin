@@ -22,6 +22,8 @@ export const location_node = [
   { location_id: 'LOC-WH-GF', parent_location_id: 'LOC-WH', location_name: 'WH Ground Floor',                 location_type: 'floor', site: 'WH', floor: 'GF', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
   { location_id: 'LOC-WH-FF', parent_location_id: 'LOC-WH', location_name: 'WH First Floor / VC-Pack Line A',  location_type: 'floor', site: 'WH', floor: 'FF', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
   { location_id: 'LOC-WH-SF', parent_location_id: 'LOC-WH', location_name: 'WH Second Floor / VC-Pack Line B + Ramp Landing', location_type: 'floor', site: 'WH', floor: 'SF', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
+  { location_id: 'LOC-WH-3F', parent_location_id: 'LOC-WH', location_name: 'WH Third Floor / ASRS Level 3',                  location_type: 'floor', site: 'WH', floor: '3F', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
+  { location_id: 'LOC-WH-4F', parent_location_id: 'LOC-WH', location_name: 'WH Fourth Floor / ASRS Top Level',               location_type: 'floor', site: 'WH', floor: '4F', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
 
   // KMP GF
   { location_id: 'LOC-KMP-GF-GATE',  parent_location_id: 'LOC-KMP-GF', location_name: 'KMP Main Gate',          location_type: 'dock',         site: 'KMP', floor: 'GF', block: null,      zone: 'Gate',   capacity: 'trucks',         capacity_limit: 5,  initial_fill_ratio: 0.0, status: 'active' },

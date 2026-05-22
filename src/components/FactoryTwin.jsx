@@ -9,7 +9,7 @@ import LocationNode from '../scene/LocationNode.jsx';
 import FloorPaths from '../scene/FloorPaths.jsx';
 import ParticleStream from '../scene/ParticleStream.jsx';
 
-const FLOOR_Y = { GF: 0, FF: 5, SF: 10, '3F': 15 };
+const FLOOR_Y = { GF: 0, FF: 5, SF: 10, '3F': 15, '4F': 20 };
 
 // Fixed floor plates — bounds match the building shell columns exactly.
 // KMP and WH share the same floor heights (GF=0, FF=5, SF=10, 3F=15)
@@ -23,8 +23,11 @@ const FLOOR_PLATES = [
   { key: 'kmp-sf', cx: KMP_BOUNDS.x, y: FLOOR_Y.SF,    cz: KMP_BOUNDS.z, w: KMP_BOUNDS.w, d: KMP_BOUNDS.d, color: '#2b3954', label: 'KMP · SF' },
   { key: 'kmp-3f', cx: KMP_BOUNDS.x, y: FLOOR_Y['3F'], cz: KMP_BOUNDS.z, w: 30,           d: 10,           color: '#2b3954', label: 'KMP · 3F' },
   // ── WH (warehouse) — GF + matching SF at same y as KMP SF ─────────────────
-  { key: 'wh-gf',  cx: WH_BOUNDS.x,  y: FLOOR_Y.GF,   cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · GF'  },
-  { key: 'wh-sf',  cx: WH_BOUNDS.x,  y: FLOOR_Y.SF,   cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · SF'  },
+  { key: 'wh-gf',  cx: WH_BOUNDS.x,  y: FLOOR_Y.GF,    cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · GF'  },
+  { key: 'wh-ff',  cx: WH_BOUNDS.x,  y: FLOOR_Y.FF,    cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · FF'  },
+  { key: 'wh-sf',  cx: WH_BOUNDS.x,  y: FLOOR_Y.SF,    cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · SF'  },
+  { key: 'wh-3f',  cx: WH_BOUNDS.x,  y: FLOOR_Y['3F'], cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · 3F'  },
+  { key: 'wh-4f',  cx: WH_BOUNDS.x,  y: FLOOR_Y['4F'], cz: WH_BOUNDS.z,  w: WH_BOUNDS.w,  d: WH_BOUNDS.d,  color: '#26334d', label: 'WH · 4F'  },
   // ── Ramp bridge: connects KMP SF RAMP (x=3) ↔ WH SF RAMP (x=6) at y=10 ──
   { key: 'bridge', cx: 4.5,           y: FLOOR_Y.SF,   cz: 0,            w: 7,            d: 5,            color: '#243149', label: '' },
 ];
@@ -85,6 +88,7 @@ const TwinScene = forwardRef(({ simState, layout, onSelectLoc, selectedLocId, ac
       else if (preset === 'FF')     { setTargetPos(new THREE.Vector3(3, 13, 30));  setTargetCtrl(new THREE.Vector3(3, 5, 0)); }
       else if (preset === 'SF')     { setTargetPos(new THREE.Vector3(3, 18, 30));  setTargetCtrl(new THREE.Vector3(3, 10, 0)); }
       else if (preset === '3F')     { setTargetPos(new THREE.Vector3(3, 23, 28));  setTargetCtrl(new THREE.Vector3(3, 15, 0)); }
+      else if (preset === '4F')     { setTargetPos(new THREE.Vector3(3, 28, 28));  setTargetCtrl(new THREE.Vector3(3, 20, 0)); }
     },
   }));
 
