@@ -20,7 +20,8 @@ export const location_node = [
 
   // WH floors
   { location_id: 'LOC-WH-GF', parent_location_id: 'LOC-WH', location_name: 'WH Ground Floor',                 location_type: 'floor', site: 'WH', floor: 'GF', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
-  { location_id: 'LOC-WH-SF', parent_location_id: 'LOC-WH', location_name: 'WH Second Floor / Ramp Landing', location_type: 'floor', site: 'WH', floor: 'SF', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
+  { location_id: 'LOC-WH-FF', parent_location_id: 'LOC-WH', location_name: 'WH First Floor / VC-Pack Line A',  location_type: 'floor', site: 'WH', floor: 'FF', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
+  { location_id: 'LOC-WH-SF', parent_location_id: 'LOC-WH', location_name: 'WH Second Floor / VC-Pack Line B + Ramp Landing', location_type: 'floor', site: 'WH', floor: 'SF', block: null, zone: null, capacity: null, initial_fill_ratio: null, status: 'active' },
 
   // KMP GF
   { location_id: 'LOC-KMP-GF-GATE',  parent_location_id: 'LOC-KMP-GF', location_name: 'KMP Main Gate',          location_type: 'dock',         site: 'KMP', floor: 'GF', block: null,      zone: 'Gate',   capacity: 'trucks',         capacity_limit: 5,  initial_fill_ratio: 0.0, status: 'active' },
@@ -58,8 +59,14 @@ export const location_node = [
   { location_id: 'LOC-WH-GF-ASRS',     parent_location_id: 'LOC-WH-GF',      location_name: 'WH ASRS',                  location_type: 'ASRS',         site: 'WH', floor: 'GF', block: null, zone: 'ASRS',       capacity: 'bins / pallets',   capacity_limit: 20, initial_fill_ratio: 0.5, status: 'active' },
   { location_id: 'LOC-WH-GF-ASRS-IN',  parent_location_id: 'LOC-WH-GF-ASRS', location_name: 'WH ASRS Input Station',    location_type: 'ASRS_point',   site: 'WH', floor: 'GF', block: null, zone: 'ASRS In',    capacity: 'pallets',          capacity_limit: 10, initial_fill_ratio: 0.2, status: 'active' },
   { location_id: 'LOC-WH-GF-ASRS-OUT', parent_location_id: 'LOC-WH-GF-ASRS', location_name: 'WH ASRS Output Station',   location_type: 'ASRS_point',   site: 'WH', floor: 'GF', block: null, zone: 'ASRS Out',   capacity: 'pallets',          capacity_limit: 10, initial_fill_ratio: 0.3, status: 'active' },
-  { location_id: 'LOC-WH-GF-VC',       parent_location_id: 'LOC-WH-GF',      location_name: 'Value Creation Area',      location_type: 'station_zone', site: 'WH', floor: 'GF', block: null, zone: 'VC',         capacity: 'SFG bins',         capacity_limit: 8,  initial_fill_ratio: 0.4, status: 'active' },
-  { location_id: 'LOC-WH-GF-PACK',     parent_location_id: 'LOC-WH-GF',      location_name: 'Automated Packaging Area', location_type: 'station_zone', site: 'WH', floor: 'GF', block: null, zone: 'Packaging',  capacity: 'cartons / pallets',capacity_limit: 8,  initial_fill_ratio: 0.3, status: 'active' },
+  { location_id: 'LOC-WH-GF-VC',       parent_location_id: 'LOC-WH-GF',      location_name: 'Value Creation Area (GF)', location_type: 'station_zone', site: 'WH', floor: 'GF', block: null, zone: 'VC',         capacity: 'SFG bins',         capacity_limit: 8,  initial_fill_ratio: 0.4, status: 'active' },
+  { location_id: 'LOC-WH-GF-PACK',     parent_location_id: 'LOC-WH-GF',      location_name: 'Packaging Area (GF)',      location_type: 'station_zone', site: 'WH', floor: 'GF', block: null, zone: 'Packaging',  capacity: 'cartons / pallets',capacity_limit: 8,  initial_fill_ratio: 0.3, status: 'active' },
+  // FF Line A — identical VC+Pack process, ~50% of total volume
+  { location_id: 'LOC-WH-FF-VC',       parent_location_id: 'LOC-WH-FF',      location_name: 'Value Creation Area (FF / Line A)', location_type: 'station_zone', site: 'WH', floor: 'FF', block: null, zone: 'VC',         capacity: 'SFG bins',         capacity_limit: 8,  initial_fill_ratio: 0.2, status: 'active' },
+  { location_id: 'LOC-WH-FF-PACK',     parent_location_id: 'LOC-WH-FF',      location_name: 'Packaging Line A (FF)',    location_type: 'station_zone', site: 'WH', floor: 'FF', block: null, zone: 'Packaging',  capacity: 'cartons / pallets',capacity_limit: 8,  initial_fill_ratio: 0.2, status: 'active' },
+  // SF Line B — identical VC+Pack process, ~50% of total volume
+  { location_id: 'LOC-WH-SF-VC',       parent_location_id: 'LOC-WH-SF',      location_name: 'Value Creation Area (SF / Line B)', location_type: 'station_zone', site: 'WH', floor: 'SF', block: null, zone: 'VC',         capacity: 'SFG bins',         capacity_limit: 8,  initial_fill_ratio: 0.2, status: 'active' },
+  { location_id: 'LOC-WH-SF-PACK',     parent_location_id: 'LOC-WH-SF',      location_name: 'Packaging Line B (SF)',    location_type: 'station_zone', site: 'WH', floor: 'SF', block: null, zone: 'Packaging',  capacity: 'cartons / pallets',capacity_limit: 8,  initial_fill_ratio: 0.2, status: 'active' },
   { location_id: 'LOC-WH-GF-FG-ASRS',  parent_location_id: 'LOC-WH-GF-ASRS', location_name: 'FG ASRS Zone',             location_type: 'ASRS_zone',    site: 'WH', floor: 'GF', block: null, zone: 'FG Storage', capacity: 'FG pallets',       capacity_limit: 20, initial_fill_ratio: 0.4, status: 'active' },
   { location_id: 'LOC-WH-GF-DISPATCH', parent_location_id: 'LOC-WH-GF',      location_name: 'Dispatch Staging + Dock',  location_type: 'dispatch',     site: 'WH', floor: 'GF', block: null, zone: 'Dispatch',   capacity: 'trucks / pallets', capacity_limit: 10, initial_fill_ratio: 0.2, status: 'active' },
 ];
@@ -88,6 +95,14 @@ export const path = [
   { path_id: 'PATH-WH-ASRS-VC',        from_location_id: 'LOC-WH-GF-ASRS-OUT',  to_location_id: 'LOC-WH-GF-VC',       movement_mode: 'stacker/AMR',       resource_hint: 'electric stacker/AMR',            capacity: 'SFG pallet',         distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
   { path_id: 'PATH-VC-PACK',           from_location_id: 'LOC-WH-GF-VC',        to_location_id: 'LOC-WH-GF-PACK',     movement_mode: 'HPT/AMR/manual',    resource_hint: 'HPT/AMR/manual',                  capacity: 'SFG bin/pallet',     distance: '20m',   travel_time: '4s',  distance_val: 20,   travel_time_val: 4,  status: 'active' },
   { path_id: 'PATH-PACK-FG-ASRS',      from_location_id: 'LOC-WH-GF-PACK',      to_location_id: 'LOC-WH-GF-FG-ASRS',  movement_mode: 'stacker+ASRS',      resource_hint: 'electric stacker + ASRS crane',   capacity: 'FG pallet',          distance: '18m',   travel_time: '4s',  distance_val: 18,   travel_time_val: 4,  status: 'active' },
+  // FF Line A paths (ASRS crane delivers to FF conventional zone)
+  { path_id: 'PATH-ASRS-FF-VC',        from_location_id: 'LOC-WH-GF-ASRS',      to_location_id: 'LOC-WH-FF-VC',       movement_mode: 'ASRS crane',        resource_hint: 'ASRS crane + stacker',            capacity: 'SFG pallet',         distance: '18m',   travel_time: '5s',  distance_val: 18,   travel_time_val: 5,  status: 'active' },
+  { path_id: 'PATH-FF-VC-PACK',         from_location_id: 'LOC-WH-FF-VC',        to_location_id: 'LOC-WH-FF-PACK',     movement_mode: 'HPT/AMR/manual',    resource_hint: 'HPT/AMR',                         capacity: 'SFG bin/pallet',     distance: '20m',   travel_time: '4s',  distance_val: 20,   travel_time_val: 4,  status: 'active' },
+  { path_id: 'PATH-FF-PACK-FG-ASRS',    from_location_id: 'LOC-WH-FF-PACK',      to_location_id: 'LOC-WH-GF-FG-ASRS',  movement_mode: 'stacker+ASRS',      resource_hint: 'electric stacker + ASRS crane',   capacity: 'FG pallet',          distance: '20m',   travel_time: '5s',  distance_val: 20,   travel_time_val: 5,  status: 'active' },
+  // SF Line B paths
+  { path_id: 'PATH-ASRS-SF-VC',         from_location_id: 'LOC-WH-GF-ASRS',      to_location_id: 'LOC-WH-SF-VC',       movement_mode: 'ASRS crane',        resource_hint: 'ASRS crane + stacker',            capacity: 'SFG pallet',         distance: '22m',   travel_time: '6s',  distance_val: 22,   travel_time_val: 6,  status: 'active' },
+  { path_id: 'PATH-SF-VC-PACK',          from_location_id: 'LOC-WH-SF-VC',        to_location_id: 'LOC-WH-SF-PACK',     movement_mode: 'HPT/AMR/manual',    resource_hint: 'HPT/AMR',                         capacity: 'SFG bin/pallet',     distance: '20m',   travel_time: '4s',  distance_val: 20,   travel_time_val: 4,  status: 'active' },
+  { path_id: 'PATH-SF-PACK-FG-ASRS',     from_location_id: 'LOC-WH-SF-PACK',      to_location_id: 'LOC-WH-GF-FG-ASRS',  movement_mode: 'stacker+ASRS',      resource_hint: 'electric stacker + ASRS crane',   capacity: 'FG pallet',          distance: '22m',   travel_time: '5s',  distance_val: 22,   travel_time_val: 5,  status: 'active' },
   { path_id: 'PATH-FG-ASRS-FAT',       from_location_id: 'LOC-WH-GF-FG-ASRS',   to_location_id: 'LOC-KMP-3F-FAT',     movement_mode: 'manual/trolley',    resource_hint: 'manual/trolley',                  capacity: 'samples',            distance: '70m',   travel_time: '14s', distance_val: 70,   travel_time_val: 14, status: 'active' },
   { path_id: 'PATH-FG-ASRS-DISPATCH',  from_location_id: 'LOC-WH-GF-FG-ASRS',   to_location_id: 'LOC-WH-GF-DISPATCH', movement_mode: 'ASRS+stacker',      resource_hint: 'ASRS crane + electric stacker',   capacity: 'FG pallet',          distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
   { path_id: 'PATH-DISPATCH-CUSTOMER', from_location_id: 'LOC-WH-GF-DISPATCH',   to_location_id: 'LOC-CUSTOMER',       movement_mode: 'road',              resource_hint: 'covered truck',                   capacity: 'truckload',          distance: '2000m', travel_time: '30s', distance_val: 2000, travel_time_val: 30, status: 'active' },
@@ -478,7 +493,14 @@ export const sim_rates = {
   'PATH-WH-ASRS-VC':        0.22,
   'PATH-VC-PACK':           0.22,
   'PATH-PACK-FG-ASRS':      0.2,
+  'PATH-ASRS-FF-VC':        0.22,
+  'PATH-FF-VC-PACK':        0.22,
+  'PATH-FF-PACK-FG-ASRS':   0.20,
+  'PATH-ASRS-SF-VC':        0.22,
+  'PATH-SF-VC-PACK':        0.22,
+  'PATH-SF-PACK-FG-ASRS':   0.20,
   'PATH-FG-ASRS-DISPATCH':  0.2,
+  'PATH-FG-ASRS-FAT':       0.05,
   'PATH-DISPATCH-CUSTOMER': 0.18,
   'PATH-KMP-EMPTYBIN-DOCK3':0.2,
   'PATH-WH-VC-EMPTYBIN-KMP':0.15,

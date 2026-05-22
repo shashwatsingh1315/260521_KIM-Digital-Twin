@@ -84,7 +84,10 @@ function App() {
                   <button
                     key={f}
                     className="btn-ctrl"
-                    onClick={() => setActiveFloor(f)}
+                    onClick={() => {
+                      setActiveFloor(f);
+                      if (f !== 'all') handleViewPreset(f);
+                    }}
                     style={{
                       background: activeFloor === f ? 'rgba(245, 158, 11, 0.2)' : undefined,
                       borderColor: activeFloor === f ? '#f59e0b' : undefined,

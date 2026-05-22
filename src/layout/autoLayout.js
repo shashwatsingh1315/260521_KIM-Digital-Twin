@@ -41,6 +41,11 @@ const BASELINE = {
   'LOC-WH-GF-FG-ASRS':    { x: 14,  z: 4  },
   'LOC-WH-GF-VC':         { x: 17,  z: 0  },
   'LOC-WH-GF-PACK':       { x: 21,  z: 0  },
+  // FF Line A and SF Line B — same x/z column as GF, elevated by floor y
+  'LOC-WH-FF-VC':         { x: 17,  z: 0  },
+  'LOC-WH-FF-PACK':       { x: 21,  z: 0  },
+  'LOC-WH-SF-VC':         { x: 17,  z: 0  },
+  'LOC-WH-SF-PACK':       { x: 21,  z: 0  },
   'LOC-WH-GF-IQC':        { x: 26,  z: 0  },
   'LOC-WH-GF-INWARD':     { x: 29,  z: 0  },
   'LOC-WH-GF-GATE':       { x: 34,  z: 0  },

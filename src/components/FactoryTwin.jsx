@@ -76,10 +76,15 @@ const TwinScene = forwardRef(({ simState, layout, onSelectLoc, selectedLocId, ac
   useImperativeHandle(ref, () => ({
     flyTo(preset) {
       if (!controls) return;
-      if (preset === 'kmp')    { setTargetPos(new THREE.Vector3(-22, 18, 24)); setTargetCtrl(new THREE.Vector3(-14, 5, 0)); }
+      if      (preset === 'kmp')    { setTargetPos(new THREE.Vector3(-22, 18, 24)); setTargetCtrl(new THREE.Vector3(-14, 5, 0)); }
       else if (preset === 'center') { setTargetPos(new THREE.Vector3(3, 26, 48));  setTargetCtrl(new THREE.Vector3(3, 5, 0)); }
-      else if (preset === 'wh')    { setTargetPos(new THREE.Vector3(25, 18, 24));  setTargetCtrl(new THREE.Vector3(16, 5, 0)); }
-      else if (preset === 'top')   { setTargetPos(new THREE.Vector3(3, 55, 0.1));  setTargetCtrl(new THREE.Vector3(3, 0, 0)); }
+      else if (preset === 'wh')     { setTargetPos(new THREE.Vector3(25, 18, 24)); setTargetCtrl(new THREE.Vector3(16, 5, 0)); }
+      else if (preset === 'top')    { setTargetPos(new THREE.Vector3(3, 55, 0.1)); setTargetCtrl(new THREE.Vector3(3, 0, 0)); }
+      // Floor-level presets — camera drops to eye-level for each floor
+      else if (preset === 'GF')     { setTargetPos(new THREE.Vector3(3, 8, 30));   setTargetCtrl(new THREE.Vector3(3, 0, 0)); }
+      else if (preset === 'FF')     { setTargetPos(new THREE.Vector3(3, 13, 30));  setTargetCtrl(new THREE.Vector3(3, 5, 0)); }
+      else if (preset === 'SF')     { setTargetPos(new THREE.Vector3(3, 18, 30));  setTargetCtrl(new THREE.Vector3(3, 10, 0)); }
+      else if (preset === '3F')     { setTargetPos(new THREE.Vector3(3, 23, 28));  setTargetCtrl(new THREE.Vector3(3, 15, 0)); }
     },
   }));
 
