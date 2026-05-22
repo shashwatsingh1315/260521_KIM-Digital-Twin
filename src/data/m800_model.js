@@ -93,6 +93,15 @@ export const path = [
   { path_id: 'PATH-DISPATCH-CUSTOMER', from_location_id: 'LOC-WH-GF-DISPATCH',   to_location_id: 'LOC-CUSTOMER',       movement_mode: 'road',              resource_hint: 'covered truck',                   capacity: 'truckload',          distance: '2000m', travel_time: '30s', distance_val: 2000, travel_time_val: 30, status: 'active' },
   { path_id: 'PATH-KMP-EMPTYBIN-DOCK3',from_location_id: 'LOC-KMP-SF-B-WIP',     to_location_id: 'LOC-KMP-GF-DOCK3',   movement_mode: 'lift+trolley',      resource_hint: 'material lift + trolley',         capacity: 'empty bins',         distance: '40m',   travel_time: '10s', distance_val: 40,   travel_time_val: 10, status: 'active' },
   { path_id: 'PATH-WH-VC-EMPTYBIN-KMP',from_location_id: 'LOC-WH-GF-VC',         to_location_id: 'LOC-KMP-GF-DOCK3',   movement_mode: 'lift+ramp+trolley', resource_hint: 'WH lift + KMP trolley',           capacity: 'empty bins',         distance: '85m',   travel_time: '16s', distance_val: 85,   travel_time_val: 16, status: 'active' },
+  { path_id: 'PATH-SUP-WH-GATE',      from_location_id: 'EXTERNAL-SUPPLIER',   to_location_id: 'LOC-WH-GF-GATE',      movement_mode: 'road',              resource_hint: 'supplier truck',                  capacity: 'truckload',          distance: '1000m', travel_time: '15s', distance_val: 1000, travel_time_val: 15, status: 'active' },
+  { path_id: 'PATH-WH-GATE-INWARD',   from_location_id: 'LOC-WH-GF-GATE',      to_location_id: 'LOC-WH-GF-INWARD',    movement_mode: 'road/internal',     resource_hint: 'supplier truck',                  capacity: 'pallets/bins',       distance: '50m',   travel_time: '5s',  distance_val: 50,   travel_time_val: 5,  status: 'active' },
+  { path_id: 'PATH-WH-INWARD-IQC',    from_location_id: 'LOC-WH-GF-INWARD',    to_location_id: 'LOC-WH-GF-IQC',       movement_mode: 'manual/HPT',        resource_hint: 'HPT',                             capacity: 'bins',               distance: '10m',   travel_time: '2s',  distance_val: 10,   travel_time_val: 2,  status: 'active' },
+  { path_id: 'PATH-WH-IQC-ASRS-IN',   from_location_id: 'LOC-WH-GF-IQC',       to_location_id: 'LOC-WH-GF-ASRS-IN',   movement_mode: 'HPT/stacker',       resource_hint: 'stacker',                         capacity: 'pallet',             distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
+  { path_id: 'PATH-ASRS-WH-RAMP',     from_location_id: 'LOC-WH-GF-ASRS-IN',   to_location_id: 'LOC-WH-SF-RAMP',      movement_mode: 'stacker',           resource_hint: 'electric stacker',                capacity: 'pallets/bins',       distance: '20m',   travel_time: '5s',  distance_val: 20,   travel_time_val: 5,  status: 'active' },
+  { path_id: 'PATH-BRIDGE',           from_location_id: 'LOC-WH-SF-RAMP',      to_location_id: 'LOC-KMP-SF-RAMP',     movement_mode: 'stacker',           resource_hint: 'electric stacker',                capacity: 'pallets/bins',       distance: '30m',   travel_time: '6s',  distance_val: 30,   travel_time_val: 6,  status: 'active' },
+  { path_id: 'PATH-KMP-RAMP-TRSS',    from_location_id: 'LOC-KMP-SF-RAMP',     to_location_id: 'LOC-KMP-SF-A-TRSS',   movement_mode: 'trolley',           resource_hint: 'bin trolley',                     capacity: 'ESD trays',          distance: '12m',   travel_time: '3s',  distance_val: 12,   travel_time_val: 3,  status: 'active' },
+  { path_id: 'PATH-KMP-RAMP-BWIP',    from_location_id: 'LOC-KMP-SF-RAMP',     to_location_id: 'LOC-KMP-SF-B-WIP',    movement_mode: 'trolley',           resource_hint: 'bin trolley',                     capacity: 'station bins',       distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
+  { path_id: 'PATH-VRC-SF-BWIP',      from_location_id: 'LOC-KMP-SF-VRC',      to_location_id: 'LOC-KMP-SF-B-WIP',    movement_mode: 'trolley',           resource_hint: 'operator/trolley',                capacity: 'ESD bins',           distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
 ];
 
 // ─── 3. OPERATING ASSETS ──────────────────────────────────────────────────────
@@ -158,7 +167,9 @@ export const process = [
   { process_id: 'PROC-WH-DISPATCH-STAGE',    process_name: 'FG Retrieval to Dispatch Staging',   process_type: 'release',   input_state: 'FG_RELEASED',                             output_state_pass: 'DISPATCH_STAGED', output_state_fail: 'RELEASE_HOLD',        cycle_time: '2m',   cycle_time_s: 120,  status: 'active' },
   { process_id: 'PROC-WH-DISPATCH',          process_name: 'Truck Loading + Dispatch',           process_type: 'release',   input_state: 'DISPATCH_STAGED',                         output_state_pass: 'DISPATCHED',      output_state_fail: 'DOC_HOLD',             cycle_time: '15m',  cycle_time_s: 900,  status: 'active' },
   { process_id: 'PROC-KMP-EMPTYBIN-RETURN',  process_name: 'KMP Empty Leap Bin Return',          process_type: 'return',    input_state: 'EMPTY_BIN',                               output_state_pass: 'EMPTY_BIN_DOCK3', output_state_fail: 'DAMAGED_BIN_HOLD',     cycle_time: '5m',   cycle_time_s: 300,  status: 'active' },
-  { process_id: 'PROC-WH-EMPTYBIN-RETURN',   process_name: 'WH VC Empty Bin Return to KMP',      process_type: 'return',    input_state: 'EMPTY_BIN',                               output_state_pass: 'EMPTY_BIN_DOCK3', output_state_fail: 'DAMAGED_BIN_HOLD',     cycle_time: '8m',   cycle_time_s: 480,  status: 'active' }
+  { process_id: 'PROC-WH-EMPTYBIN-RETURN',   process_name: 'WH VC Empty Bin Return to KMP',      process_type: 'return',    input_state: 'EMPTY_BIN',                               output_state_pass: 'EMPTY_BIN_DOCK3', output_state_fail: 'DAMAGED_BIN_HOLD',     cycle_time: '8m',   cycle_time_s: 480,  status: 'active' },
+  { process_id: 'PROC-WH-RM-INBOUND',        process_name: 'Non-Electronic RM Arrival at WH',    process_type: 'receive',   input_state: 'RM_SUPPLIER',                             output_state_pass: 'RM_RECEIVED_WH',  output_state_fail: 'DOC_HOLD',             cycle_time: '10m',  cycle_time_s: 600,  status: 'active' },
+  { process_id: 'PROC-WH-RM-IQC',            process_name: 'WH GRN + IQC',                       process_type: 'inspect',   input_state: 'RM_RECEIVED_WH',                          output_state_pass: 'RM_IQC_PASS',     output_state_fail: 'RM_IQC_HOLD',          cycle_time: '15m',  cycle_time_s: 900,  status: 'active' }
 ];
 
 // Main production route: 24 steps from Supplier to Customer
@@ -174,8 +185,8 @@ export const route_step = [
   { route_id: 'ROUTE-M800-MAIN', seq: 90,  sequence_no: 90,  from_location_id: 'LOC-KMP-GF-VRC',      path_id: 'PATH-VRC-GF-SMT',       to_location_id: 'LOC-KMP-GF-SMT',     process_id: 'PROC-KMP-SMT',             input_state: 'SMT_LINE_WIP',      output_state: 'PCBA_WIP' },
   { route_id: 'ROUTE-M800-MAIN', seq: 100, sequence_no: 100, from_location_id: 'LOC-KMP-GF-SMT',      path_id: 'PATH-SMT-FCT',          to_location_id: 'LOC-KMP-GF-FCT',     process_id: 'PROC-KMP-FCT',             input_state: 'PCBA_WIP',          output_state: 'PCBA_FCT_PASS' },
   { route_id: 'ROUTE-M800-MAIN', seq: 110, sequence_no: 110, from_location_id: 'LOC-KMP-GF-FCT',      path_id: 'PATH-FCT-VRC-GF',       to_location_id: 'LOC-KMP-GF-VRC',     process_id: 'PROC-KMP-FCT',             input_state: 'PCBA_FCT_PASS',     output_state: 'PCBA_FCT_PASS' },
-  { route_id: 'ROUTE-M800-MAIN', seq: 120, sequence_no: 120, from_location_id: 'LOC-KMP-GF-VRC',      path_id: 'PATH-VRC-GF-SF',        to_location_id: 'LOC-KMP-SF-VRC',     process_id: 'PROC-KMP-1P-MATL-ISSUE',  input_state: 'PCBA_FCT_PASS',     output_state: 'LINE_WIP' },
-  { route_id: 'ROUTE-M800-MAIN', seq: 130, sequence_no: 130, from_location_id: 'LOC-KMP-SF-VRC',      path_id: 'PATH-VRC-SF-TRSS',      to_location_id: 'LOC-KMP-SF-A-TRSS',  process_id: 'PROC-KMP-TRSS-ASSEMBLY',   input_state: 'TRSS_CHILD_WIP',    output_state: 'TRSS_READY' },
+  { route_id: 'ROUTE-M800-MAIN', seq: 120, sequence_no: 120, from_location_id: 'LOC-KMP-GF-VRC',      path_id: 'PATH-VRC-GF-SF',        to_location_id: 'LOC-KMP-SF-VRC',     process_id: 'PROC-KMP-1P-MATL-ISSUE',  input_state: 'PCBA_FCT_PASS',     output_state: 'PCBA_FCT_PASS' },
+  { route_id: 'ROUTE-M800-MAIN', seq: 130, sequence_no: 130, from_location_id: 'LOC-KMP-SF-VRC',      path_id: 'PATH-VRC-SF-BWIP',      to_location_id: 'LOC-KMP-SF-B-WIP',  process_id: 'PROC-KMP-1P-MATL-ISSUE',   input_state: 'PCBA_FCT_PASS',    output_state: 'LINE_WIP' },
   { route_id: 'ROUTE-M800-MAIN', seq: 140, sequence_no: 140, from_location_id: 'LOC-WH-GF-ASRS-OUT',  path_id: 'PATH-WH-ASRS-KMP-SF',   to_location_id: 'LOC-KMP-SF-B-WIP',   process_id: 'PROC-KMP-BOP-RECEIPT',     input_state: 'RM_IQC_PASS',       output_state: 'BOP_LINE_WIP' },
   { route_id: 'ROUTE-M800-MAIN', seq: 150, sequence_no: 150, from_location_id: 'LOC-KMP-SF-B-WIP',    path_id: 'PATH-BWIP-1P',          to_location_id: 'LOC-KMP-SF-B-1P',    process_id: 'PROC-KMP-1P-SPM',          input_state: 'LINE_WIP',          output_state: 'SFG_METER' },
   { route_id: 'ROUTE-M800-MAIN', seq: 160, sequence_no: 160, from_location_id: 'LOC-KMP-SF-B-1P',     path_id: 'PATH-1P-SFG-PACK',      to_location_id: 'LOC-KMP-SF-SFG-PACK',process_id: 'PROC-KMP-SFG-BOX',         input_state: 'SFG_METER',         output_state: 'SFG_BINNED' },
@@ -191,6 +202,16 @@ export const route_step = [
   // Empty bin return routes
   { route_id: 'ROUTE-M800-EMPTY-KMP', seq: 10, sequence_no: 10, from_location_id: 'LOC-KMP-SF-B-WIP', path_id: 'PATH-KMP-EMPTYBIN-DOCK3', to_location_id: 'LOC-KMP-GF-DOCK3', process_id: 'PROC-KMP-EMPTYBIN-RETURN', input_state: 'EMPTY_BIN', output_state: 'EMPTY_BIN_DOCK3' },
   { route_id: 'ROUTE-M800-EMPTY-WH',  seq: 10, sequence_no: 10, from_location_id: 'LOC-WH-GF-VC',     path_id: 'PATH-WH-VC-EMPTYBIN-KMP',to_location_id: 'LOC-KMP-GF-DOCK3',  process_id: 'PROC-WH-EMPTYBIN-RETURN',  input_state: 'EMPTY_BIN', output_state: 'EMPTY_BIN_DOCK3' },
+
+  // Non-electronic inbound route
+  { route_id: 'ROUTE-M800-RM-WH', seq: 10, sequence_no: 10, from_location_id: 'EXTERNAL-SUPPLIER',   path_id: 'PATH-SUP-WH-GATE',     to_location_id: 'LOC-WH-GF-GATE',    process_id: 'PROC-WH-RM-INBOUND',        input_state: 'RM_SUPPLIER',       output_state: 'RM_RECEIVED_WH' },
+  { route_id: 'ROUTE-M800-RM-WH', seq: 20, sequence_no: 20, from_location_id: 'LOC-WH-GF-GATE',      path_id: 'PATH-WH-GATE-INWARD',  to_location_id: 'LOC-WH-GF-INWARD',  process_id: 'PROC-WH-RM-INBOUND',        input_state: 'RM_RECEIVED_WH',    output_state: 'RM_RECEIVED_WH' },
+  { route_id: 'ROUTE-M800-RM-WH', seq: 30, sequence_no: 30, from_location_id: 'LOC-WH-GF-INWARD',    path_id: 'PATH-WH-INWARD-IQC',   to_location_id: 'LOC-WH-GF-IQC',     process_id: 'PROC-WH-RM-IQC',            input_state: 'RM_RECEIVED_WH',    output_state: 'RM_IQC_PASS' },
+  { route_id: 'ROUTE-M800-RM-WH', seq: 40, sequence_no: 40, from_location_id: 'LOC-WH-GF-IQC',       path_id: 'PATH-WH-IQC-ASRS-IN',  to_location_id: 'LOC-WH-GF-ASRS-IN', process_id: 'PROC-WH-SFG-ASRS-PUTAWAY',  input_state: 'RM_IQC_PASS',       output_state: 'RM_ASRS_STOCK' },
+  { route_id: 'ROUTE-M800-RM-WH', seq: 50, sequence_no: 50, from_location_id: 'LOC-WH-GF-ASRS-IN',   path_id: 'PATH-ASRS-WH-RAMP',    to_location_id: 'LOC-WH-SF-RAMP',    process_id: 'PROC-KMP-BOP-RECEIPT',      input_state: 'RM_ASRS_STOCK',     output_state: 'BOP_LINE_WIP' },
+  { route_id: 'ROUTE-M800-RM-WH', seq: 60, sequence_no: 60, from_location_id: 'LOC-WH-SF-RAMP',      path_id: 'PATH-BRIDGE',          to_location_id: 'LOC-KMP-SF-RAMP',   process_id: 'PROC-KMP-BOP-RECEIPT',      input_state: 'BOP_LINE_WIP',      output_state: 'BOP_LINE_WIP' },
+  { route_id: 'ROUTE-M800-RM-WH', seq: 70, sequence_no: 70, from_location_id: 'LOC-KMP-SF-RAMP',     path_id: 'PATH-KMP-RAMP-TRSS',   to_location_id: 'LOC-KMP-SF-A-TRSS', process_id: 'PROC-KMP-TRSS-MATL-RECEIPT',input_state: 'BOP_LINE_WIP',      output_state: 'TRSS_CHILD_WIP' },
+  { route_id: 'ROUTE-M800-RM-WH', seq: 71, sequence_no: 71, from_location_id: 'LOC-KMP-SF-RAMP',     path_id: 'PATH-KMP-RAMP-BWIP',   to_location_id: 'LOC-KMP-SF-B-WIP',  process_id: 'PROC-KMP-BOP-RECEIPT',      input_state: 'BOP_LINE_WIP',      output_state: 'BOP_LINE_WIP' },
 ];
 
 // ─── 5. MATERIAL MODEL ────────────────────────────────────────────────────────
@@ -261,7 +282,9 @@ export const material_state = [
   { state_id: 'LOCATION_HOLD',     state_name: 'Location/system block',       state_type: 'exception' },
   { state_id: 'ORDER_HOLD',        state_name: 'MTO/order sequencing hold',   state_type: 'exception' },
   { state_id: 'RELEASE_HOLD',      state_name: 'QA/SAP release hold',         state_type: 'exception' },
-  { state_id: 'DAMAGED_BIN_HOLD',  state_name: 'Damaged bin hold',            state_type: 'exception' }
+  { state_id: 'DAMAGED_BIN_HOLD',  state_name: 'Damaged bin hold',            state_type: 'exception' },
+  { state_id: 'RM_RECEIVED_WH',    state_name: 'Received at WH',              state_type: 'inbound' },
+  { state_id: 'RM_ASRS_STOCK',     state_name: 'Non-electronic RM in WH ASRS',state_type: 'storage' }
 ];
 
 export const container = [
@@ -459,6 +482,15 @@ export const sim_rates = {
   'PATH-DISPATCH-CUSTOMER': 0.18,
   'PATH-KMP-EMPTYBIN-DOCK3':0.2,
   'PATH-WH-VC-EMPTYBIN-KMP':0.15,
+  'PATH-SUP-WH-GATE':       0.60,
+  'PATH-WH-GATE-INWARD':    0.55,
+  'PATH-WH-INWARD-IQC':     0.50,
+  'PATH-WH-IQC-ASRS-IN':    0.45,
+  'PATH-ASRS-WH-RAMP':      0.40,
+  'PATH-BRIDGE':            0.40,
+  'PATH-KMP-RAMP-TRSS':     0.38,
+  'PATH-KMP-RAMP-BWIP':     0.35,
+  'PATH-VRC-SF-BWIP':       0.28
 };
 
 // Dynamically construct buffer capacities from location nodes

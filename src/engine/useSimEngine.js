@@ -9,7 +9,11 @@ const SIM_EDGES = [
   { from: 'LOC-KMP-GF-IQC',      to: 'LOC-KMP-FF-ESTORE',    pathId: 'PATH-IQC-LIFT-GF',         processId: 'PROC-KMP-ESTORE-PUTAWAY',   rate: 0.55 },
   { from: 'LOC-KMP-FF-ESTORE',   to: 'LOC-KMP-GF-SMT',       pathId: 'PATH-VRC-GF-SMT',          processId: 'PROC-KMP-SMT-ISSUE',        rate: 0.50 },
   { from: 'LOC-KMP-GF-SMT',      to: 'LOC-KMP-GF-FCT',       pathId: 'PATH-SMT-FCT',             processId: 'PROC-KMP-SMT',              rate: 0.45 },
-  { from: 'LOC-KMP-GF-FCT',      to: 'LOC-KMP-SF-A-TRSS',    pathId: 'PATH-VRC-SF-TRSS',         processId: 'PROC-KMP-TRSS-ASSEMBLY',    rate: 0.40 },
+  { from: 'LOC-KMP-GF-FCT',      to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-VRC-GF-SF',           processId: 'PROC-KMP-1P-MATL-ISSUE',    rate: 0.40 },
+  { from: '_SUPPLIER_WH',        to: 'LOC-WH-GF-IQC',        pathId: 'PATH-WH-INWARD-IQC',       processId: 'PROC-WH-RM-INBOUND',        rate: 0.70 },
+  { from: 'LOC-WH-GF-IQC',       to: 'LOC-WH-GF-ASRS-IN',    pathId: 'PATH-WH-IQC-ASRS-IN',      processId: 'PROC-WH-RM-IQC',            rate: 0.60 },
+  { from: 'LOC-WH-GF-ASRS-IN',   to: 'LOC-KMP-SF-A-TRSS',    pathId: 'PATH-KMP-RAMP-TRSS',       processId: 'PROC-KMP-TRSS-MATL-RECEIPT',rate: 0.38 },
+  { from: 'LOC-WH-GF-ASRS-IN',   to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-KMP-RAMP-BWIP',       processId: 'PROC-KMP-BOP-RECEIPT',      rate: 0.35 },
   { from: 'LOC-KMP-SF-A-TRSS',   to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-TRSS-BWIP',           processId: 'PROC-KMP-1P-MATL-ISSUE',    rate: 0.38 },
   { from: 'LOC-KMP-SF-B-WIP',    to: 'LOC-KMP-SF-B-1P',      pathId: 'PATH-BWIP-1P',             processId: 'PROC-KMP-1P-SPM',           rate: 0.36 },
   { from: 'LOC-KMP-SF-B-1P',     to: 'LOC-KMP-SF-SFG-PACK',  pathId: 'PATH-1P-SFG-PACK',         processId: 'PROC-KMP-SFG-BOX',          rate: 0.33 },
@@ -88,7 +92,7 @@ export function runSimulation(activeScenarios = []) {
       if (rate <= 0) continue;
 
       // Source: either unlimited supplier or a buffer
-      const srcLevel = edge.from === '_SUPPLIER' ? Infinity : (next[edge.from] ?? 0);
+      const srcLevel = (edge.from === '_SUPPLIER' || edge.from === '_SUPPLIER_WH') ? Infinity : (next[edge.from] ?? 0);
       if (srcLevel <= 0) continue;
 
       // Destination capacity check
@@ -98,7 +102,7 @@ export function runSimulation(activeScenarios = []) {
       }
 
       if (Math.random() < rate) {
-        if (edge.from !== '_SUPPLIER') next[edge.from]--;
+        if (edge.from !== '_SUPPLIER' && edge.from !== '_SUPPLIER_WH') next[edge.from]--;
         alive.push({
           id: pid++,
           pathId: edge.pathId,
