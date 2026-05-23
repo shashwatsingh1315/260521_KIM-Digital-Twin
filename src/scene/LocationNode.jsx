@@ -68,15 +68,35 @@ function ProcMesh({ loc, simState, dimmed }) {
       </mesh>
     );
   }
-  
+
   const familyMat = MAT[familyMatKey(loc)];
-  
+
   // Scale machines up so they're proportionate to the floor size
   return (
     <group scale={[1.6, 1.6, 1.6]}>
-      <MeshComp fillRatio={fillRatio} familyMat={familyMat} dimmed={dimmed} />
+      <MeshComp fillRatio={fillRatio} familyMat={familyMat} dimmed={dimmed} loc={loc} />
     </group>
   );
+}
+
+// ─── Per-location rotation (Y axis, radians) ──────────────────────────────
+// Docks/gates point outward toward where trucks arrive. Ramp landings on the
+// SF bridge face each other across the gap.
+const ROT = {
+  // KMP exterior — supplier truck approaches from -x side, so loading face
+  // points -x. Default DockMesh "opens" toward -z, so rotate +π/2.
+  'LOC-KMP-GF-GATE':  Math.PI / 2,
+  'LOC-KMP-GF-DOCK3': Math.PI / 2,
+  // WH exterior — customer side is +x, so loading face points +x.
+  'LOC-WH-GF-GATE':   -Math.PI / 2,
+  'LOC-WH-GF-INWARD': -Math.PI / 2,
+  'LOC-WH-GF-DISPATCH': -Math.PI / 2,
+  // Bridge ramp landings face each other across the SF gap (x-axis bridge).
+  'LOC-KMP-SF-RAMP':  Math.PI / 2,
+  'LOC-WH-SF-RAMP':  -Math.PI / 2,
+};
+function locationRotation(loc) {
+  return ROT[loc.location_id] ?? 0;
 }
 
 // ─── Selection indicator ring ─────────────────────────────────────────────────
@@ -100,9 +120,12 @@ export default function LocationNode({ loc, pos, simState, onSelect, isSelected,
     onSelect?.(loc);
   };
 
+  const yRot = locationRotation(loc);
+
   return (
     <group
       position={[pos.x, pos.y, pos.z]}
+      rotation={[0, yRot, 0]}
       onClick={handleClick}
       onPointerEnter={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
       onPointerLeave={() => { document.body.style.cursor = 'default'; }}

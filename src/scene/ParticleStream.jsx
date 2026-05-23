@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { routeWaypoints, pointAt, arcLengths } from './PathRouter.js';
 
 const MAX_PARTICLES = 150;
 const DUMMY = new THREE.Object3D();
@@ -14,9 +15,21 @@ function particleColor(pathId) {
   return '#94a3b8';
 }
 
-export default function ParticleStream({ simState, pathSegments, layout }) {
-  const meshRef   = useRef();
+export default function ParticleStream({ simState, pathSegments, layout, paths = [] }) {
+  const meshRef    = useRef();
   const prevPosRef = useRef(new Map());
+
+  // Pre-compute waypoints + arc-lengths for every declared path so we don't
+  // re-route every frame. Particles whose pathId isn't in here fall back to
+  // an on-the-fly route from fromLocId/toLocId.
+  const pathCache = useMemo(() => {
+    const cache = {};
+    for (const p of paths) {
+      const wps = routeWaypoints(p.from_location_id, p.to_location_id, layout);
+      if (wps.length >= 2) cache[p.path_id] = { wps, cum: arcLengths(wps) };
+    }
+    return cache;
+  }, [paths, layout]);
 
   useFrame(() => {
     if (!meshRef.current || !simState) return;
@@ -26,18 +39,14 @@ export default function ParticleStream({ simState, pathSegments, layout }) {
 
     for (let i = 0; i < count; i++) {
       const p = particles[i];
-      let seg = pathSegments[p.pathId];
-      if (!seg && p.fromLocId && p.toLocId && layout[p.fromLocId] && layout[p.toLocId]) {
-        const f = layout[p.fromLocId];
-        const t = layout[p.toLocId];
-        seg = {
-          start: new THREE.Vector3(f.x, f.y + 0.5, f.z),
-          end:   new THREE.Vector3(t.x, t.y + 0.5, t.z),
-        };
+      let entry = pathCache[p.pathId];
+      if (!entry && p.fromLocId && p.toLocId) {
+        const wps = routeWaypoints(p.fromLocId, p.toLocId, layout);
+        if (wps.length >= 2) entry = { wps, cum: arcLengths(wps) };
       }
-      if (!seg) continue;
+      if (!entry) continue;
 
-      const target = new THREE.Vector3().lerpVectors(seg.start, seg.end, p.progress);
+      const target = pointAt(entry.wps, p.progress, entry.cum);
       const prev   = prevPosRef.current.get(p.id);
       const pos    = prev ? prev.clone().lerp(target, 0.25) : target.clone();
       currentPos.set(p.id, pos);
@@ -57,8 +66,13 @@ export default function ParticleStream({ simState, pathSegments, layout }) {
 
   return (
     <instancedMesh ref={meshRef} args={[null, null, MAX_PARTICLES]} renderOrder={3}>
-      <sphereGeometry args={[0.18, 6, 6]} />
-      <meshBasicMaterial transparent opacity={0.85} />
+      <sphereGeometry args={[0.22, 16, 16]} />
+      <meshStandardMaterial
+        emissive="#ffffff"
+        emissiveIntensity={0.45}
+        roughness={0.35}
+        metalness={0.2}
+      />
     </instancedMesh>
   );
 }

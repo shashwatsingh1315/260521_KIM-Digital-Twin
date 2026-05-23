@@ -30,8 +30,17 @@ const BASELINE = {
   'LOC-KMP-SF-B-1P':      { x: -4,  z: 0  },
   'LOC-KMP-SF-SFG-PACK':  { x: 0,   z: 0  },
   'LOC-KMP-SF-RAMP':      { x: 3,   z: 0  },
+  'LOC-KMP-SF-STAIR':     { x: -10, z: -4 },
 
   'LOC-KMP-3F-FAT':       { x: -14, z: 0  },
+  'LOC-KMP-3F-STAIR':     { x: -10, z: -4 },
+
+  // WH material lift (column at x=27, z=-4 — opposite side of WH from ASRS)
+  'LOC-WH-GF-LIFT':       { x: 27,  z: -4 },
+  'LOC-WH-FF-LIFT':       { x: 27,  z: -4 },
+  'LOC-WH-SF-LIFT':       { x: 27,  z: -4 },
+  'LOC-WH-3F-LIFT':       { x: 27,  z: -4 },
+  'LOC-WH-4F-LIFT':       { x: 27,  z: -4 },
 
   'LOC-WH-SF-RAMP':       { x: 6,   z: 0  },
 
@@ -39,13 +48,11 @@ const BASELINE = {
   'LOC-WH-GF-ASRS-OUT':   { x: 10,  z: 3  },
   'LOC-WH-GF-ASRS':       { x: 12,  z: 0  },
   'LOC-WH-GF-FG-ASRS':    { x: 14,  z: 4  },
-  'LOC-WH-GF-VC':         { x: 17,  z: 0  },
-  'LOC-WH-GF-PACK':       { x: 21,  z: 0  },
-  // FF Line A (-z side) and SF Line B (+z side) — offset so they're distinct in layout view
-  'LOC-WH-FF-VC':         { x: 17,  z: -3 },
-  'LOC-WH-FF-PACK':       { x: 21,  z: -3 },
-  'LOC-WH-SF-VC':         { x: 17,  z: 3  },
-  'LOC-WH-SF-PACK':       { x: 21,  z: 3  },
+  // VC + Pack live only on FF (Line A) and SF (Line B) — no GF instance.
+  'LOC-WH-FF-VC':         { x: 17,  z: 0  },
+  'LOC-WH-FF-PACK':       { x: 21,  z: 0  },
+  'LOC-WH-SF-VC':         { x: 17,  z: 0  },
+  'LOC-WH-SF-PACK':       { x: 21,  z: 0  },
   'LOC-WH-GF-IQC':        { x: 26,  z: 0  },
   'LOC-WH-GF-INWARD':     { x: 29,  z: 0  },
   'LOC-WH-GF-GATE':       { x: 34,  z: 0  },

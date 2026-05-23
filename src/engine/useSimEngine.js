@@ -4,34 +4,50 @@ import { buffer_capacity, initial_fill, scenario_override } from '../data/m800_m
 // Direct simulation edges: source buffer → destination buffer.
 // Transit nodes (lifts, VRCs, ramps) are collapsed into particle travel time.
 // pathId is used for 3D particle animation; fromLocId/toLocId drive layout.
+// Rates target a balanced steady-state at ~0.5 SFG/tick throughput.
+// Pacing rule: every node's drain ≈ fill so no buffer drifts to 0 (starves)
+// or 10 (pegs). BWIP receives 3 sub-streams (PCBA + TRSS + BOP); each is
+// paced at ~⅓ of 1P consumption so the sum matches the drain.
 const SIM_EDGES = [
-  { from: '_SUPPLIER',            to: 'LOC-KMP-GF-IQC',       pathId: 'PATH-DOCK3-IQC',          processId: 'PROC-KMP-INBOUND',          rate: 0.80 },
-  { from: 'LOC-KMP-GF-IQC',      to: 'LOC-KMP-FF-ESTORE',    pathId: 'PATH-IQC-LIFT-GF',         processId: 'PROC-KMP-ESTORE-PUTAWAY',   rate: 0.55 },
-  { from: 'LOC-KMP-FF-ESTORE',   to: 'LOC-KMP-GF-SMT',       pathId: 'PATH-VRC-GF-SMT',          processId: 'PROC-KMP-SMT-ISSUE',        rate: 0.50 },
-  { from: 'LOC-KMP-GF-SMT',      to: 'LOC-KMP-GF-FCT',       pathId: 'PATH-SMT-FCT',             processId: 'PROC-KMP-SMT',              rate: 0.45 },
-  { from: 'LOC-KMP-GF-FCT',      to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-VRC-GF-SF',           processId: 'PROC-KMP-1P-MATL-ISSUE',    rate: 0.40 },
-  { from: '_SUPPLIER_WH',        to: 'LOC-WH-GF-IQC',        pathId: 'PATH-WH-INWARD-IQC',       processId: 'PROC-WH-RM-INBOUND',        rate: 0.70 },
-  { from: 'LOC-WH-GF-IQC',       to: 'LOC-WH-GF-ASRS-IN',    pathId: 'PATH-WH-IQC-ASRS-IN',      processId: 'PROC-WH-RM-IQC',            rate: 0.60 },
-  { from: 'LOC-WH-GF-ASRS-IN',   to: 'LOC-KMP-SF-A-TRSS',    pathId: 'PATH-KMP-RAMP-TRSS',       processId: 'PROC-KMP-TRSS-MATL-RECEIPT',rate: 0.38 },
-  { from: 'LOC-WH-GF-ASRS-IN',   to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-KMP-RAMP-BWIP',       processId: 'PROC-KMP-BOP-RECEIPT',      rate: 0.35 },
-  { from: 'LOC-KMP-SF-A-TRSS',   to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-TRSS-BWIP',           processId: 'PROC-KMP-1P-MATL-ISSUE',    rate: 0.38 },
-  { from: 'LOC-KMP-SF-B-WIP',    to: 'LOC-KMP-SF-B-1P',      pathId: 'PATH-BWIP-1P',             processId: 'PROC-KMP-1P-SPM',           rate: 0.36 },
-  { from: 'LOC-KMP-SF-B-1P',     to: 'LOC-KMP-SF-SFG-PACK',  pathId: 'PATH-1P-SFG-PACK',         processId: 'PROC-KMP-SFG-BOX',          rate: 0.33 },
-  { from: 'LOC-KMP-SF-SFG-PACK', to: 'LOC-WH-GF-ASRS',       pathId: 'PATH-KMP-SFG-WH-ASRS',     processId: 'PROC-WH-SFG-ASRS-PUTAWAY',  rate: 0.30 },
-  // Line A (FF): ~50% of VC/Pack volume
-  { from: 'LOC-WH-GF-ASRS',      to: 'LOC-WH-FF-VC',         pathId: 'PATH-ASRS-FF-VC',          processId: 'PROC-WH-NIC-SIM-SEAL',      rate: 0.15 },
-  { from: 'LOC-WH-FF-VC',        to: 'LOC-WH-FF-PACK',        pathId: 'PATH-FF-VC-PACK',          processId: 'PROC-WH-SCREEN-LASER-HOLO', rate: 0.14 },
-  { from: 'LOC-WH-FF-PACK',      to: 'LOC-WH-GF-FG-ASRS',    pathId: 'PATH-FF-PACK-FG-ASRS',     processId: 'PROC-WH-FG-ASRS-PUTAWAY',   rate: 0.13 },
-  // Line B (SF): ~50% of VC/Pack volume
-  { from: 'LOC-WH-GF-ASRS',      to: 'LOC-WH-SF-VC',         pathId: 'PATH-ASRS-SF-VC',          processId: 'PROC-WH-NIC-SIM-SEAL',      rate: 0.15 },
-  { from: 'LOC-WH-SF-VC',        to: 'LOC-WH-SF-PACK',        pathId: 'PATH-SF-VC-PACK',          processId: 'PROC-WH-SCREEN-LASER-HOLO', rate: 0.14 },
-  { from: 'LOC-WH-SF-PACK',      to: 'LOC-WH-GF-FG-ASRS',    pathId: 'PATH-SF-PACK-FG-ASRS',     processId: 'PROC-WH-AUTO-PACK',         rate: 0.13 },
-  { from: 'LOC-WH-GF-FG-ASRS',   to: 'LOC-WH-GF-DISPATCH',   pathId: 'PATH-FG-ASRS-DISPATCH',    processId: 'PROC-WH-DISPATCH-STAGE',    rate: 0.24 },
-  { from: 'LOC-WH-GF-DISPATCH',  to: '_CUSTOMER',             pathId: 'PATH-DISPATCH-CUSTOMER',   processId: 'PROC-WH-DISPATCH',          rate: 0.22 },
-  // FAT Lab sampling: low-rate pull from FG-ASRS (n=5 functional, n=32 visual per batch)
-  { from: 'LOC-WH-GF-FG-ASRS',   to: 'LOC-KMP-3F-FAT',       pathId: 'PATH-FG-ASRS-FAT',         processId: 'PROC-KMP-PDI-FAT',          rate: 0.05 },
-  // Empty bin return: KMP B-WIP → Dock3 (reverse logistics, visible as separate particle stream)
-  { from: 'LOC-KMP-SF-B-WIP',    to: 'LOC-KMP-GF-DOCK3',     pathId: 'PATH-KMP-EMPTYBIN-DOCK3',  processId: 'PROC-KMP-EMPTYBIN-RETURN',  rate: 0.12 },
+  // ── KMP main chain (raw → SMT → FCT → SF) ──
+  { from: '_SUPPLIER',            to: 'LOC-KMP-GF-IQC',       pathId: 'PATH-DOCK3-IQC',          processId: 'PROC-KMP-INBOUND',          rate: 0.55 },
+  { from: 'LOC-KMP-GF-IQC',       to: 'LOC-KMP-FF-ESTORE',    pathId: 'PATH-IQC-LIFT-GF',         processId: 'PROC-KMP-ESTORE-PUTAWAY',   rate: 0.50 },
+  { from: 'LOC-KMP-FF-ESTORE',    to: 'LOC-KMP-GF-SMT',       pathId: 'PATH-VRC-GF-SMT',          processId: 'PROC-KMP-SMT-ISSUE',        rate: 0.50 },
+  { from: 'LOC-KMP-GF-SMT',       to: 'LOC-KMP-GF-FCT',       pathId: 'PATH-SMT-FCT',             processId: 'PROC-KMP-SMT',              rate: 0.50 },
+  // PCBA contribution to BWIP — one of three sub-streams
+  { from: 'LOC-KMP-GF-FCT',       to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-VRC-GF-SF',           processId: 'PROC-KMP-1P-MATL-ISSUE',    rate: 0.18 },
+
+  // ── WH inbound chain (raw → IQC → ASRS-IN, then split to TRSS / BWIP) ──
+  { from: '_SUPPLIER_WH',         to: 'LOC-WH-GF-IQC',        pathId: 'PATH-WH-INWARD-IQC',       processId: 'PROC-WH-RM-INBOUND',        rate: 0.45 },
+  { from: 'LOC-WH-GF-IQC',        to: 'LOC-WH-GF-ASRS-IN',    pathId: 'PATH-WH-IQC-ASRS-IN',      processId: 'PROC-WH-RM-IQC',            rate: 0.40 },
+  // ASRS-IN drains via TRSS feed + BOP feed (≈ 0.18 + 0.18 = 0.36); refill at 0.40
+  { from: 'LOC-WH-GF-ASRS-IN',    to: 'LOC-KMP-SF-A-TRSS',    pathId: 'PATH-KMP-RAMP-TRSS',       processId: 'PROC-KMP-TRSS-MATL-RECEIPT',rate: 0.18 },
+  { from: 'LOC-WH-GF-ASRS-IN',    to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-KMP-RAMP-BWIP',       processId: 'PROC-KMP-BOP-RECEIPT',      rate: 0.18 },
+  // TRSS subassembly → BWIP — third sub-stream
+  { from: 'LOC-KMP-SF-A-TRSS',    to: 'LOC-KMP-SF-B-WIP',     pathId: 'PATH-TRSS-BWIP',           processId: 'PROC-KMP-1P-MATL-ISSUE',    rate: 0.18 },
+
+  // ── 1P assembly → SFG → cross to WH ASRS ──
+  // BWIP drains at 0.55 (just over the 3×0.18 = 0.54 inflow so no peg)
+  { from: 'LOC-KMP-SF-B-WIP',     to: 'LOC-KMP-SF-B-1P',      pathId: 'PATH-BWIP-1P',             processId: 'PROC-KMP-1P-SPM',           rate: 0.55 },
+  { from: 'LOC-KMP-SF-B-1P',      to: 'LOC-KMP-SF-SFG-PACK',  pathId: 'PATH-1P-SFG-PACK',         processId: 'PROC-KMP-SFG-BOX',          rate: 0.55 },
+  { from: 'LOC-KMP-SF-SFG-PACK',  to: 'LOC-WH-GF-ASRS',       pathId: 'PATH-KMP-SFG-WH-ASRS',     processId: 'PROC-WH-SFG-ASRS-PUTAWAY',  rate: 0.50 },
+
+  // ── WH lines A & B (FF + SF) — each handles half the SFG ──
+  { from: 'LOC-WH-GF-ASRS',       to: 'LOC-WH-FF-VC',         pathId: 'PATH-ASRS-FF-VC',          processId: 'PROC-WH-NIC-SIM-SEAL',      rate: 0.25 },
+  { from: 'LOC-WH-FF-VC',         to: 'LOC-WH-FF-PACK',       pathId: 'PATH-FF-VC-PACK',          processId: 'PROC-WH-SCREEN-LASER-HOLO', rate: 0.25 },
+  { from: 'LOC-WH-FF-PACK',       to: 'LOC-WH-GF-FG-ASRS',    pathId: 'PATH-FF-PACK-FG-ASRS',     processId: 'PROC-WH-FG-ASRS-PUTAWAY',   rate: 0.25 },
+  { from: 'LOC-WH-GF-ASRS',       to: 'LOC-WH-SF-VC',         pathId: 'PATH-ASRS-SF-VC',          processId: 'PROC-WH-NIC-SIM-SEAL',      rate: 0.25 },
+  { from: 'LOC-WH-SF-VC',         to: 'LOC-WH-SF-PACK',       pathId: 'PATH-SF-VC-PACK',          processId: 'PROC-WH-SCREEN-LASER-HOLO', rate: 0.25 },
+  { from: 'LOC-WH-SF-PACK',       to: 'LOC-WH-GF-FG-ASRS',    pathId: 'PATH-SF-PACK-FG-ASRS',     processId: 'PROC-WH-AUTO-PACK',         rate: 0.25 },
+
+  // ── FG ASRS → Dispatch → Customer ──
+  // FG-ASRS fills at 0.50 (FF+SF). Drain 0.48 + 0.05 = 0.53 → slow controlled drain
+  { from: 'LOC-WH-GF-FG-ASRS',    to: 'LOC-WH-GF-DISPATCH',   pathId: 'PATH-FG-ASRS-DISPATCH',    processId: 'PROC-WH-DISPATCH-STAGE',    rate: 0.48 },
+  { from: 'LOC-WH-GF-DISPATCH',   to: '_CUSTOMER',            pathId: 'PATH-DISPATCH-CUSTOMER',   processId: 'PROC-WH-DISPATCH',          rate: 0.46 },
+  // FAT sampling — low-rate QA pull (n=5 functional, n=32 visual per batch)
+  { from: 'LOC-WH-GF-FG-ASRS',    to: 'LOC-KMP-3F-FAT',       pathId: 'PATH-FG-ASRS-FAT',         processId: 'PROC-KMP-PDI-FAT',          rate: 0.05 },
+  // ── Reverse logistics: empty bins back to KMP dock ──
+  { from: 'LOC-KMP-SF-B-WIP',     to: 'LOC-KMP-GF-DOCK3',     pathId: 'PATH-KMP-EMPTYBIN-DOCK3',  processId: 'PROC-KMP-EMPTYBIN-RETURN',  rate: 0.12 },
 ];
 
 const BUFFER_LOCS = Object.keys(buffer_capacity);

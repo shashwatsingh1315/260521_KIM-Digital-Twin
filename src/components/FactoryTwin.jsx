@@ -8,6 +8,9 @@ import BuildingShells, { KMP_BOUNDS, WH_BOUNDS } from '../scene/BuildingShells.j
 import LocationNode from '../scene/LocationNode.jsx';
 import FloorPaths from '../scene/FloorPaths.jsx';
 import ParticleStream from '../scene/ParticleStream.jsx';
+import ScenePostFX from '../scene/ScenePostFX.jsx';
+import SetDressing from '../scene/SetDressing.jsx';
+import { floorGridNormalMap, warningStripeMap } from '../materials/factoryMaterials.js';
 
 const FLOOR_Y = { GF: 0, FF: 5, SF: 10, '3F': 15, '4F': 20 };
 
@@ -33,28 +36,65 @@ const FLOOR_PLATES = [
 ];
 
 // ─── Floor surface plates ──────────────────────────────────────────────────────
-// Plain matte floors. Single corner label per plate at small size, no grid
-// overlay, no emissive — floors are background, not foreground.
+// Polished concrete-like floor slabs with subtle painted safety stripe along the
+// long edge. Single corner label per plate. Materials are PBR so they pick up
+// the environment subtly — the lift/VRC columns gleam, machines cast shadows.
 function FloorSurfaces({ activeFloor }) {
-  const dimmedOpacity = 0.12;
+  const dimmedOpacity = 0.14;
   const isFloorActive = (floor) => activeFloor === 'all' || activeFloor === floor;
 
   return (
     <>
       {FLOOR_PLATES.map(({ key, cx, y, cz, w, d, color, label }) => {
-        let f = key === 'bridge' ? 'SF' : key.split('-')[1].toUpperCase();
+        const f = key === 'bridge' ? 'SF' : key.split('-')[1].toUpperCase();
         const active = isFloorActive(f);
+        const slabColor = key.startsWith('wh') ? '#3a4660' : key === 'bridge' ? '#37445e' : '#3c4866';
         return (
           <group key={key} position={[cx, y - 0.01, cz]}>
-            <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow renderOrder={2}>
-              <planeGeometry args={[w, d]} />
-              <meshLambertMaterial color={color} transparent={!active} opacity={active ? 1 : dimmedOpacity} />
+            {/* Slab body — slim box so it has a visible thickness from the side */}
+            <mesh position={[0, -0.06, 0]} receiveShadow castShadow>
+              <boxGeometry args={[w, 0.12, d]} />
+              <meshStandardMaterial
+                color={slabColor}
+                roughness={0.78}
+                metalness={0.12}
+                transparent={!active}
+                opacity={active ? 1 : dimmedOpacity}
+              />
             </mesh>
+            {/* Inset painted area — work zone with a tiled grid normal map so
+                the slab reads as a real floor, not a flat plane */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.001, 0]} receiveShadow>
+              <planeGeometry args={[w - 1.4, d - 1.4]} />
+              <meshStandardMaterial
+                color={color}
+                roughness={0.78}
+                metalness={0.06}
+                normalMap={floorGridNormalMap || undefined}
+                normalScale-x={0.55}
+                normalScale-y={0.55}
+                transparent={!active}
+                opacity={active ? 0.92 : dimmedOpacity}
+              />
+            </mesh>
+            {/* Yellow/black hazard stripe along the front edge */}
+            {key !== 'bridge' && warningStripeMap && (
+              <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, d / 2 - 0.25]}>
+                <planeGeometry args={[w - 1.2, 0.28]} />
+                <meshStandardMaterial
+                  map={warningStripeMap}
+                  roughness={0.55}
+                  metalness={0.15}
+                  transparent={!active}
+                  opacity={active ? 0.92 : dimmedOpacity}
+                />
+              </mesh>
+            )}
             {label && (
-              <Html position={[-w / 2 + 1, 0.05, d / 2 - 0.6]} distanceFactor={30}>
+              <Html position={[-w / 2 + 1, 0.06, d / 2 - 0.6]} distanceFactor={30}>
                 <div style={{
                   fontSize: 10,
-                  color: 'rgba(148, 163, 184, 0.7)',
+                  color: 'rgba(203, 213, 225, 0.78)',
                   fontFamily: 'monospace',
                   letterSpacing: '0.05em',
                   whiteSpace: 'nowrap',
@@ -132,6 +172,7 @@ const TwinScene = forwardRef(({ simState, layout, onSelectLoc, selectedLocId, ac
       <SceneAtmosphere />
       <BuildingShells />
       <FloorSurfaces activeFloor={activeFloor} />
+      <SetDressing />
       {leaves.map(loc => {
         const active = isFloorActive(loc.floor);
         return (
@@ -146,8 +187,8 @@ const TwinScene = forwardRef(({ simState, layout, onSelectLoc, selectedLocId, ac
           />
         );
       })}
-      {/* Paths removed based on instruction 4.2 Option B */}
-      <ParticleStream simState={simState} pathSegments={pathSegments} layout={layout} />
+      <FloorPaths path={path} layout={layout} activeFloor={activeFloor} />
+      <ParticleStream simState={simState} pathSegments={pathSegments} layout={layout} paths={path} />
     </group>
   );
 });
@@ -176,9 +217,12 @@ export default function FactoryTwin({ simState, layout, sceneRef, isMobile, onSe
       camera={{ position: [0, 30, 40], fov: 45 }}
       style={{ background: 'transparent' }}
       dpr={[1, 2]}
+      shadows="soft"
+      gl={{ antialias: false, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.18 }}
     >
       <TwinScene ref={sceneRef} simState={simState} layout={layout} onSelectLoc={onSelectLoc} selectedLocId={selectedLocId} activeFloor={activeFloor} />
       <OrbitControls makeDefault enableDamping enablePan={!isMobile} />
+      <ScenePostFX isMobile={isMobile} />
     </Canvas>
   );
 }

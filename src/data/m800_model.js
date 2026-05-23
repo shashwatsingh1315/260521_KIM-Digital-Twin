@@ -48,8 +48,19 @@ export const location_node = [
   { location_id: 'LOC-KMP-SF-SFG-PACK', parent_location_id: 'LOC-KMP-SF', location_name: 'SFG Boxing / Palletizing',location_type: 'station_zone',site: 'KMP', floor: 'SF', block: 'B-Block', zone: 'SFG Packing',  capacity: '25 bins/pallet', capacity_limit: 8,  initial_fill_ratio: 0.2, status: 'active' },
   { location_id: 'LOC-KMP-SF-RAMP',     parent_location_id: 'LOC-KMP-SF', location_name: 'KMP SF Ramp Landing',   location_type: 'ramp',         site: 'KMP', floor: 'SF', block: null,      zone: 'Ramp',        capacity: 'pallets / bins', capacity_limit: 5,  initial_fill_ratio: 0.0, status: 'active' },
 
+  // KMP SF/3F stair — manual-trolley access between SF and 3F (KMP lift only goes to SF)
+  { location_id: 'LOC-KMP-SF-STAIR', parent_location_id: 'LOC-KMP-SF', location_name: 'KMP SF Stair Landing', location_type: 'stair', site: 'KMP', floor: 'SF', block: null, zone: 'Stair', capacity: 'manual trolley', capacity_limit: 2, initial_fill_ratio: 0.0, status: 'active' },
+
   // KMP 3F
+  { location_id: 'LOC-KMP-3F-STAIR', parent_location_id: 'LOC-KMP-3F', location_name: 'KMP 3F Stair Landing', location_type: 'stair', site: 'KMP', floor: '3F', block: null, zone: 'Stair', capacity: 'manual trolley', capacity_limit: 2, initial_fill_ratio: 0.0, status: 'active' },
   { location_id: 'LOC-KMP-3F-FAT', parent_location_id: 'LOC-KMP-3F', location_name: 'FAT Lab', location_type: 'inspection_area', site: 'KMP', floor: '3F', block: null, zone: 'FAT', capacity: 'samples', capacity_limit: 5, initial_fill_ratio: 0.0, status: 'active' },
+
+  // WH material lift — vertical transport servicing every WH floor (GF/FF/SF/3F/4F)
+  { location_id: 'LOC-WH-GF-LIFT', parent_location_id: 'LOC-WH-GF', location_name: 'WH Material Lift GF', location_type: 'lift', site: 'WH', floor: 'GF', block: null, zone: 'Lift', capacity: '5 pallets', capacity_limit: 5, initial_fill_ratio: 0.0, status: 'active' },
+  { location_id: 'LOC-WH-FF-LIFT', parent_location_id: 'LOC-WH-FF', location_name: 'WH Material Lift FF', location_type: 'lift', site: 'WH', floor: 'FF', block: null, zone: 'Lift', capacity: '5 pallets', capacity_limit: 5, initial_fill_ratio: 0.0, status: 'active' },
+  { location_id: 'LOC-WH-SF-LIFT', parent_location_id: 'LOC-WH-SF', location_name: 'WH Material Lift SF', location_type: 'lift', site: 'WH', floor: 'SF', block: null, zone: 'Lift', capacity: '5 pallets', capacity_limit: 5, initial_fill_ratio: 0.0, status: 'active' },
+  { location_id: 'LOC-WH-3F-LIFT', parent_location_id: 'LOC-WH-3F', location_name: 'WH Material Lift 3F', location_type: 'lift', site: 'WH', floor: '3F', block: null, zone: 'Lift', capacity: '5 pallets', capacity_limit: 5, initial_fill_ratio: 0.0, status: 'active' },
+  { location_id: 'LOC-WH-4F-LIFT', parent_location_id: 'LOC-WH-4F', location_name: 'WH Material Lift 4F', location_type: 'lift', site: 'WH', floor: '4F', block: null, zone: 'Lift', capacity: '5 pallets', capacity_limit: 5, initial_fill_ratio: 0.0, status: 'active' },
 
   // WH SF
   { location_id: 'LOC-WH-SF-RAMP', parent_location_id: 'LOC-WH-SF', location_name: 'WH SF Ramp Landing', location_type: 'ramp', site: 'WH', floor: 'SF', block: null, zone: 'Ramp', capacity: 'pallets / bins', capacity_limit: 5, initial_fill_ratio: 0.0, status: 'active' },
@@ -57,13 +68,11 @@ export const location_node = [
   // WH GF
   { location_id: 'LOC-WH-GF-GATE',     parent_location_id: 'LOC-WH-GF',      location_name: 'WH Main Gate',             location_type: 'dock',         site: 'WH', floor: 'GF', block: null, zone: 'Gate',       capacity: 'trucks',           capacity_limit: 5,  initial_fill_ratio: 0.0, status: 'active' },
   { location_id: 'LOC-WH-GF-INWARD',   parent_location_id: 'LOC-WH-GF',      location_name: 'WH Inward / GRN Bay',      location_type: 'dock',         site: 'WH', floor: 'GF', block: null, zone: 'Inward',     capacity: 'bins / pallets',   capacity_limit: 10, initial_fill_ratio: 0.0, status: 'active' },
-  { location_id: 'LOC-WH-GF-IQC',      parent_location_id: 'LOC-WH-GF',      location_name: 'WH IQC Hold Area',         location_type: 'buffer',       site: 'WH', floor: 'GF', block: null, zone: 'IQC',        capacity: '10 bins',          capacity_limit: 10, initial_fill_ratio: 0.0, status: 'active' },
+  { location_id: 'LOC-WH-GF-IQC',      parent_location_id: 'LOC-WH-GF',      location_name: 'WH IQC Hold Area',         location_type: 'buffer',       site: 'WH', floor: 'GF', block: null, zone: 'IQC',        capacity: '10 bins',          capacity_limit: 10, initial_fill_ratio: 0.3, status: 'active' },
   { location_id: 'LOC-WH-GF-ASRS',     parent_location_id: 'LOC-WH-GF',      location_name: 'WH ASRS',                  location_type: 'ASRS',         site: 'WH', floor: 'GF', block: null, zone: 'ASRS',       capacity: 'bins / pallets',   capacity_limit: 20, initial_fill_ratio: 0.5, status: 'active' },
   { location_id: 'LOC-WH-GF-ASRS-IN',  parent_location_id: 'LOC-WH-GF-ASRS', location_name: 'WH ASRS Input Station',    location_type: 'ASRS_point',   site: 'WH', floor: 'GF', block: null, zone: 'ASRS In',    capacity: 'pallets',          capacity_limit: 10, initial_fill_ratio: 0.2, status: 'active' },
   { location_id: 'LOC-WH-GF-ASRS-OUT', parent_location_id: 'LOC-WH-GF-ASRS', location_name: 'WH ASRS Output Station',   location_type: 'ASRS_point',   site: 'WH', floor: 'GF', block: null, zone: 'ASRS Out',   capacity: 'pallets',          capacity_limit: 10, initial_fill_ratio: 0.3, status: 'active' },
-  { location_id: 'LOC-WH-GF-VC',       parent_location_id: 'LOC-WH-GF',      location_name: 'Value Creation Area (GF)', location_type: 'station_zone', site: 'WH', floor: 'GF', block: null, zone: 'VC',         capacity: 'SFG bins',         capacity_limit: 8,  initial_fill_ratio: 0.4, status: 'active' },
-  { location_id: 'LOC-WH-GF-PACK',     parent_location_id: 'LOC-WH-GF',      location_name: 'Packaging Area (GF)',      location_type: 'station_zone', site: 'WH', floor: 'GF', block: null, zone: 'Packaging',  capacity: 'cartons / pallets',capacity_limit: 8,  initial_fill_ratio: 0.3, status: 'active' },
-  // FF Line A — identical VC+Pack process, ~50% of total volume
+  // FF Line A — VC + Pack process (Line A handles ~50% of volume)
   { location_id: 'LOC-WH-FF-VC',       parent_location_id: 'LOC-WH-FF',      location_name: 'Value Creation Area (FF / Line A)', location_type: 'station_zone', site: 'WH', floor: 'FF', block: null, zone: 'VC',         capacity: 'SFG bins',         capacity_limit: 8,  initial_fill_ratio: 0.2, status: 'active' },
   { location_id: 'LOC-WH-FF-PACK',     parent_location_id: 'LOC-WH-FF',      location_name: 'Packaging Line A (FF)',    location_type: 'station_zone', site: 'WH', floor: 'FF', block: null, zone: 'Packaging',  capacity: 'cartons / pallets',capacity_limit: 8,  initial_fill_ratio: 0.2, status: 'active' },
   // SF Line B — identical VC+Pack process, ~50% of total volume
@@ -94,9 +103,6 @@ export const path = [
   { path_id: 'PATH-BWIP-1P',           from_location_id: 'LOC-KMP-SF-B-WIP',    to_location_id: 'LOC-KMP-SF-B-1P',    movement_mode: 'line_feed',         resource_hint: 'operator/line feeder',            capacity: 'station bins',       distance: '5m',    travel_time: '1s',  distance_val: 5,    travel_time_val: 1,  status: 'active' },
   { path_id: 'PATH-1P-SFG-PACK',       from_location_id: 'LOC-KMP-SF-B-1P',     to_location_id: 'LOC-KMP-SF-SFG-PACK',movement_mode: 'in_station',        resource_hint: 'operator/MES scan',               capacity: 'SFG bins',           distance: '2m',    travel_time: '1s',  distance_val: 2,    travel_time_val: 1,  status: 'active' },
   { path_id: 'PATH-KMP-SFG-WH-ASRS',   from_location_id: 'LOC-KMP-SF-SFG-PACK', to_location_id: 'LOC-WH-GF-ASRS-IN',  movement_mode: 'ramp+stacker+ASRS', resource_hint: 'stacker + ASRS crane',            capacity: 'SFG pallet',         distance: '90m',   travel_time: '18s', distance_val: 90,   travel_time_val: 18, status: 'active' },
-  { path_id: 'PATH-WH-ASRS-VC',        from_location_id: 'LOC-WH-GF-ASRS-OUT',  to_location_id: 'LOC-WH-GF-VC',       movement_mode: 'stacker/AMR',       resource_hint: 'electric stacker/AMR',            capacity: 'SFG pallet',         distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
-  { path_id: 'PATH-VC-PACK',           from_location_id: 'LOC-WH-GF-VC',        to_location_id: 'LOC-WH-GF-PACK',     movement_mode: 'HPT/AMR/manual',    resource_hint: 'HPT/AMR/manual',                  capacity: 'SFG bin/pallet',     distance: '20m',   travel_time: '4s',  distance_val: 20,   travel_time_val: 4,  status: 'active' },
-  { path_id: 'PATH-PACK-FG-ASRS',      from_location_id: 'LOC-WH-GF-PACK',      to_location_id: 'LOC-WH-GF-FG-ASRS',  movement_mode: 'stacker+ASRS',      resource_hint: 'electric stacker + ASRS crane',   capacity: 'FG pallet',          distance: '18m',   travel_time: '4s',  distance_val: 18,   travel_time_val: 4,  status: 'active' },
   // FF Line A paths (ASRS crane delivers to FF conventional zone)
   { path_id: 'PATH-ASRS-FF-VC',        from_location_id: 'LOC-WH-GF-ASRS',      to_location_id: 'LOC-WH-FF-VC',       movement_mode: 'ASRS crane',        resource_hint: 'ASRS crane + stacker',            capacity: 'SFG pallet',         distance: '18m',   travel_time: '5s',  distance_val: 18,   travel_time_val: 5,  status: 'active' },
   { path_id: 'PATH-FF-VC-PACK',         from_location_id: 'LOC-WH-FF-VC',        to_location_id: 'LOC-WH-FF-PACK',     movement_mode: 'HPT/AMR/manual',    resource_hint: 'HPT/AMR',                         capacity: 'SFG bin/pallet',     distance: '20m',   travel_time: '4s',  distance_val: 20,   travel_time_val: 4,  status: 'active' },
@@ -105,20 +111,27 @@ export const path = [
   { path_id: 'PATH-ASRS-SF-VC',         from_location_id: 'LOC-WH-GF-ASRS',      to_location_id: 'LOC-WH-SF-VC',       movement_mode: 'ASRS crane',        resource_hint: 'ASRS crane + stacker',            capacity: 'SFG pallet',         distance: '22m',   travel_time: '6s',  distance_val: 22,   travel_time_val: 6,  status: 'active' },
   { path_id: 'PATH-SF-VC-PACK',          from_location_id: 'LOC-WH-SF-VC',        to_location_id: 'LOC-WH-SF-PACK',     movement_mode: 'HPT/AMR/manual',    resource_hint: 'HPT/AMR',                         capacity: 'SFG bin/pallet',     distance: '20m',   travel_time: '4s',  distance_val: 20,   travel_time_val: 4,  status: 'active' },
   { path_id: 'PATH-SF-PACK-FG-ASRS',     from_location_id: 'LOC-WH-SF-PACK',      to_location_id: 'LOC-WH-GF-FG-ASRS',  movement_mode: 'stacker+ASRS',      resource_hint: 'electric stacker + ASRS crane',   capacity: 'FG pallet',          distance: '22m',   travel_time: '5s',  distance_val: 22,   travel_time_val: 5,  status: 'active' },
-  { path_id: 'PATH-FG-ASRS-FAT',       from_location_id: 'LOC-WH-GF-FG-ASRS',   to_location_id: 'LOC-KMP-3F-FAT',     movement_mode: 'manual/trolley',    resource_hint: 'manual/trolley',                  capacity: 'samples',            distance: '70m',   travel_time: '14s', distance_val: 70,   travel_time_val: 14, status: 'active' },
+  { path_id: 'PATH-FG-ASRS-FAT',       from_location_id: 'LOC-WH-GF-FG-ASRS',   to_location_id: 'LOC-KMP-3F-FAT',     movement_mode: 'WH-lift+bridge+KMP-stair+trolley', resource_hint: 'WH lift + stacker + KMP stair',  capacity: 'samples',            distance: '70m',   travel_time: '14s', distance_val: 70,   travel_time_val: 14, status: 'active' },
   { path_id: 'PATH-FG-ASRS-DISPATCH',  from_location_id: 'LOC-WH-GF-FG-ASRS',   to_location_id: 'LOC-WH-GF-DISPATCH', movement_mode: 'ASRS+stacker',      resource_hint: 'ASRS crane + electric stacker',   capacity: 'FG pallet',          distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
   { path_id: 'PATH-DISPATCH-CUSTOMER', from_location_id: 'LOC-WH-GF-DISPATCH',   to_location_id: 'LOC-CUSTOMER',       movement_mode: 'road',              resource_hint: 'covered truck',                   capacity: 'truckload',          distance: '2000m', travel_time: '30s', distance_val: 2000, travel_time_val: 30, status: 'active' },
   { path_id: 'PATH-KMP-EMPTYBIN-DOCK3',from_location_id: 'LOC-KMP-SF-B-WIP',     to_location_id: 'LOC-KMP-GF-DOCK3',   movement_mode: 'lift+trolley',      resource_hint: 'material lift + trolley',         capacity: 'empty bins',         distance: '40m',   travel_time: '10s', distance_val: 40,   travel_time_val: 10, status: 'active' },
-  { path_id: 'PATH-WH-VC-EMPTYBIN-KMP',from_location_id: 'LOC-WH-GF-VC',         to_location_id: 'LOC-KMP-GF-DOCK3',   movement_mode: 'lift+ramp+trolley', resource_hint: 'WH lift + KMP trolley',           capacity: 'empty bins',         distance: '85m',   travel_time: '16s', distance_val: 85,   travel_time_val: 16, status: 'active' },
+  { path_id: 'PATH-WH-VC-EMPTYBIN-KMP',from_location_id: 'LOC-WH-FF-VC',         to_location_id: 'LOC-KMP-GF-DOCK3',   movement_mode: 'lift+ramp+trolley', resource_hint: 'WH lift + KMP trolley',           capacity: 'empty bins',         distance: '85m',   travel_time: '16s', distance_val: 85,   travel_time_val: 16, status: 'active' },
   { path_id: 'PATH-SUP-WH-GATE',      from_location_id: 'EXTERNAL-SUPPLIER',   to_location_id: 'LOC-WH-GF-GATE',      movement_mode: 'road',              resource_hint: 'supplier truck',                  capacity: 'truckload',          distance: '1000m', travel_time: '15s', distance_val: 1000, travel_time_val: 15, status: 'active' },
   { path_id: 'PATH-WH-GATE-INWARD',   from_location_id: 'LOC-WH-GF-GATE',      to_location_id: 'LOC-WH-GF-INWARD',    movement_mode: 'road/internal',     resource_hint: 'supplier truck',                  capacity: 'pallets/bins',       distance: '50m',   travel_time: '5s',  distance_val: 50,   travel_time_val: 5,  status: 'active' },
   { path_id: 'PATH-WH-INWARD-IQC',    from_location_id: 'LOC-WH-GF-INWARD',    to_location_id: 'LOC-WH-GF-IQC',       movement_mode: 'manual/HPT',        resource_hint: 'HPT',                             capacity: 'bins',               distance: '10m',   travel_time: '2s',  distance_val: 10,   travel_time_val: 2,  status: 'active' },
   { path_id: 'PATH-WH-IQC-ASRS-IN',   from_location_id: 'LOC-WH-GF-IQC',       to_location_id: 'LOC-WH-GF-ASRS-IN',   movement_mode: 'HPT/stacker',       resource_hint: 'stacker',                         capacity: 'pallet',             distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
-  { path_id: 'PATH-ASRS-WH-RAMP',     from_location_id: 'LOC-WH-GF-ASRS-IN',   to_location_id: 'LOC-WH-SF-RAMP',      movement_mode: 'stacker',           resource_hint: 'electric stacker',                capacity: 'pallets/bins',       distance: '20m',   travel_time: '5s',  distance_val: 20,   travel_time_val: 5,  status: 'active' },
+  { path_id: 'PATH-ASRS-WH-RAMP',     from_location_id: 'LOC-WH-GF-ASRS-IN',   to_location_id: 'LOC-WH-SF-RAMP',      movement_mode: 'WH-lift+stacker',   resource_hint: 'WH material lift + electric stacker', capacity: 'pallets/bins',       distance: '20m',   travel_time: '5s',  distance_val: 20,   travel_time_val: 5,  status: 'active' },
   { path_id: 'PATH-BRIDGE',           from_location_id: 'LOC-WH-SF-RAMP',      to_location_id: 'LOC-KMP-SF-RAMP',     movement_mode: 'stacker',           resource_hint: 'electric stacker',                capacity: 'pallets/bins',       distance: '30m',   travel_time: '6s',  distance_val: 30,   travel_time_val: 6,  status: 'active' },
   { path_id: 'PATH-KMP-RAMP-TRSS',    from_location_id: 'LOC-KMP-SF-RAMP',     to_location_id: 'LOC-KMP-SF-A-TRSS',   movement_mode: 'trolley',           resource_hint: 'bin trolley',                     capacity: 'ESD trays',          distance: '12m',   travel_time: '3s',  distance_val: 12,   travel_time_val: 3,  status: 'active' },
   { path_id: 'PATH-KMP-RAMP-BWIP',    from_location_id: 'LOC-KMP-SF-RAMP',     to_location_id: 'LOC-KMP-SF-B-WIP',    movement_mode: 'trolley',           resource_hint: 'bin trolley',                     capacity: 'station bins',       distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
   { path_id: 'PATH-VRC-SF-BWIP',      from_location_id: 'LOC-KMP-SF-VRC',      to_location_id: 'LOC-KMP-SF-B-WIP',    movement_mode: 'trolley',           resource_hint: 'operator/trolley',                capacity: 'ESD bins',           distance: '15m',   travel_time: '3s',  distance_val: 15,   travel_time_val: 3,  status: 'active' },
+  // ── WH material lift bookkeeping (vertical edges between WH lift landings) ──
+  { path_id: 'PATH-WH-LIFT-GF-FF',  from_location_id: 'LOC-WH-GF-LIFT', to_location_id: 'LOC-WH-FF-LIFT', movement_mode: 'lift', resource_hint: 'WH material lift', capacity: 'pallet', distance: '5m',  travel_time: '3s', distance_val: 5,  travel_time_val: 3, status: 'active' },
+  { path_id: 'PATH-WH-LIFT-FF-SF',  from_location_id: 'LOC-WH-FF-LIFT', to_location_id: 'LOC-WH-SF-LIFT', movement_mode: 'lift', resource_hint: 'WH material lift', capacity: 'pallet', distance: '5m',  travel_time: '3s', distance_val: 5,  travel_time_val: 3, status: 'active' },
+  { path_id: 'PATH-WH-LIFT-SF-3F',  from_location_id: 'LOC-WH-SF-LIFT', to_location_id: 'LOC-WH-3F-LIFT', movement_mode: 'lift', resource_hint: 'WH material lift', capacity: 'pallet', distance: '5m',  travel_time: '3s', distance_val: 5,  travel_time_val: 3, status: 'active' },
+  { path_id: 'PATH-WH-LIFT-3F-4F',  from_location_id: 'LOC-WH-3F-LIFT', to_location_id: 'LOC-WH-4F-LIFT', movement_mode: 'lift', resource_hint: 'WH material lift', capacity: 'pallet', distance: '5m',  travel_time: '3s', distance_val: 5,  travel_time_val: 3, status: 'active' },
+  // ── KMP stair bookkeeping (manual-trolley between SF and 3F landings) ──
+  { path_id: 'PATH-KMP-STAIR-SF-3F', from_location_id: 'LOC-KMP-SF-STAIR', to_location_id: 'LOC-KMP-3F-STAIR', movement_mode: 'stair/trolley', resource_hint: 'operator + trolley', capacity: 'samples', distance: '6m', travel_time: '4s', distance_val: 6, travel_time_val: 4, status: 'active' },
 ];
 
 // ─── 3. OPERATING ASSETS ──────────────────────────────────────────────────────
@@ -135,9 +148,12 @@ export const station = [
   { station_id: 'ST-WH-GRN-01',       station_group: 'WH_GRN',            location_id: 'LOC-WH-GF-INWARD',    station_type: 'manual + HHT',            process_area: 'WH inbound',   capacity: '10 bins',                                instance_count: 1, operator_count: '1',            status: 'active' },
   { station_id: 'ST-WH-IQC-01',       station_group: 'WH_IQC',            location_id: 'LOC-WH-GF-IQC',      station_type: 'inspection',              process_area: 'WH inbound QA',capacity: '5 bins',                                 instance_count: 1, operator_count: 'QA',           status: 'active' },
   { station_id: 'ST-WH-ASRS-01',      station_group: 'ASRS',              location_id: 'LOC-WH-GF-ASRS',      station_type: 'automated storage',       process_area: 'WH storage',   capacity: 'pallets/bins',                           instance_count: 1, operator_count: '0 direct',     status: 'active' },
-  { station_id: 'ST-WH-VC-01',        station_group: 'VALUE_CREATION',    location_id: 'LOC-WH-GF-VC',        station_type: 'manual/semi-auto',        process_area: 'NIC+SIM+seal', capacity: '22.5 sec/meter',                         instance_count: 1, operator_count: '1',            status: 'active' },
-  { station_id: 'ST-WH-SCREEN-01',    station_group: 'SCREEN_LASER_HOLO', location_id: 'LOC-WH-GF-PACK',      station_type: 'automated line',          process_area: 'Packaging',    capacity: '10 sec each stage',                      instance_count: 1, operator_count: '0',            status: 'active' },
-  { station_id: 'ST-WH-AUTOPACK-01',   station_group: 'AUTO_PACK',         location_id: 'LOC-WH-GF-PACK',      station_type: 'automated packaging',     process_area: 'Packaging',    capacity: 'carton 19 sec/meter',                    instance_count: 1, operator_count: '1',            status: 'active' },
+  { station_id: 'ST-WH-VC-01',        station_group: 'VALUE_CREATION',    location_id: 'LOC-WH-FF-VC',        station_type: 'manual/semi-auto',        process_area: 'NIC+SIM+seal', capacity: '22.5 sec/meter',                         instance_count: 1, operator_count: '1',            status: 'active' },
+  { station_id: 'ST-WH-VC-02',        station_group: 'VALUE_CREATION',    location_id: 'LOC-WH-SF-VC',        station_type: 'manual/semi-auto',        process_area: 'NIC+SIM+seal', capacity: '22.5 sec/meter',                         instance_count: 1, operator_count: '1',            status: 'active' },
+  { station_id: 'ST-WH-SCREEN-01',    station_group: 'SCREEN_LASER_HOLO', location_id: 'LOC-WH-FF-PACK',      station_type: 'automated line',          process_area: 'Packaging',    capacity: '10 sec each stage',                      instance_count: 1, operator_count: '0',            status: 'active' },
+  { station_id: 'ST-WH-SCREEN-02',    station_group: 'SCREEN_LASER_HOLO', location_id: 'LOC-WH-SF-PACK',      station_type: 'automated line',          process_area: 'Packaging',    capacity: '10 sec each stage',                      instance_count: 1, operator_count: '0',            status: 'active' },
+  { station_id: 'ST-WH-AUTOPACK-01',   station_group: 'AUTO_PACK',         location_id: 'LOC-WH-FF-PACK',      station_type: 'automated packaging',     process_area: 'Packaging',    capacity: 'carton 19 sec/meter',                    instance_count: 1, operator_count: '1',            status: 'active' },
+  { station_id: 'ST-WH-AUTOPACK-02',   station_group: 'AUTO_PACK',         location_id: 'LOC-WH-SF-PACK',      station_type: 'automated packaging',     process_area: 'Packaging',    capacity: 'carton 19 sec/meter',                    instance_count: 1, operator_count: '1',            status: 'active' },
   { station_id: 'ST-KMP-FAT-01',      station_group: 'FAT',               location_id: 'LOC-KMP-3F-FAT',      station_type: 'inspection/test',         process_area: 'PDI/FAT',      capacity: 'Sample rule: n=5 functional, n=32 visual',instance_count: 1, operator_count: 'QA',           status: 'active' },
   { station_id: 'ST-WH-DISPATCH-01',  station_group: 'DISPATCH',          location_id: 'LOC-WH-GF-DISPATCH',  station_type: 'staging/loading',         process_area: 'dispatch',     capacity: 'truckload',                              instance_count: 1, operator_count: 'logistics',    status: 'active' }
 ];
@@ -152,7 +168,7 @@ export const resource = [
   { resource_id: 'RES-ASRS-CRANE',      resource_type: 'ASRS_crane',      home_location_id: 'LOC-WH-GF-ASRS',      used_for: 'ASRS putaway/retrieval',        capacity: 'pallet/bin',         status: 'active' },
   { resource_id: 'RES-BIN-TROLLEY',     resource_type: 'bin_trolley',     home_location_id: 'shared',              used_for: 'ESD/tray/bin moves',            capacity: 'bins/trays',         status: 'active' },
   { resource_id: 'RES-FORKLIFT',        resource_type: 'forklift',        home_location_id: 'LOC-WH-GF-DISPATCH',  used_for: 'truck loading',                 capacity: 'pallets',            status: 'active' },
-  { resource_id: 'RES-AMR-PLACEHOLDER', resource_type: 'AMR',             home_location_id: 'LOC-WH-GF-VC',        used_for: 'future automated movement',     capacity: '1 bin',              status: 'planned' },
+  { resource_id: 'RES-AMR-PLACEHOLDER', resource_type: 'AMR',             home_location_id: 'LOC-WH-FF-VC',        used_for: 'future automated movement',     capacity: '1 bin',              status: 'planned' },
   { resource_id: 'RES-OPERATOR',        resource_type: 'operator',        home_location_id: 'shared',              used_for: 'manual assembly/movement',      capacity: 'human',              status: 'active' },
   { resource_id: 'RES-QA',              resource_type: 'QA_engineer',     home_location_id: 'shared',              used_for: 'IQC/PQA/FAT checks',            capacity: 'inspection',         status: 'active' }
 ];
@@ -208,17 +224,17 @@ export const route_step = [
   { route_id: 'ROUTE-M800-MAIN', seq: 150, sequence_no: 150, from_location_id: 'LOC-KMP-SF-B-WIP',    path_id: 'PATH-BWIP-1P',          to_location_id: 'LOC-KMP-SF-B-1P',    process_id: 'PROC-KMP-1P-SPM',          input_state: 'LINE_WIP',          output_state: 'SFG_METER' },
   { route_id: 'ROUTE-M800-MAIN', seq: 160, sequence_no: 160, from_location_id: 'LOC-KMP-SF-B-1P',     path_id: 'PATH-1P-SFG-PACK',      to_location_id: 'LOC-KMP-SF-SFG-PACK',process_id: 'PROC-KMP-SFG-BOX',         input_state: 'SFG_METER',         output_state: 'SFG_BINNED' },
   { route_id: 'ROUTE-M800-MAIN', seq: 170, sequence_no: 170, from_location_id: 'LOC-KMP-SF-SFG-PACK', path_id: 'PATH-KMP-SFG-WH-ASRS',  to_location_id: 'LOC-WH-GF-ASRS-IN',  process_id: 'PROC-WH-SFG-ASRS-PUTAWAY',input_state: 'SFG_PALLETIZED',    output_state: 'SFG_WH_HOLD' },
-  { route_id: 'ROUTE-M800-MAIN', seq: 180, sequence_no: 180, from_location_id: 'LOC-WH-GF-ASRS-OUT',  path_id: 'PATH-WH-ASRS-VC',       to_location_id: 'LOC-WH-GF-VC',       process_id: 'PROC-WH-NIC-SIM-SEAL',     input_state: 'SFG_WH_HOLD',       output_state: 'VC_METER' },
-  { route_id: 'ROUTE-M800-MAIN', seq: 190, sequence_no: 190, from_location_id: 'LOC-WH-GF-VC',        path_id: 'PATH-VC-PACK',          to_location_id: 'LOC-WH-GF-PACK',     process_id: 'PROC-WH-SCREEN-LASER-HOLO',input_state: 'VC_METER',          output_state: 'POST_SCREEN_METER' },
-  { route_id: 'ROUTE-M800-MAIN', seq: 200, sequence_no: 200, from_location_id: 'LOC-WH-GF-PACK',      path_id: 'PATH-VC-PACK',          to_location_id: 'LOC-WH-GF-PACK',     process_id: 'PROC-WH-AUTO-PACK',        input_state: 'POST_SCREEN_METER', output_state: 'PACKED_FG' },
-  { route_id: 'ROUTE-M800-MAIN', seq: 210, sequence_no: 210, from_location_id: 'LOC-WH-GF-PACK',      path_id: 'PATH-PACK-FG-ASRS',     to_location_id: 'LOC-WH-GF-FG-ASRS',  process_id: 'PROC-WH-FG-ASRS-PUTAWAY',  input_state: 'PACKED_FG',         output_state: 'FG_QA_HOLD' },
+  { route_id: 'ROUTE-M800-MAIN', seq: 180, sequence_no: 180, from_location_id: 'LOC-WH-GF-ASRS',      path_id: 'PATH-ASRS-FF-VC',       to_location_id: 'LOC-WH-FF-VC',       process_id: 'PROC-WH-NIC-SIM-SEAL',     input_state: 'SFG_WH_HOLD',       output_state: 'VC_METER' },
+  { route_id: 'ROUTE-M800-MAIN', seq: 190, sequence_no: 190, from_location_id: 'LOC-WH-FF-VC',        path_id: 'PATH-FF-VC-PACK',       to_location_id: 'LOC-WH-FF-PACK',     process_id: 'PROC-WH-SCREEN-LASER-HOLO',input_state: 'VC_METER',          output_state: 'POST_SCREEN_METER' },
+  { route_id: 'ROUTE-M800-MAIN', seq: 200, sequence_no: 200, from_location_id: 'LOC-WH-FF-PACK',      path_id: 'PATH-FF-VC-PACK',       to_location_id: 'LOC-WH-FF-PACK',     process_id: 'PROC-WH-AUTO-PACK',        input_state: 'POST_SCREEN_METER', output_state: 'PACKED_FG' },
+  { route_id: 'ROUTE-M800-MAIN', seq: 210, sequence_no: 210, from_location_id: 'LOC-WH-FF-PACK',      path_id: 'PATH-FF-PACK-FG-ASRS',  to_location_id: 'LOC-WH-GF-FG-ASRS',  process_id: 'PROC-WH-FG-ASRS-PUTAWAY',  input_state: 'PACKED_FG',         output_state: 'FG_QA_HOLD' },
   { route_id: 'ROUTE-M800-MAIN', seq: 220, sequence_no: 220, from_location_id: 'LOC-WH-GF-FG-ASRS',   path_id: 'PATH-FG-ASRS-FAT',      to_location_id: 'LOC-KMP-3F-FAT',     process_id: 'PROC-KMP-PDI-FAT',         input_state: 'FG_QA_HOLD',        output_state: 'FG_RELEASED' },
   { route_id: 'ROUTE-M800-MAIN', seq: 230, sequence_no: 230, from_location_id: 'LOC-WH-GF-FG-ASRS',   path_id: 'PATH-FG-ASRS-DISPATCH', to_location_id: 'LOC-WH-GF-DISPATCH', process_id: 'PROC-WH-DISPATCH-STAGE',   input_state: 'FG_RELEASED',       output_state: 'DISPATCH_STAGED' },
   { route_id: 'ROUTE-M800-MAIN', seq: 240, sequence_no: 240, from_location_id: 'LOC-WH-GF-DISPATCH',   path_id: 'PATH-DISPATCH-CUSTOMER',to_location_id: 'LOC-CUSTOMER',        process_id: 'PROC-WH-DISPATCH',         input_state: 'DISPATCH_STAGED',   output_state: 'DISPATCHED' },
 
   // Empty bin return routes
   { route_id: 'ROUTE-M800-EMPTY-KMP', seq: 10, sequence_no: 10, from_location_id: 'LOC-KMP-SF-B-WIP', path_id: 'PATH-KMP-EMPTYBIN-DOCK3', to_location_id: 'LOC-KMP-GF-DOCK3', process_id: 'PROC-KMP-EMPTYBIN-RETURN', input_state: 'EMPTY_BIN', output_state: 'EMPTY_BIN_DOCK3' },
-  { route_id: 'ROUTE-M800-EMPTY-WH',  seq: 10, sequence_no: 10, from_location_id: 'LOC-WH-GF-VC',     path_id: 'PATH-WH-VC-EMPTYBIN-KMP',to_location_id: 'LOC-KMP-GF-DOCK3',  process_id: 'PROC-WH-EMPTYBIN-RETURN',  input_state: 'EMPTY_BIN', output_state: 'EMPTY_BIN_DOCK3' },
+  { route_id: 'ROUTE-M800-EMPTY-WH',  seq: 10, sequence_no: 10, from_location_id: 'LOC-WH-FF-VC',     path_id: 'PATH-WH-VC-EMPTYBIN-KMP',to_location_id: 'LOC-KMP-GF-DOCK3',  process_id: 'PROC-WH-EMPTYBIN-RETURN',  input_state: 'EMPTY_BIN', output_state: 'EMPTY_BIN_DOCK3' },
 
   // Non-electronic inbound route
   { route_id: 'ROUTE-M800-RM-WH', seq: 10, sequence_no: 10, from_location_id: 'EXTERNAL-SUPPLIER',   path_id: 'PATH-SUP-WH-GATE',     to_location_id: 'LOC-WH-GF-GATE',    process_id: 'PROC-WH-RM-INBOUND',        input_state: 'RM_SUPPLIER',       output_state: 'RM_RECEIVED_WH' },
@@ -368,19 +384,19 @@ export const inventory_position = [
   { inventory_id: 'INV-002', material_id: 'MAT-PCBA',      state_id: 'PCBA_FCT_PASS',   location_id: 'LOC-KMP-GF-FCT',      container_id: 'CONT-ESD-BIN',    quantity: 0, last_updated: 'TBD', source: 'MES' },
   { inventory_id: 'INV-003', material_id: 'MAT-TRSS',      state_id: 'TRSS_READY',      location_id: 'LOC-KMP-SF-A-TRSS',   container_id: 'CONT-ESD-TRAY',   quantity: 0, last_updated: 'TBD', source: 'MES' },
   { inventory_id: 'INV-004', material_id: 'MAT-M800-SFG',  state_id: 'SFG_WH_HOLD',     location_id: 'LOC-WH-GF-ASRS',      container_id: 'CONT-SFG-PALLET', quantity: 0, last_updated: 'TBD', source: 'WMS' },
-  { inventory_id: 'INV-005', material_id: 'MAT-M800-SFG',  state_id: 'SFG_AT_VC',       location_id: 'LOC-WH-GF-VC',        container_id: 'CONT-SFG-BIN',    quantity: 0, last_updated: 'TBD', source: 'MES/WMS' },
+  { inventory_id: 'INV-005', material_id: 'MAT-M800-SFG',  state_id: 'SFG_AT_VC',       location_id: 'LOC-WH-FF-VC',        container_id: 'CONT-SFG-BIN',    quantity: 0, last_updated: 'TBD', source: 'MES/WMS' },
   { inventory_id: 'INV-006', material_id: 'MAT-M800-FG',   state_id: 'FG_QA_HOLD',      location_id: 'LOC-WH-GF-FG-ASRS',   container_id: 'CONT-FG-PALLET',  quantity: 0, last_updated: 'TBD', source: 'SAP/WMS' },
   { inventory_id: 'INV-007', material_id: 'MAT-M800-FG',   state_id: 'FG_RELEASED',     location_id: 'LOC-WH-GF-FG-ASRS',   container_id: 'CONT-FG-PALLET',  quantity: 0, last_updated: 'TBD', source: 'SAP QA/WMS' },
   { inventory_id: 'INV-008', material_id: 'MAT-M800-FG',   state_id: 'DISPATCH_STAGED', location_id: 'LOC-WH-GF-DISPATCH',  container_id: 'CONT-FG-PALLET',  quantity: 0, last_updated: 'TBD', source: 'SAP Dispatch/HHT' },
-  { inventory_id: 'INV-009', material_id: 'MAT-EMPTY-BIN', state_id: 'EMPTY_BIN',       location_id: 'LOC-WH-GF-VC',        container_id: 'CONT-LEAP-BIN',   quantity: 0, last_updated: 'TBD', source: 'manual' }
+  { inventory_id: 'INV-009', material_id: 'MAT-EMPTY-BIN', state_id: 'EMPTY_BIN',       location_id: 'LOC-WH-FF-VC',        container_id: 'CONT-LEAP-BIN',   quantity: 0, last_updated: 'TBD', source: 'manual' }
 ];
 
 export const live_status = [
   { object_type: 'station',  object_id: 'ST-KMP-SMT-01',      status: 'unknown', current_location_id: 'LOC-KMP-GF-SMT',     timestamp: 'TBD', source: 'MES/manual' },
   { object_type: 'station',  object_id: 'ST-KMP-FCT-01',      status: 'unknown', current_location_id: 'LOC-KMP-GF-FCT',     timestamp: 'TBD', source: 'MES/manual' },
   { object_type: 'station',  object_id: 'ST-KMP-SPM-01',      status: 'unknown', current_location_id: 'LOC-KMP-SF-B-1P',     timestamp: 'TBD', source: 'MES/manual' },
-  { object_type: 'station',  object_id: 'ST-WH-VC-01',        status: 'unknown', current_location_id: 'LOC-WH-GF-VC',       timestamp: 'TBD', source: 'MES/manual' },
-  { object_type: 'station',  object_id: 'ST-WH-AUTOPACK-01',  status: 'unknown', current_location_id: 'LOC-WH-GF-PACK',     timestamp: 'TBD', source: 'MES/manual' },
+  { object_type: 'station',  object_id: 'ST-WH-VC-01',        status: 'unknown', current_location_id: 'LOC-WH-FF-VC',       timestamp: 'TBD', source: 'MES/manual' },
+  { object_type: 'station',  object_id: 'ST-WH-AUTOPACK-01',  status: 'unknown', current_location_id: 'LOC-WH-FF-PACK',     timestamp: 'TBD', source: 'MES/manual' },
   { object_type: 'station',  object_id: 'ST-KMP-FAT-01',      status: 'unknown', current_location_id: 'LOC-KMP-3F-FAT',     timestamp: 'TBD', source: 'SAP QA/manual' },
   { object_type: 'resource', object_id: 'RES-ASRS-CRANE',     status: 'unknown', current_location_id: 'LOC-WH-GF-ASRS',     timestamp: 'TBD', source: 'WMS' },
   { object_type: 'resource', object_id: 'RES-VRC-KMP',        status: 'unknown', current_location_id: 'LOC-KMP-GF-VRC',      timestamp: 'TBD', source: 'manual/IoT' },
@@ -445,7 +461,7 @@ export const scenario_override = [
     field_name: 'rate_multiplier',
     new_value: 0.4,
     reason: 'Simulate NIC sync issues or SIM card shortage at WH VC',
-    affected_path: 'PATH-WH-ASRS-VC',
+    affected_path: 'PATH-ASRS-FF-VC',
   },
   {
     scenario_id: 'SCN-ADD-FCT-02',
@@ -462,12 +478,12 @@ export const scenario_override = [
     scenario_id: 'SCN-AMR-WH-VC-PACK',
     scenario_name: 'AMR replaces HPT (VC → Pack)',
     entity_type: 'path',
-    entity_id: 'PATH-VC-PACK',
+    entity_id: 'PATH-FF-VC-PACK',
     change_type: 'modify',
     field_name: 'rate_multiplier',
     new_value: 1.5,
     reason: 'AMR higher throughput than manual HPT movement',
-    affected_path: 'PATH-VC-PACK',
+    affected_path: 'PATH-FF-VC-PACK',
   },
 ];
 
@@ -492,9 +508,6 @@ export const sim_rates = {
   'PATH-BWIP-1P':           0.25,
   'PATH-1P-SFG-PACK':       0.25,
   'PATH-KMP-SFG-WH-ASRS':   0.22,
-  'PATH-WH-ASRS-VC':        0.22,
-  'PATH-VC-PACK':           0.22,
-  'PATH-PACK-FG-ASRS':      0.2,
   'PATH-ASRS-FF-VC':        0.22,
   'PATH-FF-VC-PACK':        0.22,
   'PATH-FF-PACK-FG-ASRS':   0.20,
@@ -517,18 +530,27 @@ export const sim_rates = {
   'PATH-VRC-SF-BWIP':       0.28
 };
 
-// Dynamically construct buffer capacities from location nodes
-export const buffer_capacity = {};
-for (const loc of location_node) {
-  if (loc.capacity_limit !== undefined && loc.capacity_limit !== null) {
-    buffer_capacity[loc.location_id] = loc.capacity_limit;
-  }
-}
+// Buffer accounting only considers locations that are real storage points in
+// the simulation graph. Transit-only types (lift, stair, ramp) carry no
+// inventory; gates/inward bays / ASRS staging points aren't in `SIM_EDGES`
+// and would otherwise show up as perpetually-starved fake buffers.
+const NON_BUFFER_TYPES = new Set(['lift', 'stair', 'ramp']);
+const NON_BUFFER_IDS = new Set([
+  'LOC-KMP-GF-GATE',
+  'LOC-WH-GF-GATE',
+  'LOC-WH-GF-INWARD',
+  'LOC-WH-GF-ASRS-OUT',
+]);
 
-// Dynamically construct initial fill levels from location nodes
+export const buffer_capacity = {};
 export const initial_fill = {};
 for (const loc of location_node) {
-  if (loc.initial_fill_ratio !== undefined && loc.initial_fill_ratio !== null) {
+  if (NON_BUFFER_TYPES.has(loc.location_type)) continue;
+  if (NON_BUFFER_IDS.has(loc.location_id)) continue;
+  if (loc.capacity_limit != null) {
+    buffer_capacity[loc.location_id] = loc.capacity_limit;
+  }
+  if (loc.initial_fill_ratio != null) {
     initial_fill[loc.location_id] = loc.initial_fill_ratio;
   }
 }
