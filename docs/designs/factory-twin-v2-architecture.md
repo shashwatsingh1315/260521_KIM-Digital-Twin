@@ -88,6 +88,10 @@ These were settled during the design conversation and are binding for v2:
 | 17 | Carrier pool scope | **Dedicated per path** — no shared dispatch; headcount is a clean sum |
 | 18 | Carrier count | **User-assigned** — sim reports utilization & whether it keeps up; user tunes |
 | 19 | AMR vs. people hours | **AMR runs 24/7** (no labor, separate fleet count); people/manned-forklift are shift-gated and count as headcount |
+| 20 | Process taxonomy | **5 orthogonal axes** (count/type/data/time/boundary); named kinds are presets |
+| 21 | v1 process kinds | transform, **assembly (N→1)**, inspect/QC, label/seal, hold, store, intake, offload |
+| 22 | Assembly components | **Fungible** — matched by type + count, no serial pegging; product born at assembly step |
+| 23 | QC failure | **Scrap exit** — no rework loop in v1 (DAG); order reports shortfall if scrap drops it below qty |
 
 ---
 
@@ -151,24 +155,108 @@ governor spawns a unit from a pending order only when it can admit it onto the
 floor.
 
 ### 4.4 Process (transformation recipe)
+
+A process is not a fixed enum — it is a point in a **5-axis transform space**.
+The named `kind`s below are presets over these axes:
+
+| Axis | Question | Values |
+|---|---|---|
+| **count** | Does unit count change? | `1→1` · `N→1` (assembly) |
+| **type** | Does material identity change? | same · new type |
+| **data** | Does it gain information? | none · adds enrichments |
+| **time** | How long does material reside? | instant (takt) · fixed dwell · until-pull |
+| **boundary** | Does it cross the system edge? | internal · intake · offload/exit |
+
 ```
 Process {
-  id, name           // "Sealing"
-  kind               // "hold" | "store" | "transform" | ...
-  input_materials    // Material[]
-  
-  adds_enrichments   // e.g. ["seal_number"]
-  output_material?   // if it transforms type (Raw → Treated)
-  
+  id, name
+  kind                // see preset table below
+  input_materials     // Material[]
+
+  // --- transform / output ---
+  output_material?    // if type changes (transform, assembly)  Raw → Treated
+
+  // --- assembly (kind == "assembly") ---
+  bom?                // { material_id: qty }  e.g. { PCB:1, CASING:1, SCREW:4 }
+                      // components are FUNGIBLE: matched by type + count, not serial
+  enrichment_inherit? // "none" | "union"   (default none; product gets adds_enrichments)
+
+  // --- timed residence (kind == "hold" | "store") ---
+  dwell_seconds?      // hold: fixed residence time;  store: omitted (until pull)
+  slots?              // how many units reside simultaneously (oven trays, racks)
+
+  // --- inspection (kind == "inspect") ---
+  pass_rate?          // 0..1; failing units route to a SCRAP exit (no rework in v1, DAG)
+
+  // --- data ---
+  adds_enrichments    // e.g. ["seal_number"]  (label/seal, inspect result, etc.)
+
   constraints { requires_skills[], requires_tools[] }
-  
-  schema_impact      // SchemaImpactMatrix  (see §7)
+  takt_is_set_per_station   // takt lives on Station.processes, not here
+  schema_impact       // SchemaImpactMatrix  (see §9)
 }
 ```
-Processes define *what can happen*. The **sequence** in which a material undergoes
-processes is per-order (defined in `Order.process_sequence`), not per-material.
-This allows flexible routing: the same STEEL_COIL can follow different sequences
-depending on the order.
+
+**v1 kind presets:**
+
+| kind | count | type | data | time | boundary | engine handling |
+|---|---|---|---|---|---|---|
+| `transform` | 1→1 | new | maybe | takt | internal | reassign `unit.material`, advance |
+| `assembly` | **N→1** | new | maybe | takt | internal | consume fungible kit per `bom`, emit one product |
+| `inspect` | 1→1 | same | adds result | takt | internal | pass → continue; fail → **scrap exit** |
+| `label` / `seal` | 1→1 | same | adds field | takt | internal | append enrichment only |
+| `hold` | 1→1 | same | none | **dwell** | internal | occupy a slot for `dwell_seconds` |
+| `store` | 1→1 | same | none | **until pull** | internal | occupy a slot until downstream pull |
+| `intake` | 0→1 | sets | sets | takt | **entry** | order-level unit creation (§4.2-4.3) |
+| `offload` | 1→0 | — | — | takt | **exit** | unit reaches ExitNode, completes |
+
+Processes define *what can happen*. The **sequence** is per-order
+(`Order.process_sequence`), not per-material — the same STEEL_COIL can follow
+different sequences depending on the order.
+
+> **Note on `takt` vs `dwell` vs `slots`** — these are three different numbers and
+> are easy to conflate. `takt` = the load/unload cadence (throughput rate);
+> `dwell` = how long one unit stays (residence); `slots` = how many reside at
+> once. For a curing oven: takt = load cadence, dwell = bake time, slots = trays.
+> Steady-state throughput ≈ `slots / dwell`.
+
+### 4.4.1 Transformation & Assembly Mechanics
+
+**`1→1` transform (the simple 90%)** — same unit id keeps flowing:
+```
+on complete(transform):
+  unit.material    = output_material          // RAW_STEEL → TREATED_STEEL
+  unit.enrichments += adds_enrichments
+  unit.next_process = order.process_sequence[++idx]
+```
+
+**`N→1` assembly (the hard case)** — a new unit is *born*:
+```
+station waits until input buffer holds a COMPLETE fungible kit (per bom)   // sync point
+on assembly:
+  consume the kit units (they cease to exist)
+  emit new unit:
+    id            = new uuid
+    material      = output_material            // DEVICE
+    order_id      = the product order this assembly fulfils      // see rule below
+    enrichments   = (enrichment_inherit == "union" ? merge(components) : {}) + adds_enrichments
+```
+
+Assembly is a **merge** — which is allowed, and does *not* contradict the
+"split, no merge" decision. That rule forbids *same-order split units* from
+re-joining; assembly instead combines **distinct component materials** via a BOM.
+
+**Three rules assembly forces (resolved for v1):**
+1. **Order identity** — the product unit belongs to the **product order** whose
+   `process_sequence` includes this assembly step. The product unit is born *at*
+   the assembly station (not at intake); components arrive from their own
+   intakes/upstream. If several product orders share an assembly station,
+   serve them **FIFO**.
+2. **Components are fungible** — matched by `(type, count)` only; no serial
+   pegging in v1.
+3. **Kitting deadlock** — if the station holds partial kits because one
+   component line lags, its buffer fills and stalls. This is detected like any
+   block and raised as a **ShockEvent** for the operator (§8.1).
 
 ### 4.5 Shift (workforce schedule)
 ```
@@ -185,15 +273,19 @@ Shift {
 ```
 ExitNode {
   id, location{x, y, z}
+  kind                // "ship" (good output) | "scrap" (QC failures)
   connected_from: TrackSegment[]
 }
 ```
-Units reach an exit node and are marked complete, removing them from the
-simulation. The order-completion aggregator tracks when all units from an order
-have exited.
+Units reach an exit node and are removed from the simulation. A **ship** exit
+counts toward the order's `units_completed`; a **scrap** exit increments the
+order's scrap counter instead. An order whose good units fall short of
+`quantity` (due to scrap) is reported as a shortfall — v1 does not auto-release
+replacements.
 
-**Config validation:** At least one exit node must exist. All terminal track
-segments must lead to an exit node; no dead-end tracks allowed.
+**Config validation:** At least one ship exit must exist. All terminal track
+segments must lead to an exit node; no dead-end tracks allowed. If any process
+has `kind == "inspect"`, a reachable scrap exit must exist for the failing path.
 
 ### 4.7 Divergence Routing (material-type based)
 
@@ -462,11 +554,22 @@ clock).
    - Carrier pools are **shift-gated** for people/forklifts; AMR pools run 24/7.
 4. **Queue discipline** — station input buffer is FIFO; one process at a time
    per station (no tool-switching mid-shift). Carrier pickup is FIFO by request.
-5. **Deadlock detector** — detect circular waits (cycle in the "waiting-for"
-   graph) and emit a **ShockEvent** for the operator to resolve (we do not
-   auto-divert).
-6. **Order-completion aggregator** — mark an order complete when **all** its
-   units have exited.
+5. **Process application** — apply the process kind's transform on completion:
+   - `transform`: reassign `unit.material`, add enrichments, advance.
+   - `assembly`: wait for a complete fungible kit (per `bom`), consume the
+     components, emit one product unit (born here, tagged with the product
+     order). A stalled kit is a block → ShockEvent.
+   - `inspect`: roll against `pass_rate`; pass → continue, fail → route to a
+     **scrap exit**.
+   - `label`/`seal`: append enrichment only.
+   - `hold`/`store`: occupy a slot for `dwell_seconds` (hold) or until a
+     downstream pull (store); `slots` bounds simultaneous residents.
+6. **Deadlock detector** — detect circular waits (cycle in the "waiting-for"
+   graph), including assembly kitting stalls and carrier blocks; emit a
+   **ShockEvent** for the operator to resolve (we do not auto-divert).
+7. **Order-completion aggregator** — count `units_completed` at **ship** exits
+   and `scrap` at scrap exits; mark an order complete when good units reach
+   `quantity`, or report a shortfall if scrap prevents it.
 
 ### 8.2 The central dynamic: takt balance
 Because takt drives everything, the relationship between adjacent takt times is
@@ -591,6 +694,10 @@ into a chaotic one. Each is mapped to a decision:
 | Carrier dispatch starvation | Eliminated — pools are dedicated per path, no shared dispatch (§7.3) |
 | Carrier blocked at full buffer | Carrier waits holding the unit → shrinks fleet → transport ShockEvent (§8.1) |
 | Hidden transport bottleneck | Carrier utilization & pickup-queue surfaced in UI (§7.4) |
+| Assembly kitting deadlock | Partial-kit stall detected as a block → ShockEvent (§4.4.1, §8.1) |
+| Assembly count/order ambiguity | Product born at assembly step, tagged to the product order, FIFO if shared (§4.4.1) |
+| QC scrap drift (count mismatch) | Scrap exits tracked separately; order reports shortfall vs quantity (§4.6, §8.1) |
+| takt/dwell/slots conflation | Three explicit fields; throughput ≈ slots/dwell documented (§4.4) |
 
 ---
 
