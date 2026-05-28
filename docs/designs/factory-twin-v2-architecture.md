@@ -84,6 +84,10 @@ These were settled during the design conversation and are binding for v2:
 | 13 | Time model | **Event-driven per station** — next event is the next takt completion; deterministic and causal |
 | 14 | Shift hand-over mid-process | **Complete on overtime** — takt is absolute; staffing affects capacity, not takt |
 | 15 | Network validation | **DAG only, no cycles** — ensures forward progress; rework loops are a future feature |
+| 16 | Transport on a path | **Passive** (conveyor) **or carrier** (AMR / forklift / person); the visual is aesthetic, the resource cost is not |
+| 17 | Carrier pool scope | **Dedicated per path** — no shared dispatch; headcount is a clean sum |
+| 18 | Carrier count | **User-assigned** — sim reports utilization & whether it keeps up; user tunes |
+| 19 | AMR vs. people hours | **AMR runs 24/7** (no labor, separate fleet count); people/manned-forklift are shift-gated and count as headcount |
 
 ---
 
@@ -300,7 +304,8 @@ TrackNode {                 // a point: station port OR junction
 
 TrackSegment {              // a single track between two nodes
   id, from_node, to_node
-  physics  { length_m, transport_mode("conveyor"|"rail"|"manual"), speed_m_per_min }
+  length_m
+  transport: PassiveTransport | CarrierTransport   // see §7.3
   capacity { max_units | max_volume_m3, current_occupancy: Unit[] }
   state    // "active" | "blocked" | "maintenance"
 }
@@ -311,6 +316,8 @@ TrackSegment {              // a single track between two nodes
 - At a **diverge**, the branch is chosen by **material type** (`material_rules`).
 - A unit **consumes physical space** on a segment; when the segment is at
   capacity, upstream units **wait** (block).
+- Each segment declares **how** material crosses it — passively (conveyor) or
+  via a carrier (AMR / forklift / person). See §7.3.
 
 ### 7.2 Station
 ```
@@ -334,9 +341,97 @@ Station {
 The same `process_id` may appear on multiple stations (parallel capacity); a
 single station may list multiple processes.
 
----
+### 7.3 Transport Classes & Carrier Pools
 
-## 6. Simulation Engine (Pure, Time Injected)
+The visual choice (AMR vs. walking person) is **aesthetic in the 3D view**, but
+the choice has one real, non-aesthetic consequence: **resource accounting** (how
+many people the factory needs) and whether transport itself becomes a bottleneck.
+So transport is modeled as a real entity, not a render flag.
+
+Every segment uses one of two transport classes:
+
+**Passive transport** — the track moves the material (conveyor, chute, powered
+rail). No discrete carrier, no labor.
+```
+PassiveTransport {
+  mode          // "conveyor" | "chute" | "rail"
+  speed_m_per_min
+}
+```
+Throughput is bounded only by `length_m`, `speed`, and segment `capacity`.
+
+**Carrier transport** — a discrete carrier picks up a unit, travels, drops it,
+and **returns empty** to fetch the next. Served by a dedicated `CarrierPool`.
+```
+CarrierTransport {
+  pool_id       // the dedicated CarrierPool serving this segment
+}
+
+CarrierPool {
+  id
+  carrier_kind  // "amr" | "forklift" | "person"
+  count         // fleet size / people assigned (USER-ASSIGNED, not derived)
+  units_per_trip            // usually 1; cart/tote can be >1
+  timing {
+    load_sec, unload_sec
+    loaded_speed_m_per_min
+    return_speed_m_per_min  // empty leg, often faster
+  }
+
+  // Derived from carrier_kind (user-overridable):
+  counts_as_labor   // person → true;  amr → false;  forklift → true (manned)
+  shift_gated       // person/forklift → true;  amr → false (runs 24/7)
+}
+```
+
+**Key decisions (binding):**
+- **Dedicated per path** — each carrier-served segment has its *own* pool. No
+  shared dispatch, so no starvation/oscillation, and headcount is a clean sum.
+- **User-assigned count** — the user sets `count`; the sim does **not** derive
+  it. Instead the sim reports utilization and whether the pool keeps up (see
+  §7.4). The user tunes `count` up/down by observation.
+- **AMR runs 24/7** — AMR pools ignore shifts and add **zero** to headcount
+  (counted separately as a fleet). People (and manned forklifts) are shift-gated
+  and count as labor.
+
+**Carrier physics (the round trip — must not be skipped):**
+```
+round_trip_time = load_sec
+                + (length_m / loaded_speed)
+                + unload_sec
+                + (length_m / return_speed)
+
+pool_throughput = count × units_per_trip × (3600 / round_trip_time)   units/hour
+                  × availability   (1.0 for AMR 24/7; shift fraction for people)
+```
+Modeling only the loaded leg would overstate capacity and undercount people, so
+the empty return is mandatory.
+
+### 7.4 Headcount Accounting
+
+This is the bottom-line readout the factory exists to produce.
+
+```
+people_required (per shift) =
+    Σ station staffing for that shift            (operators + technicians)
+  + Σ CarrierPool.count where counts_as_labor && active in that shift
+
+amr_fleet = Σ CarrierPool.count where carrier_kind == "amr"   (reported separately)
+```
+
+Because pools are dedicated and counts are user-assigned, this is a plain sum —
+no dispatch model, no estimation. The sim's job is to tell the user whether their
+assigned numbers are **enough**:
+
+- **Carrier utilization** = (demand on segment) ÷ pool_throughput.
+  - `< 1.0` → keeps up (idle time exists).
+  - `≥ 1.0` → transport is a bottleneck; units queue at pickup, WIP grows, and
+    (under wait/block) the line can stall.
+- A **growing pickup queue** is the visible signal to add a carrier/person.
+
+So "number of people required" emerges by iteration: assign → run → watch
+utilization & queues → adjust. The total headcount is always exact for whatever
+is currently assigned.
 
 ---
 
@@ -355,11 +450,18 @@ clock).
 2. **Takt tick (shift-gated)** — each process @ station completes a unit every
    `takt_seconds`, **but only while the station is staffed per the current shift**.
    If a shift ends, takt is paused (not cancelled; resumes next shift).
-3. **Flow + buffer physics** — move units along segments at `speed_m_per_min`,
-   respect segment capacity, move into/out of station input/output buffers;
-   when a segment is full, the unit **waits** (blocks).
+3. **Flow + buffer physics** — move units along segments, respect segment
+   capacity, move into/out of station input/output buffers; when a segment is
+   full, the unit **waits** (blocks).
+   - **Passive segments**: unit advances continuously at the conveyor speed.
+   - **Carrier segments**: a free carrier from the dedicated pool picks up the
+     unit, traverses (loaded), drops at the destination buffer, then returns
+     empty before it can take the next. If the destination buffer is full, the
+     carrier **waits while holding the unit** (occupying itself) — this shrinks
+     effective fleet and can trigger a transport ShockEvent.
+   - Carrier pools are **shift-gated** for people/forklifts; AMR pools run 24/7.
 4. **Queue discipline** — station input buffer is FIFO; one process at a time
-   per station (no tool-switching mid-shift).
+   per station (no tool-switching mid-shift). Carrier pickup is FIFO by request.
 5. **Deadlock detector** — detect circular waits (cycle in the "waiting-for"
    graph) and emit a **ShockEvent** for the operator to resolve (we do not
    auto-divert).
@@ -438,22 +540,24 @@ Three non-negotiable rules:
 
 ```
 ┌─ DOMAIN (pure data) ──────────────────────────────┐
-│  Material · Unit · Process · Shift                 │
+│  Material · Order · Unit · Process · Shift         │
 │  + SchemaImpactMatrix                              │
 ├─ NETWORK (editable physical) ─────────────────────┤
-│  TrackNode · TrackSegment(length,speed,capacity)   │
+│  TrackNode · TrackSegment(passive | carrier)       │
 │  Station(dimensions, buffers, takt-per-process)    │
+│  CarrierPool(dedicated, AMR/forklift/person)       │
 ├─ ENGINE (pure, time injected) ────────────────────┤
 │  Pull release · Takt tick (shift-gated) ·          │
-│  Flow/buffer/block physics ·                       │
+│  Flow/buffer/block + carrier round-trip physics ·  │
 │  Deadlock detector → ShockEvent ·                  │
-│  Order-completion aggregator                       │
+│  Order-completion + headcount/utilization          │
 ├─ TIME / MODE ─────────────────────────────────────┤
 │  Live Twin (wall-clock)  │  Fork (synthetic, COW)  │
 ├─ UI ──────────────────────────────────────────────┤
-│  3D floor (modifiable dims) · Track editor ·       │
-│  Schema-matrix panel (on machine click) ·          │
-│  WIP/starvation heatmap · Shock console            │
+│  3D floor (modifiable dims) · Track + carrier      │
+│  editor · Schema-matrix panel (on machine click) · │
+│  WIP/starvation + carrier-utilization heatmap ·    │
+│  Headcount readout · Shock console                 │
 └────────────────────────────────────────────────────┘
 ```
 
@@ -483,6 +587,10 @@ into a chaotic one. Each is mapped to a decision:
 | Station queue discipline | FIFO input buffer; one process at a time (§8.1) |
 | Network validation | Config-time validation: DAG only, no dead-ends, all material types routable (§4.6-4.7) |
 | Config edit mid-run | **RESOLVED** — pause-and-apply (all operations freeze, user edits, then apply) |
+| Transport undercount (forgot empty return) | Carrier model is full round-trip; loaded + empty legs (§7.3) |
+| Carrier dispatch starvation | Eliminated — pools are dedicated per path, no shared dispatch (§7.3) |
+| Carrier blocked at full buffer | Carrier waits holding the unit → shrinks fleet → transport ShockEvent (§8.1) |
+| Hidden transport bottleneck | Carrier utilization & pickup-queue surfaced in UI (§7.4) |
 
 ---
 
@@ -512,12 +620,15 @@ These are design-pass-level questions that don't block the engine architecture:
    bottleneck identified.
 3. **Engine core**: event-driven takt tick (shift-gated) + flow/buffer/block
    physics on a hand-built network; unit tests to prove determinism and causality.
-4. **Pull release governor** + bottleneck identification.
-5. **Deadlock detector** + ShockEvent emission.
-6. **Order-completion aggregator**.
-7. **Hybrid time/mode** (snapshot + fork + clone-on-write).
-8. **UI**: wire the engine state into the existing R3F floor; add track editor,
-   schema-matrix panel, WIP/starvation heatmap, shock console, config pause-resume.
+4. **Transport layer**: passive vs. carrier movement; dedicated pools with full
+   round-trip timing; carrier-block handling.
+5. **Pull release governor** + bottleneck identification.
+6. **Deadlock detector** + ShockEvent emission (station + transport).
+7. **Order-completion aggregator** + headcount/utilization accounting.
+8. **Hybrid time/mode** (snapshot + fork + clone-on-write).
+9. **UI**: wire the engine state into the existing R3F floor; add track editor,
+   carrier-pool config, schema-matrix panel, WIP/starvation + carrier-utilization
+   heatmap, headcount readout, shock console, config pause-resume.
 
 1. **Domain + Network types** (pure data, no behavior).
 2. **Engine core**: takt tick + flow/buffer/block physics, with unit tests on a
