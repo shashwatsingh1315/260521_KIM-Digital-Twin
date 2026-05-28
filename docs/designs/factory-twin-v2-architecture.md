@@ -79,6 +79,11 @@ These were settled during the design conversation and are binding for v2:
 | 8 | Multi-granularity | **Order → splits into units at entry; units flow independently; no re-merge** |
 | 9 | Order completion | **Logical aggregator** — order is complete when all its units exit |
 | 10 | Station dimensions | **Modifiable** |
+| 11 | Config edits during run | **Pause and apply** — everything freezes, user edits, apply resumes |
+| 12 | Takt variability | **Fixed / deterministic** — no breakdowns or micro-stops in v1 |
+| 13 | Time model | **Event-driven per station** — next event is the next takt completion; deterministic and causal |
+| 14 | Shift hand-over mid-process | **Complete on overtime** — takt is absolute; staffing affects capacity, not takt |
+| 15 | Network validation | **DAG only, no cycles** — ensures forward progress; rework loops are a future feature |
 
 ---
 
@@ -92,43 +97,76 @@ them.
 Material {
   id                 // "STEEL_COIL"
   properties { weight_kg, dimensions{l,w,h}, sku }
-  allowed_processes  // Process[]
-  divergence_rules   // { junction_id: chosen_branch_id }  (material-type routing)
+  allowed_processes  // Process[]  (unordered set; sequence is per-order)
 }
 ```
 
-### 4.2 Unit (dynamic instance — the thing that flows)
+### 4.2 Order (top-level request)
+```
+Order {
+  id                 // "ORD_001"
+  material_type      // Material
+  quantity           // N (units to produce)
+  process_sequence   // [Process A, Process B, Process C]  (order-specific sequence)
+  arrival_time       // when the order becomes available to the release governor
+  
+  status             // "pending" | "in_progress" | "completed" | "failed"
+  units_created      // count of units spawned from this order
+  units_completed    // count of units that have exited
+  
+  lifecycle { created_at, completed_at?, events[] }
+}
+```
+Orders arrive at the system (via UI, file, or demand signal) and are queued in
+the release governor's pending queue. As units complete, the order progresses.
+When `units_completed == quantity`, the order is marked complete.
+
+### 4.3 Unit (dynamic instance — the thing that flows)
 ```
 Unit {
   id                 // UUID
   material           // Material
   order_id           // parent order (for logical completion aggregation)
+  unit_number        // 1 of N in the order
+  
+  next_process       // the next Process this unit must undergo (from order.process_sequence)
+  
   location {
-    type             // "track" | "station_input" | "station_processing" | "station_output"
+    type             // "pending" | "track" | "station_input" | "station_processing" | "station_output" | "exit"
     track_id?, track_position_m?
     station_id?, buffer_slot?, process_id?
   }
+  
   enrichments        // { field: value } accumulated as processes run
   lifecycle { created_at, completed_at?, events[] }
 }
 ```
 A unit is a single, independently-flowing item. Splitting an order produces N
-units; there is no merge.
+units; there is no physical merge. Units are created lazily: the release
+governor spawns a unit from a pending order only when it can admit it onto the
+floor.
 
-### 4.3 Process (transformation recipe)
+### 4.4 Process (transformation recipe)
 ```
 Process {
   id, name           // "Sealing"
   kind               // "hold" | "store" | "transform" | ...
   input_materials    // Material[]
+  
   adds_enrichments   // e.g. ["seal_number"]
   output_material?   // if it transforms type (Raw → Treated)
+  
   constraints { requires_skills[], requires_tools[] }
+  
   schema_impact      // SchemaImpactMatrix  (see §7)
 }
 ```
+Processes define *what can happen*. The **sequence** in which a material undergoes
+processes is per-order (defined in `Order.process_sequence`), not per-material.
+This allows flexible routing: the same STEEL_COIL can follow different sequences
+depending on the order.
 
-### 4.4 Shift (workforce schedule)
+### 4.5 Shift (workforce schedule)
 ```
 Shift {
   id, name           // "Day Shift"
@@ -139,13 +177,121 @@ Shift {
 }
 ```
 
+### 4.6 ExitNode (where units leave the system)
+```
+ExitNode {
+  id, location{x, y, z}
+  connected_from: TrackSegment[]
+}
+```
+Units reach an exit node and are marked complete, removing them from the
+simulation. The order-completion aggregator tracks when all units from an order
+have exited.
+
+**Config validation:** At least one exit node must exist. All terminal track
+segments must lead to an exit node; no dead-end tracks allowed.
+
+### 4.7 Divergence Routing (material-type based)
+
+At a `TrackNode` with multiple outbound segments, the unit's next station is
+determined by its `next_process` and the station's capabilities:
+
+```
+routing_logic(unit, junction):
+  next_process = unit.next_process
+  candidate_stations = [stations reachable from junction that support next_process
+                        and material_type]
+  if only one candidate:
+    → go to that station
+  if multiple:
+    → all reachable; pick first (or round-robin in future)
+  if none:
+    → ERROR at config time (validation catches this)
+```
+
+**Config validation:** For every material type and every divergence junction,
+ensure there exists a valid outbound path to at least one station that performs
+the material's allowed processes. Otherwise, the unit will trap.
+
 ---
 
-## 5. Network Model (Editable Physical Infrastructure)
+## 5. Time Model — Event-Driven Per-Station
+
+**Critical:** The engine must advance deterministically despite varying takt times.
+
+```
+SimulationEngine {
+  current_time_seconds: number
+  
+  station_processes: {
+    [process_key = "station_A:process_Drilling"]: {
+      station_id, process_id, takt_seconds
+      next_completion_time: number  // when the next unit finishes
+      is_staffed: boolean            // per shift availability
+    }
+  }
+  
+  advance_one_step() {
+    // Find the next event
+    next_time = min(all next_completion_times where is_staffed)
+    
+    if next_time == ∞ (no events):
+      return  // nothing to do
+    
+    current_time = next_time
+    
+    for each process where next_completion_time == current_time:
+      unit = station_input_buffer.dequeue()
+      if unit exists:
+        complete_unit(unit, process)
+        next_completion_time = current_time + takt_seconds
+      else:
+        next_completion_time = ∞  // station idle, waiting for input
+  }
+}
+```
+
+**Why event-driven?** If Station A takt = 30s and Station B takt = 60s, a
+naive "tick all stations every second" incurs 60 discrete timesteps. Event-driven
+jumps directly to 30s, 60s, etc., making the simulation:
+- **Deterministic:** causally correct, no artificial ordering
+- **Efficient:** large takt times don't bloat the step count
+- **Pausable:** can pause at any time and edit config; resume from snapshot
+
+---
+
+## 6. Bottleneck Identification
+
+The pull release governor admits units based on the bottleneck station's
+readiness. The bottleneck is the station with the **lowest effective throughput**:
+
+```
+effective_throughput[station] = (units_per_hour_at_takt) × (shift_availability)
+                               = (3600 / takt_seconds) × (staffed_hours / 24)
+
+bottleneck_station = station with min(effective_throughput)
+```
+
+**Example:**
+```
+Station A: takt=30s, always staffed  → 120 units/hour
+Station B: takt=60s, always staffed  → 60 units/hour  ← BOTTLENECK
+Station C: takt=20s, part-time       → 30 units/hour
+```
+
+Station B is the bottleneck. The release governor only admits a unit when B can
+accept one (its input buffer is not full, or it's not actively processing).
+
+**Config validation:** Warn if the bottleneck is not explicitly identified by
+the user. (In a future multi-path network, bottlenecks per path may differ.)
+
+---
+
+## 7. Network Model (Editable Physical Infrastructure)
 
 The floor is a **directed graph with physics**. This is the editable backbone.
 
-### 5.1 Track network
+### 7.1 Track network
 ```
 TrackNode {                 // a point: station port OR junction
   id, coordinates{x,y,z}
@@ -166,7 +312,7 @@ TrackSegment {              // a single track between two nodes
 - A unit **consumes physical space** on a segment; when the segment is at
   capacity, upstream units **wait** (block).
 
-### 5.2 Station
+### 7.2 Station
 ```
 Station {
   id, location{x,y,z}, dimensions{l,w,h}        // dimensions modifiable
@@ -192,29 +338,35 @@ single station may list multiple processes.
 
 ## 6. Simulation Engine (Pure, Time Injected)
 
+---
+
+## 8. Simulation Engine (Pure, Time Injected)
+
 The engine has **zero knowledge of the UI or the four external systems.** It
 takes the domain + network + a `time` source and advances state. Time is an
 **injected dependency** — never read from the system clock directly — which is
 what lets the same engine run the live twin (wall-clock) and a fork (synthetic
 clock).
 
-### 6.1 Responsibilities
+### 8.1 Responsibilities
 1. **Pull release governor** — admit a new unit onto the floor only when the
    **bottleneck** station can accept one. This caps work-in-progress (WIP) and
    is the primary defense against deadlock.
-2. **Takt tick** — each process @ station completes a unit every `takt_seconds`,
-   **but only while the station is active per the current shift** (effective
-   throughput = takt × availability).
+2. **Takt tick (shift-gated)** — each process @ station completes a unit every
+   `takt_seconds`, **but only while the station is staffed per the current shift**.
+   If a shift ends, takt is paused (not cancelled; resumes next shift).
 3. **Flow + buffer physics** — move units along segments at `speed_m_per_min`,
-   respect segment capacity, move into/out of station buffers; when blocked, the
-   unit **waits**.
-4. **Deadlock detector** — detect circular waits (cycle in the "waiting-for"
+   respect segment capacity, move into/out of station input/output buffers;
+   when a segment is full, the unit **waits** (blocks).
+4. **Queue discipline** — station input buffer is FIFO; one process at a time
+   per station (no tool-switching mid-shift).
+5. **Deadlock detector** — detect circular waits (cycle in the "waiting-for"
    graph) and emit a **ShockEvent** for the operator to resolve (we do not
    auto-divert).
-5. **Order-completion aggregator** — mark an order complete when **all** its
-   units have exited (there is no physical merge).
+6. **Order-completion aggregator** — mark an order complete when **all** its
+   units have exited.
 
-### 6.2 The central dynamic: takt balance
+### 8.2 The central dynamic: takt balance
 Because takt drives everything, the relationship between adjacent takt times is
 the whole system:
 - Upstream faster than downstream → WIP piles up → buffer fills → **blocks**.
@@ -224,7 +376,7 @@ KPI.
 
 ---
 
-## 7. External-System Representation (Schema-Impact Matrix)
+## 9. External-System Representation (Schema-Impact Matrix)
 
 Clicking a machine shows a per-process table documenting the **data footprint**
 of that process across the four systems. It is **static schema-level
@@ -255,7 +407,7 @@ definition.
 
 ---
 
-## 8. Time & Mode — Hybrid Twin + Fork
+## 10. Time & Mode — Hybrid Twin + Fork
 
 ```
         LIVE TWIN                          FORKED SIM
@@ -282,7 +434,7 @@ Three non-negotiable rules:
 
 ---
 
-## 9. Module Boundaries
+## 11. Module Boundaries
 
 ```
 ┌─ DOMAIN (pure data) ──────────────────────────────┐
@@ -310,7 +462,7 @@ engine never imports UI or external-system code.
 
 ---
 
-## 10. Chaos Sources and How They Are Tamed
+## 12. Chaos Sources and How They Are Tamed
 
 The design was stress-tested by enumerating what would turn an ordered system
 into a chaotic one. Each is mapped to a decision:
@@ -320,32 +472,52 @@ into a chaotic one. Each is mapped to a decision:
 | Unbounded WIP → deadlock | Pull / bottleneck-gated release |
 | Deadlock from wait/block | Detect circular wait → surface as ShockEvent → operator resolves |
 | Takt imbalance | Made visible (WIP / starvation heatmap) |
-| Hidden track capacity | Track latency + occupancy modeled explicitly |
-| Shift gaps | Station takt ticks only while staffed (throughput = takt × availability) |
-| Split-no-merge count mismatch | Logical order-completion aggregator |
-| Twin vs. sim collision | Hybrid: sealed one-way copy-on-write fork, two clocks |
-| External-system sync drift | Eliminated — systems are a schema overlay, not drivers |
-| Config edit mid-run | **OPEN** — see §11 |
+| Hidden track capacity | Track latency + occupancy modeled explicitly (§5) |
+| Shift gaps | Station takt ticks only while staffed; process paused if shift ends |
+| Split-no-merge count mismatch | Logical order-completion aggregator (order complete when all units exit) |
+| Twin vs. sim collision | Hybrid: sealed one-way copy-on-write fork, two clocks (§10) |
+| External-system sync drift | Eliminated — systems are a schema overlay, not drivers (§9) |
+| Uncontrolled release | Pull release gated by bottleneck station (§6) |
+| Order/unit creation | Explicit Order + pending queue; units spawned lazily by release governor (§4.2-4.3) |
+| Process sequencing | Per-order sequences; material-type routing enforces next_process (§4.7) |
+| Station queue discipline | FIFO input buffer; one process at a time (§8.1) |
+| Network validation | Config-time validation: DAG only, no dead-ends, all material types routable (§4.6-4.7) |
+| Config edit mid-run | **RESOLVED** — pause-and-apply (all operations freeze, user edits, then apply) |
 
 ---
 
-## 11. Open Questions
+## 13. Remaining Open Questions (Deferred to Design Refinement)
 
-1. **Config edits during a run.** When the user shortens a track, moves a
-   station, or changes a takt while units are in flight, what happens? Candidate
-   rules: pause-and-apply, or apply-to-new-units-only. **Undecided.**
-2. **Takt determinism.** Is takt fixed/deterministic, or does it have
-   variability (breakdowns, micro-stops)? Recommend starting deterministic.
-3. **Track authoring UX.** How does the user draw/edit the track graph and
-   junctions (and set per-junction material rules)? Needs its own design pass.
-4. **Dimension-editing UX.** How are station dimensions edited in the 3D view,
-   and what is constrained (collisions, floor bounds)?
-5. **Shift hand-over mid-process.** What happens to a unit being processed when
-   its station's shift ends mid-cycle?
+These are design-pass-level questions that don't block the engine architecture:
+
+1. **Track authoring UX.** How does the user draw/edit the track graph and
+   junctions in the 3D view? (Sketch tool? Click-to-place nodes? Implicit topology
+   from station adjacency?)
+2. **Dimension-editing UX.** How are station dimensions edited, and what is
+   constrained (collisions with walls, floor bounds)?
+3. **Shift hand-over recovery.** If a process is paused mid-cycle due to shift
+   end, how long does it take to resume? (Assumed: instant/same shift next day;
+   later: model changeover/setup time.)
+4. **Multi-path network support.** For now, assume a linear/DAG flow. In future:
+   how to identify bottlenecks when orders can take different paths through the
+   network?
 
 ---
 
-## 12. Suggested Build Order
+## 14. Suggested Build Order
+
+1. **Domain + Network types** (Order, Unit, Process, Shift, Material, TrackNode,
+   TrackSegment, Station, ExitNode).
+2. **Config validator** — check DAG, no dead-ends, all material types routable,
+   bottleneck identified.
+3. **Engine core**: event-driven takt tick (shift-gated) + flow/buffer/block
+   physics on a hand-built network; unit tests to prove determinism and causality.
+4. **Pull release governor** + bottleneck identification.
+5. **Deadlock detector** + ShockEvent emission.
+6. **Order-completion aggregator**.
+7. **Hybrid time/mode** (snapshot + fork + clone-on-write).
+8. **UI**: wire the engine state into the existing R3F floor; add track editor,
+   schema-matrix panel, WIP/starvation heatmap, shock console, config pause-resume.
 
 1. **Domain + Network types** (pure data, no behavior).
 2. **Engine core**: takt tick + flow/buffer/block physics, with unit tests on a
