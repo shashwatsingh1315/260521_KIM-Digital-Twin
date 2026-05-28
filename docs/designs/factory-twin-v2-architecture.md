@@ -258,6 +258,29 @@ re-joining; assembly instead combines **distinct component materials** via a BOM
    component line lags, its buffer fills and stalls. This is detected like any
    block and raised as a **ShockEvent** for the operator (§8.1).
 
+### 4.4.2 Kind-Based Editing (UI)
+
+The `Process` struct holds many optional fields, but the editor **never shows all
+of them at once.** The form is driven by `kind`, so the user only ever sees the
+1–2 fields that matter for that kind. The fields stay orthogonal in the data
+model; the UI just hides what is irrelevant.
+
+| kind | Fields shown | Hidden |
+|---|---|---|
+| `transform` | takt, output_material | dwell, slots, bom, pass_rate |
+| `assembly` | takt, output_material, bom, enrichment_inherit | dwell, slots, pass_rate |
+| `inspect` | takt, pass_rate | dwell, slots, bom, output_material |
+| `label` / `seal` | takt, adds_enrichments | dwell, slots, bom, pass_rate |
+| `hold` | dwell, slots | takt*, bom, pass_rate |
+| `store` | slots | takt*, dwell, bom, pass_rate |
+
+\* For hold/store, "takt" is the *load cadence* and defaults to "as fast as
+upstream feeds"; it is an advanced field, not required.
+
+Each form shows a **live derived readout** so the coupling is visible without
+mental math, e.g. for hold: `throughput ≈ slots / dwell = 3 / 300 s = 36/hr`.
+This keeps the three numbers separate (correct) yet effortless to enter (clean).
+
 ### 4.5 Shift (workforce schedule)
 ```
 Shift {
@@ -414,24 +437,35 @@ TrackSegment {              // a single track between two nodes
 ### 7.2 Station
 ```
 Station {
-  id, location{x,y,z}, dimensions{l,w,h}        // dimensions modifiable
+  id, location{x,y,z}, dimensions{l,w,h}        // INPUT: dimensions modifiable
   buffers {
-    input  { capacity, current: Unit[], fed_by: segment[] }
-    output { capacity, current: Unit[], drains_to: segment }
+    input  { capacity, current: Unit[], fed_by: segment[] }    // INPUT: capacity
+    output { capacity, current: Unit[], drains_to: segment }   // INPUT: capacity
   }
   processes [ {
-    process_id
-    automation_level  // "manual" | "semi" | "full"
-    parallel_slots    // can run K units simultaneously
-    takt_seconds      // the heartbeat for this process @ this station
-    capacity_per_hour
+    process_id                            // INPUT
+    automation_level                      // INPUT: "manual" | "semi" | "full"
+    parallel_slots                        // INPUT: max units run at once
+    takt_seconds                          // INPUT: the heartbeat for this process here
+    operators_per_slot                    // INPUT: people needed to run one slot
+                                          //        (0 for full automation)
+    // DERIVED (never stored, never hand-entered):
+    //   capacity_per_hour      = 3600 / takt_seconds × effective_slots
+    //   effective_slots(shift) = min(parallel_slots,
+    //                                 floor(assigned_operators / operators_per_slot))
   } ]
-  staffing_by_shift { shift_id: { roles{role:count}, capacity_multiplier } }
+  staffing_by_shift { shift_id: { roles{role:count} } }   // INPUT: people assigned
 }
 ```
 
 The same `process_id` may appear on multiple stations (parallel capacity); a
 single station may list multiple processes.
+
+**No redundant/magic numbers here:** `capacity_per_hour` is *derived* from takt,
+not stored (storing both invites contradiction). Understaffing does **not** use a
+magic multiplier like `0.8` — instead, `effective_slots` is *computed* from how
+many operators are assigned versus `operators_per_slot`. A fully-automated process
+sets `operators_per_slot = 0`, so staffing never throttles it. See §15.
 
 ### 7.3 Transport Classes & Carrier Pools
 
@@ -737,11 +771,63 @@ These are design-pass-level questions that don't block the engine architecture:
    carrier-pool config, schema-matrix panel, WIP/starvation + carrier-utilization
    heatmap, headcount readout, shock console, config pause-resume.
 
-1. **Domain + Network types** (pure data, no behavior).
-2. **Engine core**: takt tick + flow/buffer/block physics, with unit tests on a
-   tiny hand-built network — prove balance/imbalance behavior.
-3. **Pull release governor** + deadlock detector → ShockEvent.
-4. **Order-completion aggregator.**
-5. **Hybrid time/mode** (snapshot + fork).
-6. **UI**: wire the engine state into the existing R3F floor; add track editor,
-   schema-matrix panel, WIP heatmap, shock console.
+---
+
+## 15. Configuration Ledger — Inputs vs. Derived (No Hardcoding)
+
+**Governing principle:** every number in the system is either **(I) user input**
+entered upfront, or **(D) derived** by a formula from inputs. **Nothing is a magic
+constant baked into code.** Defaults exist only as editable seed values, never as
+locks. If a value can be computed from other values, it is *derived* and never
+stored (storing both invites contradiction).
+
+### 15.1 The ledger
+
+| Value | Source | Formula (if derived) |
+|---|---|---|
+| Material weight / dimensions / sku | **I** | — |
+| Order quantity / arrival_time / process_sequence | **I** | — |
+| Process takt_seconds (per station) | **I** | — |
+| Process dwell_seconds / slots (hold/store) | **I** | — |
+| Process pass_rate (inspect) | **I** | — |
+| Process bom quantities (assembly) | **I** | — |
+| Station dimensions | **I** | — |
+| Station buffer capacities (in/out) | **I** | — |
+| parallel_slots, operators_per_slot | **I** | — |
+| Shift start / duration / days / staffing | **I** | — |
+| Track length_m, speed_m_per_min, capacity | **I** | — |
+| Carrier count / units_per_trip / load+unload / speeds | **I** | — |
+| Carrier counts_as_labor / shift_gated | **I** (default by kind) | overridable |
+| **station capacity_per_hour** | **D** | `3600 / takt × effective_slots` |
+| **effective_slots (per shift)** | **D** | `min(parallel_slots, ⌊assigned_operators / operators_per_slot⌋)` |
+| **station effective_throughput** | **D** | `capacity_per_hour × shift_availability` |
+| **bottleneck station** | **D** | `argmin(effective_throughput)` |
+| **carrier round_trip_time** | **D** | `load + length/loaded_speed + unload + length/return_speed` |
+| **carrier pool_throughput** | **D** | `count × units_per_trip × 3600/round_trip × availability` |
+| **carrier utilization** | **D** | `segment_demand / pool_throughput` |
+| **hold/store throughput** | **D** | `≈ slots / dwell` |
+| **people_required (per shift)** | **D** | `Σ station staffing + Σ labor-carrier counts` |
+| **amr_fleet** | **D** | `Σ AMR carrier counts` |
+| **next_completion_time** | **D** | `current_time + takt` (event-driven, §5) |
+| **order units_completed / scrap / shortfall** | **D** | counted at ship/scrap exits |
+
+### 15.2 Legacy magic numbers eliminated
+
+The v1 (`factory-pull-digital-twin.md`) design hardcoded several constants. v2
+replaces each with input or derivation:
+
+| v1 hardcoded value | v2 treatment |
+|---|---|
+| "buffer > 5 units = bottleneck" | per-buffer `capacity` (**I**); fullness is **D** |
+| "ASRS consumes 1 unit / 3 ticks" | a demand/takt (**I**) |
+| "tick 0 → 100", "1 tick/sec" | event-driven time, no fixed range (§5) |
+| Hardcoded Three.js coordinates | station/track positions are **I** |
+| "max 500 particles", renderOrder 0/1/2 | rendering-layer perf settings, not domain numbers |
+
+### 15.3 Consequence
+
+Because of this discipline, the whole factory is **data-driven**: a configuration
+is just a document of inputs, and every behavioral number falls out by formula.
+The engine contains **no tunable constants** — it can be fully exercised by
+editing config alone, which is also what makes the hybrid twin/fork and the
+config-pause-and-apply model clean.
