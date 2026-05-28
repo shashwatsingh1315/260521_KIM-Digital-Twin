@@ -1,0 +1,2006 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "collections_crm_ptp_flow",
+        "label": "Collections CRM PTP Full Stack: Spec \u2192 Plan \u2192 DB \u2192 Actions \u2192 UI",
+        "nodes": [
+          "specs_collections_ptp_design",
+          "plans_collections_ptp_kanban_plan",
+          "plans_collections_db_migration",
+          "plans_collections_server_actions",
+          "plans_collections_client_tsx"
+        ],
+        "relation": "implement",
+        "confidence": "INFERRED",
+        "confidence_score": 0.95,
+        "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md"
+      },
+      {
+        "id": "factory_twin_visualization_stack",
+        "label": "Factory Digital Twin Visualization: CEO Plan + Wireframe + App Entry",
+        "nodes": [
+          "designs_factory_pull_ceo_plan",
+          "gstack_sketch_digital_twin_wireframe",
+          "index_factory_pull_digital_twin_app"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "docs/designs/factory-pull-digital-twin.md"
+      },
+      {
+        "id": "factory_twin_e2e_test_coverage",
+        "label": "E2E Test Coverage for Factory Twin: Timeline, Shock, Viewport Canvas",
+        "nodes": [
+          "test_e2e_factory_spec",
+          "gstack_sketch_shock_injection",
+          "gstack_sketch_timeline_slider"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.75,
+        "source_file": "test-results/factory-Factory-Twin-E2E-should-manipulate-timeline-chromium/error-context.md"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "package.json",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L1",
+      "id": "package_json",
+      "community": 1,
+      "norm_label": "package.json"
+    },
+    {
+      "label": "name",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "id": "260521_digital_twin_package_name",
+      "community": 1,
+      "norm_label": "name"
+    },
+    {
+      "label": "private",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "id": "260521_digital_twin_package_private",
+      "community": 1,
+      "norm_label": "private"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "id": "260521_digital_twin_package_version",
+      "community": 1,
+      "norm_label": "version"
+    },
+    {
+      "label": "type",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "id": "260521_digital_twin_package_type",
+      "community": 1,
+      "norm_label": "type"
+    },
+    {
+      "label": "scripts",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "id": "260521_digital_twin_package_scripts",
+      "community": 1,
+      "norm_label": "scripts"
+    },
+    {
+      "label": "dev",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "id": "260521_digital_twin_package_scripts_dev",
+      "community": 1,
+      "norm_label": "dev"
+    },
+    {
+      "label": "build",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "id": "260521_digital_twin_package_scripts_build",
+      "community": 1,
+      "norm_label": "build"
+    },
+    {
+      "label": "preview",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "id": "260521_digital_twin_package_scripts_preview",
+      "community": 1,
+      "norm_label": "preview"
+    },
+    {
+      "label": "test",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "id": "260521_digital_twin_package_scripts_test",
+      "community": 1,
+      "norm_label": "test"
+    },
+    {
+      "label": "test:e2e",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L11",
+      "id": "260521_digital_twin_package_scripts_test_e2e",
+      "community": 1,
+      "norm_label": "test:e2e"
+    },
+    {
+      "label": "dependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "id": "260521_digital_twin_package_dependencies",
+      "community": 7,
+      "norm_label": "dependencies"
+    },
+    {
+      "label": "react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "id": "260521_digital_twin_package_dependencies_react",
+      "community": 7,
+      "norm_label": "react"
+    },
+    {
+      "label": "react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "id": "260521_digital_twin_package_dependencies_react_dom",
+      "community": 7,
+      "norm_label": "react-dom"
+    },
+    {
+      "label": "three",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "id": "260521_digital_twin_package_dependencies_three",
+      "community": 7,
+      "norm_label": "three"
+    },
+    {
+      "label": "@react-three/fiber",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "id": "260521_digital_twin_package_dependencies_react_three_fiber",
+      "community": 7,
+      "norm_label": "@react-three/fiber"
+    },
+    {
+      "label": "@react-three/drei",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "id": "260521_digital_twin_package_dependencies_react_three_drei",
+      "community": 7,
+      "norm_label": "@react-three/drei"
+    },
+    {
+      "label": "lucide-react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "id": "260521_digital_twin_package_dependencies_lucide_react",
+      "community": 7,
+      "norm_label": "lucide-react"
+    },
+    {
+      "label": "devDependencies",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "id": "260521_digital_twin_package_devdependencies",
+      "community": 5,
+      "norm_label": "devdependencies"
+    },
+    {
+      "label": "vite",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "id": "260521_digital_twin_package_devdependencies_vite",
+      "community": 5,
+      "norm_label": "vite"
+    },
+    {
+      "label": "vitest",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "id": "260521_digital_twin_package_devdependencies_vitest",
+      "community": 5,
+      "norm_label": "vitest"
+    },
+    {
+      "label": "jsdom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "id": "260521_digital_twin_package_devdependencies_jsdom",
+      "community": 5,
+      "norm_label": "jsdom"
+    },
+    {
+      "label": "@playwright/test",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "id": "260521_digital_twin_package_devdependencies_playwright_test",
+      "community": 5,
+      "norm_label": "@playwright/test"
+    },
+    {
+      "label": "@types/react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "id": "260521_digital_twin_package_devdependencies_types_react",
+      "community": 5,
+      "norm_label": "@types/react"
+    },
+    {
+      "label": "@types/react-dom",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L27",
+      "id": "260521_digital_twin_package_devdependencies_types_react_dom",
+      "community": 5,
+      "norm_label": "@types/react-dom"
+    },
+    {
+      "label": "@vitejs/plugin-react",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L28",
+      "id": "260521_digital_twin_package_devdependencies_vitejs_plugin_react",
+      "community": 5,
+      "norm_label": "@vitejs/plugin-react"
+    },
+    {
+      "label": "playwright.config.js",
+      "file_type": "code",
+      "source_file": "playwright.config.js",
+      "source_location": "L1",
+      "id": "playwright_config_js",
+      "community": 10,
+      "norm_label": "playwright.config.js"
+    },
+    {
+      "label": "vite.config.js",
+      "file_type": "code",
+      "source_file": "vite.config.js",
+      "source_location": "L1",
+      "id": "vite_config_js",
+      "community": 11,
+      "norm_label": "vite.config.js"
+    },
+    {
+      "label": "factory.spec.js",
+      "file_type": "code",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L1",
+      "id": "tests_factory_spec_js",
+      "community": 8,
+      "norm_label": "factory.spec.js"
+    },
+    {
+      "label": "canvas",
+      "file_type": "code",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L9",
+      "id": "tests_factory_spec_canvas",
+      "community": 8,
+      "norm_label": "canvas"
+    },
+    {
+      "label": "shockBtn",
+      "file_type": "code",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L14",
+      "id": "tests_factory_spec_shockbtn",
+      "community": 8,
+      "norm_label": "shockbtn"
+    },
+    {
+      "label": "timelineInput",
+      "file_type": "code",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L28",
+      "id": "tests_factory_spec_timelineinput",
+      "community": 8,
+      "norm_label": "timelineinput"
+    },
+    {
+      "label": "resumeBtn",
+      "file_type": "code",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L32",
+      "id": "tests_factory_spec_resumebtn",
+      "community": 8,
+      "norm_label": "resumebtn"
+    },
+    {
+      "label": "App.jsx",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L1",
+      "id": "src_app_jsx",
+      "community": 3,
+      "norm_label": "app.jsx"
+    },
+    {
+      "label": "App()",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "source_location": "L6",
+      "id": "src_app_app",
+      "community": 3,
+      "norm_label": "app()"
+    },
+    {
+      "label": "main.jsx",
+      "file_type": "code",
+      "source_file": "src/main.jsx",
+      "source_location": "L1",
+      "id": "src_main_jsx",
+      "community": 3,
+      "norm_label": "main.jsx"
+    },
+    {
+      "label": "FactoryTwin.jsx",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L1",
+      "id": "src_components_factorytwin_jsx",
+      "community": 6,
+      "norm_label": "factorytwin.jsx"
+    },
+    {
+      "label": "DUMMY",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L7",
+      "id": "components_factorytwin_dummy",
+      "community": 6,
+      "norm_label": "dummy"
+    },
+    {
+      "label": "TARGET_VEC",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L8",
+      "id": "components_factorytwin_target_vec",
+      "community": 6,
+      "norm_label": "target_vec"
+    },
+    {
+      "label": "CURRENT_VEC",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L9",
+      "id": "components_factorytwin_current_vec",
+      "community": 6,
+      "norm_label": "current_vec"
+    },
+    {
+      "label": "NODES",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L12",
+      "id": "components_factorytwin_nodes",
+      "community": 6,
+      "norm_label": "nodes"
+    },
+    {
+      "label": "FloorPlate()",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L23",
+      "id": "components_factorytwin_floorplate",
+      "community": 6,
+      "norm_label": "floorplate()"
+    },
+    {
+      "label": "TwinScene",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L51",
+      "id": "components_factorytwin_twinscene",
+      "community": 6,
+      "norm_label": "twinscene"
+    },
+    {
+      "label": "FactoryTwin()",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L264",
+      "id": "components_factorytwin_factorytwin",
+      "community": 6,
+      "norm_label": "factorytwin()"
+    },
+    {
+      "label": "usePullEngine.js",
+      "file_type": "code",
+      "source_file": "src/hooks/usePullEngine.js",
+      "source_location": "L1",
+      "id": "src_hooks_usepullengine_js",
+      "community": 3,
+      "norm_label": "usepullengine.js"
+    },
+    {
+      "label": "runSimulation()",
+      "file_type": "code",
+      "source_file": "src/hooks/usePullEngine.js",
+      "source_location": "L4",
+      "id": "hooks_usepullengine_runsimulation",
+      "community": 3,
+      "norm_label": "runsimulation()"
+    },
+    {
+      "label": "usePullEngine()",
+      "file_type": "code",
+      "source_file": "src/hooks/usePullEngine.js",
+      "source_location": "L161",
+      "id": "hooks_usepullengine_usepullengine",
+      "community": 3,
+      "norm_label": "usepullengine()"
+    },
+    {
+      "label": "usePullEngine.test.js",
+      "file_type": "code",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L1",
+      "id": "src_hooks_usepullengine_test_js",
+      "community": 3,
+      "norm_label": "usepullengine.test.js"
+    },
+    {
+      "label": "states",
+      "file_type": "code",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L6",
+      "id": "hooks_usepullengine_test_states",
+      "community": 3,
+      "norm_label": "states"
+    },
+    {
+      "label": "hasBlocked",
+      "file_type": "code",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L25",
+      "id": "hooks_usepullengine_test_hasblocked",
+      "community": 3,
+      "norm_label": "hasblocked"
+    },
+    {
+      "label": "happyStates",
+      "file_type": "code",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L29",
+      "id": "hooks_usepullengine_test_happystates",
+      "community": 3,
+      "norm_label": "happystates"
+    },
+    {
+      "label": ".last-run.json",
+      "file_type": "code",
+      "source_file": "test-results/.last-run.json",
+      "source_location": "L1",
+      "id": "test_results_last_run_json",
+      "community": 9,
+      "norm_label": ".last-run.json"
+    },
+    {
+      "label": "status",
+      "file_type": "code",
+      "source_file": "test-results/.last-run.json",
+      "source_location": "L2",
+      "id": "test_results_last_run_status",
+      "community": 9,
+      "norm_label": "status"
+    },
+    {
+      "label": "failedTests",
+      "file_type": "code",
+      "source_file": "test-results/.last-run.json",
+      "source_location": "L3",
+      "id": "test_results_last_run_failedtests",
+      "community": 9,
+      "norm_label": "failedtests"
+    },
+    {
+      "label": "Dynamic Camera Presets TODO",
+      "file_type": "document",
+      "source_file": "TODOS.md",
+      "source_location": "line 3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "todos_dynamic_camera_presets",
+      "community": 4,
+      "norm_label": "dynamic camera presets todo"
+    },
+    {
+      "label": "Local Storage Persistence TODO",
+      "file_type": "document",
+      "source_file": "TODOS.md",
+      "source_location": "line 11",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "todos_local_storage_persistence",
+      "community": 4,
+      "norm_label": "local storage persistence todo"
+    },
+    {
+      "label": "FactoryTwin.jsx Component",
+      "file_type": "code",
+      "source_file": "TODOS.md",
+      "source_location": "line 9",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "todos_factory_twin_jsx",
+      "community": 4,
+      "norm_label": "factorytwin.jsx component"
+    },
+    {
+      "label": "usePullEngine Hook",
+      "file_type": "code",
+      "source_file": "TODOS.md",
+      "source_location": "line 16",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "todos_use_pull_engine",
+      "community": 4,
+      "norm_label": "usepullengine hook"
+    },
+    {
+      "label": "3D Factory Pull-System Digital Twin App",
+      "file_type": "document",
+      "source_file": "index.html",
+      "source_location": "line 6",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "index_factory_pull_digital_twin_app",
+      "community": 0,
+      "norm_label": "3d factory pull-system digital twin app"
+    },
+    {
+      "label": "src/main.jsx Entry Point",
+      "file_type": "code",
+      "source_file": "index.html",
+      "source_location": "line 14",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "index_main_jsx",
+      "community": 0,
+      "norm_label": "src/main.jsx entry point"
+    },
+    {
+      "label": "Digital Twin Wireframe Sketch - Factory Flow & Pull System",
+      "file_type": "document",
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 4",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "gstack_sketch_digital_twin_wireframe",
+      "community": 0,
+      "norm_label": "digital twin wireframe sketch - factory flow & pull system"
+    },
+    {
+      "label": "3D Viewport Panel (OrbitControls Mock)",
+      "file_type": "concept",
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 262",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "gstack_sketch_3d_viewport",
+      "community": 0,
+      "norm_label": "3d viewport panel (orbitcontrols mock)"
+    },
+    {
+      "label": "Pull Demand Queue Dashboard",
+      "file_type": "concept",
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 399",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "gstack_sketch_pull_demand_queue",
+      "community": 0,
+      "norm_label": "pull demand queue dashboard"
+    },
+    {
+      "label": "Shock Injection (Inject Shock / Jam)",
+      "file_type": "concept",
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 446",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "gstack_sketch_shock_injection",
+      "community": 0,
+      "norm_label": "shock injection (inject shock / jam)"
+    },
+    {
+      "label": "Time Travel Timeline Slider",
+      "file_type": "concept",
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 363",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "gstack_sketch_timeline_slider",
+      "community": 0,
+      "norm_label": "time travel timeline slider"
+    },
+    {
+      "label": "Bottleneck Diagnosis Console",
+      "file_type": "concept",
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 424",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "gstack_sketch_bottleneck_diagnosis",
+      "community": 0,
+      "norm_label": "bottleneck diagnosis console"
+    },
+    {
+      "label": "ASRS Warehouse System (4-Level)",
+      "file_type": "concept",
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 327",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "gstack_sketch_asrs_system",
+      "community": 0,
+      "norm_label": "asrs warehouse system (4-level)"
+    },
+    {
+      "label": "2nd Floor Conveyor Bridge",
+      "file_type": "concept",
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 323",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "gstack_sketch_conveyor_bridge",
+      "community": 0,
+      "norm_label": "2nd floor conveyor bridge"
+    },
+    {
+      "label": "Collections CRM PTP Kanban Implementation Plan",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_collections_ptp_kanban_plan",
+      "community": 2,
+      "norm_label": "collections crm ptp kanban implementation plan"
+    },
+    {
+      "label": "Supabase DB Migration for PTP & Escalations",
+      "file_type": "code",
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 20",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_collections_db_migration",
+      "community": 2,
+      "norm_label": "supabase db migration for ptp & escalations"
+    },
+    {
+      "label": "Collections Server Actions (actions.ts)",
+      "file_type": "code",
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 60",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_collections_server_actions",
+      "community": 2,
+      "norm_label": "collections server actions (actions.ts)"
+    },
+    {
+      "label": "CollectionsClient.tsx Kanban Board UI",
+      "file_type": "code",
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 163",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_collections_client_tsx",
+      "community": 2,
+      "norm_label": "collectionsclient.tsx kanban board ui"
+    },
+    {
+      "label": "refresh_ptp_statuses PostgreSQL RPC Function",
+      "file_type": "code",
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 41",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_refresh_ptp_statuses_rpc",
+      "community": 2,
+      "norm_label": "refresh_ptp_statuses postgresql rpc function"
+    },
+    {
+      "label": "Fix State Initialization in NewCaseForm.tsx",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2025-05-15-critical-fixes.md",
+      "source_location": "line 13",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_critical_fixes_new_case_form",
+      "community": 12,
+      "norm_label": "fix state initialization in newcaseform.tsx"
+    },
+    {
+      "label": "Secure E2E Auth Bypass in auth.ts",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2025-05-15-critical-fixes.md",
+      "source_location": "line 31",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_critical_fixes_e2e_auth_bypass",
+      "community": 13,
+      "norm_label": "secure e2e auth bypass in auth.ts"
+    },
+    {
+      "label": "Fix UUID Generation in csv.ts",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2025-05-15-critical-fixes.md",
+      "source_location": "line 53",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_critical_fixes_uuid_generation",
+      "community": 14,
+      "norm_label": "fix uuid generation in csv.ts"
+    },
+    {
+      "label": "Fix Round Type in ApprovalsTab.tsx",
+      "file_type": "document",
+      "source_file": "docs/superpowers/plans/2025-05-15-critical-fixes.md",
+      "source_location": "line 67",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "plans_critical_fixes_round_type",
+      "community": 15,
+      "norm_label": "fix round type in approvalstab.tsx"
+    },
+    {
+      "label": "Collections CRM: Promise-To-Pay & Kanban Board Design Spec",
+      "file_type": "document",
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "specs_collections_ptp_design",
+      "community": 2,
+      "norm_label": "collections crm: promise-to-pay & kanban board design spec"
+    },
+    {
+      "label": "Promise-To-Pay (PTP) Hard Snooze Mechanism",
+      "file_type": "rationale",
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 6",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "specs_ptp_mechanism",
+      "community": 2,
+      "norm_label": "promise-to-pay (ptp) hard snooze mechanism"
+    },
+    {
+      "label": "RM Neglect Highlight (3-Day Threshold)",
+      "file_type": "rationale",
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 31",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "specs_rm_neglect_highlight",
+      "community": 2,
+      "norm_label": "rm neglect highlight (3-day threshold)"
+    },
+    {
+      "label": "Kanban Board Columns: Overdue, Snoozed/PTP, Broken Promises",
+      "file_type": "concept",
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 25",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "specs_kanban_board_columns",
+      "community": 2,
+      "norm_label": "kanban board columns: overdue, snoozed/ptp, broken promises"
+    },
+    {
+      "label": "Background Wake-Up: Broken Promise Auto-Transition",
+      "file_type": "rationale",
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 17",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "specs_broken_promise_wakup",
+      "community": 2,
+      "norm_label": "background wake-up: broken promise auto-transition"
+    },
+    {
+      "label": "CEO Plan: 3D Factory Pull-System Digital Twin",
+      "file_type": "document",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_factory_pull_ceo_plan",
+      "community": 4,
+      "norm_label": "ceo plan: 3d factory pull-system digital twin"
+    },
+    {
+      "label": "Client-Side Procedural Simulation Engine (Pre-Calculated Cache)",
+      "file_type": "rationale",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 13",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_simulation_engine",
+      "community": 4,
+      "norm_label": "client-side procedural simulation engine (pre-calculated cache)"
+    },
+    {
+      "label": "Pull System Flow Logic (MFG-to-ASRS)",
+      "file_type": "concept",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 14",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_pull_system_flow_logic",
+      "community": 0,
+      "norm_label": "pull system flow logic (mfg-to-asrs)"
+    },
+    {
+      "label": "Shock Events: Manual Factory Bottleneck Injection",
+      "file_type": "concept",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 15",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_shock_events",
+      "community": 0,
+      "norm_label": "shock events: manual factory bottleneck injection"
+    },
+    {
+      "label": "X-Ray Flow-Pulse & Interactive Time-Traveler Feature",
+      "file_type": "rationale",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 11",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_xray_flow_pulse",
+      "community": 0,
+      "norm_label": "x-ray flow-pulse & interactive time-traveler feature"
+    },
+    {
+      "label": "InstancedMesh Particle Flow (R3F useFrame)",
+      "file_type": "rationale",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 35",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_instanced_mesh_particles",
+      "community": 4,
+      "norm_label": "instancedmesh particle flow (r3f useframe)"
+    },
+    {
+      "label": "WebGL Render Order Hierarchy for Transparent Floors",
+      "file_type": "rationale",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 34",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_render_order_webgl",
+      "community": 4,
+      "norm_label": "webgl render order hierarchy for transparent floors"
+    },
+    {
+      "label": "Camera Path Presets (Accepted Scope)",
+      "file_type": "concept",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 27",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_camera_path_presets",
+      "community": 4,
+      "norm_label": "camera path presets (accepted scope)"
+    },
+    {
+      "label": "Local Storage Persistence (Accepted Scope)",
+      "file_type": "concept",
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 28",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "designs_local_storage_persistence_scope",
+      "community": 4,
+      "norm_label": "local storage persistence (accepted scope)"
+    },
+    {
+      "label": "Factory Twin E2E Playwright Test Suite",
+      "file_type": "code",
+      "source_file": "test-results/factory-Factory-Twin-E2E-should-render-3D-viewport-canvas-chromium/error-context.md",
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "test_e2e_factory_spec",
+      "community": 0,
+      "norm_label": "factory twin e2e playwright test suite"
+    },
+    {
+      "label": "E2E Test Failure: page.goto Timeout (dev server not running)",
+      "file_type": "document",
+      "source_file": "test-results/factory-Factory-Twin-E2E-should-manipulate-timeline-chromium/error-context.md",
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "test_e2e_timeout_failure",
+      "community": 0,
+      "norm_label": "e2e test failure: page.goto timeout (dev server not running)"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_name",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_private",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_version",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_type",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_scripts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_dependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_devdependencies",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_scripts",
+      "target": "260521_digital_twin_package_scripts_dev",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_scripts",
+      "target": "260521_digital_twin_package_scripts_build",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_scripts",
+      "target": "260521_digital_twin_package_scripts_preview",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_scripts",
+      "target": "260521_digital_twin_package_scripts_test",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_scripts",
+      "target": "260521_digital_twin_package_scripts_test_e2e",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_three",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_react_three_fiber",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_react_three_drei",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_lucide_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_vite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_vitest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_jsdom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_playwright_test",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_types_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_types_react_dom",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_vitejs_plugin_react",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "tests_factory_spec_js",
+      "target": "tests_factory_spec_canvas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "tests_factory_spec_js",
+      "target": "tests_factory_spec_shockbtn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "tests_factory_spec_js",
+      "target": "tests_factory_spec_timelineinput",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "tests_factory_spec_js",
+      "target": "tests_factory_spec_resumebtn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_app_jsx",
+      "target": "src_hooks_usepullengine_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_app_jsx",
+      "target": "hooks_usepullengine_usepullengine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_app_jsx",
+      "target": "src_components_factorytwin_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_app_jsx",
+      "target": "src_app_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_main_jsx",
+      "target": "src_app_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/App.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_app_app",
+      "target": "hooks_usepullengine_usepullengine"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_components_factorytwin_jsx",
+      "target": "components_factorytwin_dummy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_components_factorytwin_jsx",
+      "target": "components_factorytwin_target_vec",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_components_factorytwin_jsx",
+      "target": "components_factorytwin_current_vec",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_components_factorytwin_jsx",
+      "target": "components_factorytwin_nodes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_components_factorytwin_jsx",
+      "target": "components_factorytwin_floorplate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "src_components_factorytwin_jsx",
+      "target": "components_factorytwin_twinscene",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L264",
+      "weight": 1.0,
+      "source": "src_components_factorytwin_jsx",
+      "target": "components_factorytwin_factorytwin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.js",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_hooks_usepullengine_js",
+      "target": "hooks_usepullengine_runsimulation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.js",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "src_hooks_usepullengine_js",
+      "target": "hooks_usepullengine_usepullengine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_hooks_usepullengine_test_js",
+      "target": "src_hooks_usepullengine_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_hooks_usepullengine_test_js",
+      "target": "hooks_usepullengine_runsimulation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "src_hooks_usepullengine_test_js",
+      "target": "hooks_usepullengine_test_states",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "src_hooks_usepullengine_test_js",
+      "target": "hooks_usepullengine_test_hasblocked",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "src_hooks_usepullengine_test_js",
+      "target": "hooks_usepullengine_test_happystates",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test-results/.last-run.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "test_results_last_run_json",
+      "target": "test_results_last_run_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test-results/.last-run.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "test_results_last_run_json",
+      "target": "test_results_last_run_failedtests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TODOS.md",
+      "source_location": "line 9",
+      "weight": 1.0,
+      "source": "todos_dynamic_camera_presets",
+      "target": "todos_factory_twin_jsx"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "designs_camera_path_presets",
+      "target": "todos_dynamic_camera_presets"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TODOS.md",
+      "source_location": "line 16",
+      "weight": 1.0,
+      "source": "todos_local_storage_persistence",
+      "target": "todos_use_pull_engine"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "designs_local_storage_persistence_scope",
+      "target": "todos_local_storage_persistence"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "designs_simulation_engine",
+      "target": "todos_use_pull_engine"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "source_location": "line 14",
+      "weight": 1.0,
+      "source": "index_factory_pull_digital_twin_app",
+      "target": "index_main_jsx"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "test-results/factory-Factory-Twin-E2E-should-render-3D-viewport-canvas-chromium/error-context.md",
+      "source_location": "line 5",
+      "weight": 1.0,
+      "source": "test_e2e_factory_spec",
+      "target": "index_factory_pull_digital_twin_app"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 262",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_3d_viewport"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 399",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_pull_demand_queue"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 268",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_shock_injection"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 363",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_timeline_slider"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 424",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_bottleneck_diagnosis"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 327",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_asrs_system"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 323",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_conveyor_bridge"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "test-results/factory-Factory-Twin-E2E-should-render-3D-viewport-canvas-chromium/error-context.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "test_e2e_factory_spec",
+      "target": "gstack_sketch_digital_twin_wireframe"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "designs_shock_events",
+      "target": "gstack_sketch_shock_injection"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "gstack-sketch.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "gstack_sketch_timeline_slider",
+      "target": "designs_xray_flow_pulse"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "gstack-sketch.html",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "gstack_sketch_asrs_system",
+      "target": "designs_pull_system_flow_logic"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 13",
+      "weight": 1.0,
+      "source": "plans_collections_ptp_kanban_plan",
+      "target": "plans_collections_db_migration"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 59",
+      "weight": 1.0,
+      "source": "plans_collections_ptp_kanban_plan",
+      "target": "plans_collections_server_actions"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 163",
+      "weight": 1.0,
+      "source": "plans_collections_ptp_kanban_plan",
+      "target": "plans_collections_client_tsx"
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "plans_collections_ptp_kanban_plan",
+      "target": "specs_collections_ptp_design"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 41",
+      "weight": 1.0,
+      "source": "plans_collections_db_migration",
+      "target": "plans_refresh_ptp_statuses_rpc"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 72",
+      "weight": 1.0,
+      "source": "plans_collections_server_actions",
+      "target": "plans_refresh_ptp_statuses_rpc"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "specs_rm_neglect_highlight",
+      "target": "plans_collections_client_tsx"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "specs_kanban_board_columns",
+      "target": "plans_collections_client_tsx"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "specs_broken_promise_wakup",
+      "target": "plans_refresh_ptp_statuses_rpc"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 6",
+      "weight": 1.0,
+      "source": "specs_collections_ptp_design",
+      "target": "specs_ptp_mechanism"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 25",
+      "weight": 1.0,
+      "source": "specs_collections_ptp_design",
+      "target": "specs_kanban_board_columns"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 31",
+      "weight": 1.0,
+      "source": "specs_collections_ptp_design",
+      "target": "specs_rm_neglect_highlight"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
+      "source_location": "line 17",
+      "weight": 1.0,
+      "source": "specs_collections_ptp_design",
+      "target": "specs_broken_promise_wakup"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 13",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_simulation_engine"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 14",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_pull_system_flow_logic"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 15",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_shock_events"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 11",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_xray_flow_pulse"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 35",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_instanced_mesh_particles"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 34",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_render_order_webgl"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 27",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_camera_path_presets"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 28",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_local_storage_persistence_scope"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "test-results/factory-Factory-Twin-E2E-should-manipulate-timeline-chromium/error-context.md",
+      "source_location": "line 20",
+      "weight": 1.0,
+      "source": "test_e2e_timeout_failure",
+      "target": "test_e2e_factory_spec"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "collections_crm_ptp_flow",
+      "label": "Collections CRM PTP Full Stack: Spec \u2192 Plan \u2192 DB \u2192 Actions \u2192 UI",
+      "nodes": [
+        "specs_collections_ptp_design",
+        "plans_collections_ptp_kanban_plan",
+        "plans_collections_db_migration",
+        "plans_collections_server_actions",
+        "plans_collections_client_tsx"
+      ],
+      "relation": "implement",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md"
+    },
+    {
+      "id": "factory_twin_visualization_stack",
+      "label": "Factory Digital Twin Visualization: CEO Plan + Wireframe + App Entry",
+      "nodes": [
+        "designs_factory_pull_ceo_plan",
+        "gstack_sketch_digital_twin_wireframe",
+        "index_factory_pull_digital_twin_app"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "docs/designs/factory-pull-digital-twin.md"
+    },
+    {
+      "id": "factory_twin_e2e_test_coverage",
+      "label": "E2E Test Coverage for Factory Twin: Timeline, Shock, Viewport Canvas",
+      "nodes": [
+        "test_e2e_factory_spec",
+        "gstack_sketch_shock_injection",
+        "gstack_sketch_timeline_slider"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "test-results/factory-Factory-Twin-E2E-should-manipulate-timeline-chromium/error-context.md"
+    }
+  ]
+}

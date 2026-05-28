@@ -30,19 +30,6 @@
         "confidence": "INFERRED",
         "confidence_score": 0.85,
         "source_file": "docs/designs/factory-pull-digital-twin.md"
-      },
-      {
-        "id": "factory_twin_e2e_test_coverage",
-        "label": "E2E Test Coverage for Factory Twin: Timeline, Shock, Viewport Canvas",
-        "nodes": [
-          "test_e2e_factory_spec",
-          "gstack_sketch_shock_injection",
-          "gstack_sketch_timeline_slider"
-        ],
-        "relation": "participate_in",
-        "confidence": "INFERRED",
-        "confidence_score": 0.75,
-        "source_file": "test-results/factory-Factory-Twin-E2E-should-manipulate-timeline-chromium/error-context.md"
       }
     ]
   },
@@ -52,486 +39,423 @@
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L1",
-      "id": "package_json",
-      "community": 1,
-      "norm_label": "package.json"
+      "community": 3,
+      "norm_label": "package.json",
+      "id": "package_json"
     },
     {
       "label": "name",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L2",
-      "id": "260521_digital_twin_package_name",
-      "community": 1,
-      "norm_label": "name"
+      "community": 3,
+      "norm_label": "name",
+      "id": "260521_digital_twin_package_name"
     },
     {
       "label": "private",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L3",
-      "id": "260521_digital_twin_package_private",
-      "community": 1,
-      "norm_label": "private"
+      "community": 3,
+      "norm_label": "private",
+      "id": "260521_digital_twin_package_private"
     },
     {
       "label": "version",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L4",
-      "id": "260521_digital_twin_package_version",
-      "community": 1,
-      "norm_label": "version"
+      "community": 3,
+      "norm_label": "version",
+      "id": "260521_digital_twin_package_version"
     },
     {
       "label": "type",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L5",
-      "id": "260521_digital_twin_package_type",
-      "community": 1,
-      "norm_label": "type"
+      "community": 3,
+      "norm_label": "type",
+      "id": "260521_digital_twin_package_type"
     },
     {
       "label": "scripts",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L6",
-      "id": "260521_digital_twin_package_scripts",
-      "community": 1,
-      "norm_label": "scripts"
+      "community": 3,
+      "norm_label": "scripts",
+      "id": "260521_digital_twin_package_scripts"
     },
     {
       "label": "dev",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L7",
-      "id": "260521_digital_twin_package_scripts_dev",
-      "community": 1,
-      "norm_label": "dev"
+      "community": 3,
+      "norm_label": "dev",
+      "id": "260521_digital_twin_package_scripts_dev"
     },
     {
       "label": "build",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L8",
-      "id": "260521_digital_twin_package_scripts_build",
-      "community": 1,
-      "norm_label": "build"
+      "community": 3,
+      "norm_label": "build",
+      "id": "260521_digital_twin_package_scripts_build"
     },
     {
       "label": "preview",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L9",
-      "id": "260521_digital_twin_package_scripts_preview",
-      "community": 1,
-      "norm_label": "preview"
+      "community": 3,
+      "norm_label": "preview",
+      "id": "260521_digital_twin_package_scripts_preview"
     },
     {
       "label": "test",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L10",
-      "id": "260521_digital_twin_package_scripts_test",
-      "community": 1,
-      "norm_label": "test"
+      "community": 3,
+      "norm_label": "test",
+      "id": "260521_digital_twin_package_scripts_test"
     },
     {
       "label": "test:e2e",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L11",
-      "id": "260521_digital_twin_package_scripts_test_e2e",
-      "community": 1,
-      "norm_label": "test:e2e"
+      "community": 3,
+      "norm_label": "test:e2e",
+      "id": "260521_digital_twin_package_scripts_test_e2e"
     },
     {
       "label": "dependencies",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L13",
-      "id": "260521_digital_twin_package_dependencies",
-      "community": 7,
-      "norm_label": "dependencies"
+      "community": 3,
+      "norm_label": "dependencies",
+      "id": "260521_digital_twin_package_dependencies"
     },
     {
       "label": "react",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L14",
-      "id": "260521_digital_twin_package_dependencies_react",
-      "community": 7,
-      "norm_label": "react"
+      "community": 3,
+      "norm_label": "react",
+      "id": "260521_digital_twin_package_dependencies_react"
     },
     {
       "label": "react-dom",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L15",
-      "id": "260521_digital_twin_package_dependencies_react_dom",
-      "community": 7,
-      "norm_label": "react-dom"
+      "community": 3,
+      "norm_label": "react-dom",
+      "id": "260521_digital_twin_package_dependencies_react_dom"
     },
     {
       "label": "three",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L16",
-      "id": "260521_digital_twin_package_dependencies_three",
-      "community": 7,
-      "norm_label": "three"
+      "community": 3,
+      "norm_label": "three",
+      "id": "260521_digital_twin_package_dependencies_three"
     },
     {
       "label": "@react-three/fiber",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L17",
-      "id": "260521_digital_twin_package_dependencies_react_three_fiber",
-      "community": 7,
-      "norm_label": "@react-three/fiber"
+      "community": 3,
+      "norm_label": "@react-three/fiber",
+      "id": "260521_digital_twin_package_dependencies_react_three_fiber"
     },
     {
       "label": "@react-three/drei",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L18",
-      "id": "260521_digital_twin_package_dependencies_react_three_drei",
-      "community": 7,
-      "norm_label": "@react-three/drei"
+      "community": 3,
+      "norm_label": "@react-three/drei",
+      "id": "260521_digital_twin_package_dependencies_react_three_drei"
     },
     {
       "label": "lucide-react",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L19",
-      "id": "260521_digital_twin_package_dependencies_lucide_react",
-      "community": 7,
-      "norm_label": "lucide-react"
+      "community": 3,
+      "norm_label": "lucide-react",
+      "id": "260521_digital_twin_package_dependencies_lucide_react"
     },
     {
       "label": "devDependencies",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L21",
-      "id": "260521_digital_twin_package_devdependencies",
-      "community": 5,
-      "norm_label": "devdependencies"
+      "community": 3,
+      "norm_label": "devdependencies",
+      "id": "260521_digital_twin_package_devdependencies"
     },
     {
       "label": "vite",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L22",
-      "id": "260521_digital_twin_package_devdependencies_vite",
-      "community": 5,
-      "norm_label": "vite"
+      "community": 3,
+      "norm_label": "vite",
+      "id": "260521_digital_twin_package_devdependencies_vite"
     },
     {
       "label": "vitest",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L23",
-      "id": "260521_digital_twin_package_devdependencies_vitest",
-      "community": 5,
-      "norm_label": "vitest"
+      "community": 3,
+      "norm_label": "vitest",
+      "id": "260521_digital_twin_package_devdependencies_vitest"
     },
     {
       "label": "jsdom",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L24",
-      "id": "260521_digital_twin_package_devdependencies_jsdom",
-      "community": 5,
-      "norm_label": "jsdom"
+      "community": 3,
+      "norm_label": "jsdom",
+      "id": "260521_digital_twin_package_devdependencies_jsdom"
     },
     {
       "label": "@playwright/test",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L25",
-      "id": "260521_digital_twin_package_devdependencies_playwright_test",
-      "community": 5,
-      "norm_label": "@playwright/test"
+      "community": 3,
+      "norm_label": "@playwright/test",
+      "id": "260521_digital_twin_package_devdependencies_playwright_test"
     },
     {
       "label": "@types/react",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L26",
-      "id": "260521_digital_twin_package_devdependencies_types_react",
-      "community": 5,
-      "norm_label": "@types/react"
-    },
-    {
-      "label": "@types/react-dom",
-      "file_type": "code",
-      "source_file": "package.json",
-      "source_location": "L27",
-      "id": "260521_digital_twin_package_devdependencies_types_react_dom",
-      "community": 5,
-      "norm_label": "@types/react-dom"
+      "community": 3,
+      "norm_label": "@types/react",
+      "id": "260521_digital_twin_package_devdependencies_types_react"
     },
     {
       "label": "@vitejs/plugin-react",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L28",
-      "id": "260521_digital_twin_package_devdependencies_vitejs_plugin_react",
-      "community": 5,
-      "norm_label": "@vitejs/plugin-react"
+      "community": 3,
+      "norm_label": "@vitejs/plugin-react",
+      "id": "260521_digital_twin_package_devdependencies_vitejs_plugin_react"
     },
     {
       "label": "playwright.config.js",
       "file_type": "code",
       "source_file": "playwright.config.js",
       "source_location": "L1",
-      "id": "playwright_config_js",
-      "community": 10,
-      "norm_label": "playwright.config.js"
+      "community": 13,
+      "norm_label": "playwright.config.js",
+      "id": "playwright_config_js"
     },
     {
       "label": "vite.config.js",
       "file_type": "code",
       "source_file": "vite.config.js",
       "source_location": "L1",
-      "id": "vite_config_js",
-      "community": 11,
-      "norm_label": "vite.config.js"
-    },
-    {
-      "label": "factory.spec.js",
-      "file_type": "code",
-      "source_file": "tests/factory.spec.js",
-      "source_location": "L1",
-      "id": "tests_factory_spec_js",
-      "community": 8,
-      "norm_label": "factory.spec.js"
+      "community": 14,
+      "norm_label": "vite.config.js",
+      "id": "vite_config_js"
     },
     {
       "label": "canvas",
       "file_type": "code",
       "source_file": "tests/factory.spec.js",
       "source_location": "L9",
-      "id": "tests_factory_spec_canvas",
-      "community": 8,
-      "norm_label": "canvas"
+      "community": 9,
+      "norm_label": "canvas",
+      "id": "tests_factory_spec_canvas"
     },
     {
       "label": "shockBtn",
       "file_type": "code",
       "source_file": "tests/factory.spec.js",
       "source_location": "L14",
-      "id": "tests_factory_spec_shockbtn",
-      "community": 8,
-      "norm_label": "shockbtn"
+      "community": 9,
+      "norm_label": "shockbtn",
+      "id": "tests_factory_spec_shockbtn"
     },
     {
       "label": "timelineInput",
       "file_type": "code",
       "source_file": "tests/factory.spec.js",
       "source_location": "L28",
-      "id": "tests_factory_spec_timelineinput",
-      "community": 8,
-      "norm_label": "timelineinput"
+      "community": 9,
+      "norm_label": "timelineinput",
+      "id": "tests_factory_spec_timelineinput"
     },
     {
       "label": "resumeBtn",
       "file_type": "code",
       "source_file": "tests/factory.spec.js",
       "source_location": "L32",
-      "id": "tests_factory_spec_resumebtn",
-      "community": 8,
-      "norm_label": "resumebtn"
-    },
-    {
-      "label": "App.jsx",
-      "file_type": "code",
-      "source_file": "src/App.jsx",
-      "source_location": "L1",
-      "id": "src_app_jsx",
-      "community": 3,
-      "norm_label": "app.jsx"
+      "community": 9,
+      "norm_label": "resumebtn",
+      "id": "tests_factory_spec_resumebtn"
     },
     {
       "label": "App()",
       "file_type": "code",
       "source_file": "src/App.jsx",
       "source_location": "L6",
-      "id": "src_app_app",
-      "community": 3,
-      "norm_label": "app()"
+      "community": 6,
+      "norm_label": "app()",
+      "id": "src_app_app"
     },
     {
       "label": "main.jsx",
       "file_type": "code",
       "source_file": "src/main.jsx",
       "source_location": "L1",
-      "id": "src_main_jsx",
-      "community": 3,
-      "norm_label": "main.jsx"
-    },
-    {
-      "label": "FactoryTwin.jsx",
-      "file_type": "code",
-      "source_file": "src/components/FactoryTwin.jsx",
-      "source_location": "L1",
-      "id": "src_components_factorytwin_jsx",
       "community": 6,
-      "norm_label": "factorytwin.jsx"
+      "norm_label": "main.jsx",
+      "id": "src_main_jsx"
     },
     {
       "label": "DUMMY",
       "file_type": "code",
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L7",
-      "id": "components_factorytwin_dummy",
-      "community": 6,
-      "norm_label": "dummy"
+      "community": 1,
+      "norm_label": "dummy",
+      "id": "components_factorytwin_dummy"
     },
     {
       "label": "TARGET_VEC",
       "file_type": "code",
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L8",
-      "id": "components_factorytwin_target_vec",
-      "community": 6,
-      "norm_label": "target_vec"
+      "community": 1,
+      "norm_label": "target_vec",
+      "id": "components_factorytwin_target_vec"
     },
     {
       "label": "CURRENT_VEC",
       "file_type": "code",
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L9",
-      "id": "components_factorytwin_current_vec",
-      "community": 6,
-      "norm_label": "current_vec"
+      "community": 1,
+      "norm_label": "current_vec",
+      "id": "components_factorytwin_current_vec"
     },
     {
       "label": "NODES",
       "file_type": "code",
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L12",
-      "id": "components_factorytwin_nodes",
-      "community": 6,
-      "norm_label": "nodes"
+      "community": 1,
+      "norm_label": "nodes",
+      "id": "components_factorytwin_nodes"
     },
     {
       "label": "FloorPlate()",
       "file_type": "code",
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L23",
-      "id": "components_factorytwin_floorplate",
-      "community": 6,
-      "norm_label": "floorplate()"
+      "community": 1,
+      "norm_label": "floorplate()",
+      "id": "components_factorytwin_floorplate"
     },
     {
       "label": "TwinScene",
       "file_type": "code",
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L51",
-      "id": "components_factorytwin_twinscene",
-      "community": 6,
-      "norm_label": "twinscene"
-    },
-    {
-      "label": "FactoryTwin()",
-      "file_type": "code",
-      "source_file": "src/components/FactoryTwin.jsx",
-      "source_location": "L264",
-      "id": "components_factorytwin_factorytwin",
-      "community": 6,
-      "norm_label": "factorytwin()"
-    },
-    {
-      "label": "usePullEngine.js",
-      "file_type": "code",
-      "source_file": "src/hooks/usePullEngine.js",
-      "source_location": "L1",
-      "id": "src_hooks_usepullengine_js",
-      "community": 3,
-      "norm_label": "usepullengine.js"
+      "community": 1,
+      "norm_label": "twinscene",
+      "id": "components_factorytwin_twinscene"
     },
     {
       "label": "runSimulation()",
       "file_type": "code",
       "source_file": "src/hooks/usePullEngine.js",
       "source_location": "L4",
-      "id": "hooks_usepullengine_runsimulation",
-      "community": 3,
-      "norm_label": "runsimulation()"
-    },
-    {
-      "label": "usePullEngine()",
-      "file_type": "code",
-      "source_file": "src/hooks/usePullEngine.js",
-      "source_location": "L161",
-      "id": "hooks_usepullengine_usepullengine",
-      "community": 3,
-      "norm_label": "usepullengine()"
+      "community": 2,
+      "norm_label": "runsimulation()",
+      "id": "hooks_usepullengine_runsimulation"
     },
     {
       "label": "usePullEngine.test.js",
       "file_type": "code",
       "source_file": "src/hooks/usePullEngine.test.js",
       "source_location": "L1",
-      "id": "src_hooks_usepullengine_test_js",
-      "community": 3,
-      "norm_label": "usepullengine.test.js"
+      "community": 2,
+      "norm_label": "usepullengine.test.js",
+      "id": "src_hooks_usepullengine_test_js"
     },
     {
       "label": "states",
       "file_type": "code",
       "source_file": "src/hooks/usePullEngine.test.js",
       "source_location": "L6",
-      "id": "hooks_usepullengine_test_states",
-      "community": 3,
-      "norm_label": "states"
+      "community": 2,
+      "norm_label": "states",
+      "id": "hooks_usepullengine_test_states"
     },
     {
       "label": "hasBlocked",
       "file_type": "code",
       "source_file": "src/hooks/usePullEngine.test.js",
       "source_location": "L25",
-      "id": "hooks_usepullengine_test_hasblocked",
-      "community": 3,
-      "norm_label": "hasblocked"
+      "community": 2,
+      "norm_label": "hasblocked",
+      "id": "hooks_usepullengine_test_hasblocked"
     },
     {
       "label": "happyStates",
       "file_type": "code",
       "source_file": "src/hooks/usePullEngine.test.js",
       "source_location": "L29",
-      "id": "hooks_usepullengine_test_happystates",
-      "community": 3,
-      "norm_label": "happystates"
+      "community": 2,
+      "norm_label": "happystates",
+      "id": "hooks_usepullengine_test_happystates"
     },
     {
       "label": ".last-run.json",
       "file_type": "code",
       "source_file": "test-results/.last-run.json",
       "source_location": "L1",
-      "id": "test_results_last_run_json",
-      "community": 9,
-      "norm_label": ".last-run.json"
+      "community": 12,
+      "norm_label": ".last-run.json",
+      "id": "test_results_last_run_json"
     },
     {
       "label": "status",
       "file_type": "code",
       "source_file": "test-results/.last-run.json",
       "source_location": "L2",
-      "id": "test_results_last_run_status",
-      "community": 9,
-      "norm_label": "status"
+      "community": 12,
+      "norm_label": "status",
+      "id": "test_results_last_run_status"
     },
     {
       "label": "failedTests",
       "file_type": "code",
       "source_file": "test-results/.last-run.json",
       "source_location": "L3",
-      "id": "test_results_last_run_failedtests",
-      "community": 9,
-      "norm_label": "failedtests"
+      "community": 12,
+      "norm_label": "failedtests",
+      "id": "test_results_last_run_failedtests"
     },
     {
       "label": "Dynamic Camera Presets TODO",
@@ -542,9 +466,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "todos_dynamic_camera_presets",
-      "community": 4,
-      "norm_label": "dynamic camera presets todo"
+      "community": 2,
+      "norm_label": "dynamic camera presets todo",
+      "id": "todos_dynamic_camera_presets"
     },
     {
       "label": "Local Storage Persistence TODO",
@@ -555,9 +479,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "todos_local_storage_persistence",
-      "community": 4,
-      "norm_label": "local storage persistence todo"
+      "community": 2,
+      "norm_label": "local storage persistence todo",
+      "id": "todos_local_storage_persistence"
     },
     {
       "label": "FactoryTwin.jsx Component",
@@ -568,9 +492,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "todos_factory_twin_jsx",
-      "community": 4,
-      "norm_label": "factorytwin.jsx component"
+      "community": 2,
+      "norm_label": "factorytwin.jsx component",
+      "id": "todos_factory_twin_jsx"
     },
     {
       "label": "usePullEngine Hook",
@@ -581,9 +505,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "todos_use_pull_engine",
-      "community": 4,
-      "norm_label": "usepullengine hook"
+      "community": 2,
+      "norm_label": "usepullengine hook",
+      "id": "todos_use_pull_engine"
     },
     {
       "label": "3D Factory Pull-System Digital Twin App",
@@ -594,9 +518,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_factory_pull_digital_twin_app",
-      "community": 0,
-      "norm_label": "3d factory pull-system digital twin app"
+      "community": 2,
+      "norm_label": "3d factory pull-system digital twin app",
+      "id": "index_factory_pull_digital_twin_app"
     },
     {
       "label": "src/main.jsx Entry Point",
@@ -607,9 +531,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_main_jsx",
-      "community": 0,
-      "norm_label": "src/main.jsx entry point"
+      "community": 2,
+      "norm_label": "src/main.jsx entry point",
+      "id": "index_main_jsx"
     },
     {
       "label": "Digital Twin Wireframe Sketch - Factory Flow & Pull System",
@@ -620,9 +544,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gstack_sketch_digital_twin_wireframe",
-      "community": 0,
-      "norm_label": "digital twin wireframe sketch - factory flow & pull system"
+      "community": 2,
+      "norm_label": "digital twin wireframe sketch - factory flow & pull system",
+      "id": "gstack_sketch_digital_twin_wireframe"
     },
     {
       "label": "3D Viewport Panel (OrbitControls Mock)",
@@ -633,9 +557,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gstack_sketch_3d_viewport",
-      "community": 0,
-      "norm_label": "3d viewport panel (orbitcontrols mock)"
+      "community": 2,
+      "norm_label": "3d viewport panel (orbitcontrols mock)",
+      "id": "gstack_sketch_3d_viewport"
     },
     {
       "label": "Pull Demand Queue Dashboard",
@@ -646,9 +570,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gstack_sketch_pull_demand_queue",
-      "community": 0,
-      "norm_label": "pull demand queue dashboard"
+      "community": 2,
+      "norm_label": "pull demand queue dashboard",
+      "id": "gstack_sketch_pull_demand_queue"
     },
     {
       "label": "Shock Injection (Inject Shock / Jam)",
@@ -659,9 +583,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gstack_sketch_shock_injection",
-      "community": 0,
-      "norm_label": "shock injection (inject shock / jam)"
+      "community": 2,
+      "norm_label": "shock injection (inject shock / jam)",
+      "id": "gstack_sketch_shock_injection"
     },
     {
       "label": "Time Travel Timeline Slider",
@@ -672,9 +596,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gstack_sketch_timeline_slider",
-      "community": 0,
-      "norm_label": "time travel timeline slider"
+      "community": 2,
+      "norm_label": "time travel timeline slider",
+      "id": "gstack_sketch_timeline_slider"
     },
     {
       "label": "Bottleneck Diagnosis Console",
@@ -685,9 +609,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gstack_sketch_bottleneck_diagnosis",
-      "community": 0,
-      "norm_label": "bottleneck diagnosis console"
+      "community": 2,
+      "norm_label": "bottleneck diagnosis console",
+      "id": "gstack_sketch_bottleneck_diagnosis"
     },
     {
       "label": "ASRS Warehouse System (4-Level)",
@@ -698,9 +622,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gstack_sketch_asrs_system",
-      "community": 0,
-      "norm_label": "asrs warehouse system (4-level)"
+      "community": 2,
+      "norm_label": "asrs warehouse system (4-level)",
+      "id": "gstack_sketch_asrs_system"
     },
     {
       "label": "2nd Floor Conveyor Bridge",
@@ -711,9 +635,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gstack_sketch_conveyor_bridge",
-      "community": 0,
-      "norm_label": "2nd floor conveyor bridge"
+      "community": 2,
+      "norm_label": "2nd floor conveyor bridge",
+      "id": "gstack_sketch_conveyor_bridge"
     },
     {
       "label": "Collections CRM PTP Kanban Implementation Plan",
@@ -724,9 +648,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_collections_ptp_kanban_plan",
-      "community": 2,
-      "norm_label": "collections crm ptp kanban implementation plan"
+      "community": 8,
+      "norm_label": "collections crm ptp kanban implementation plan",
+      "id": "plans_collections_ptp_kanban_plan"
     },
     {
       "label": "Supabase DB Migration for PTP & Escalations",
@@ -737,9 +661,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_collections_db_migration",
-      "community": 2,
-      "norm_label": "supabase db migration for ptp & escalations"
+      "community": 8,
+      "norm_label": "supabase db migration for ptp & escalations",
+      "id": "plans_collections_db_migration"
     },
     {
       "label": "Collections Server Actions (actions.ts)",
@@ -750,9 +674,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_collections_server_actions",
-      "community": 2,
-      "norm_label": "collections server actions (actions.ts)"
+      "community": 8,
+      "norm_label": "collections server actions (actions.ts)",
+      "id": "plans_collections_server_actions"
     },
     {
       "label": "CollectionsClient.tsx Kanban Board UI",
@@ -763,9 +687,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_collections_client_tsx",
-      "community": 2,
-      "norm_label": "collectionsclient.tsx kanban board ui"
+      "community": 8,
+      "norm_label": "collectionsclient.tsx kanban board ui",
+      "id": "plans_collections_client_tsx"
     },
     {
       "label": "refresh_ptp_statuses PostgreSQL RPC Function",
@@ -776,9 +700,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_refresh_ptp_statuses_rpc",
-      "community": 2,
-      "norm_label": "refresh_ptp_statuses postgresql rpc function"
+      "community": 8,
+      "norm_label": "refresh_ptp_statuses postgresql rpc function",
+      "id": "plans_refresh_ptp_statuses_rpc"
     },
     {
       "label": "Fix State Initialization in NewCaseForm.tsx",
@@ -789,9 +713,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_critical_fixes_new_case_form",
-      "community": 12,
-      "norm_label": "fix state initialization in newcaseform.tsx"
+      "community": 15,
+      "norm_label": "fix state initialization in newcaseform.tsx",
+      "id": "plans_critical_fixes_new_case_form"
     },
     {
       "label": "Secure E2E Auth Bypass in auth.ts",
@@ -802,9 +726,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_critical_fixes_e2e_auth_bypass",
-      "community": 13,
-      "norm_label": "secure e2e auth bypass in auth.ts"
+      "community": 16,
+      "norm_label": "secure e2e auth bypass in auth.ts",
+      "id": "plans_critical_fixes_e2e_auth_bypass"
     },
     {
       "label": "Fix UUID Generation in csv.ts",
@@ -815,9 +739,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_critical_fixes_uuid_generation",
-      "community": 14,
-      "norm_label": "fix uuid generation in csv.ts"
+      "community": 17,
+      "norm_label": "fix uuid generation in csv.ts",
+      "id": "plans_critical_fixes_uuid_generation"
     },
     {
       "label": "Fix Round Type in ApprovalsTab.tsx",
@@ -828,9 +752,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "plans_critical_fixes_round_type",
-      "community": 15,
-      "norm_label": "fix round type in approvalstab.tsx"
+      "community": 18,
+      "norm_label": "fix round type in approvalstab.tsx",
+      "id": "plans_critical_fixes_round_type"
     },
     {
       "label": "Collections CRM: Promise-To-Pay & Kanban Board Design Spec",
@@ -841,9 +765,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "specs_collections_ptp_design",
-      "community": 2,
-      "norm_label": "collections crm: promise-to-pay & kanban board design spec"
+      "community": 8,
+      "norm_label": "collections crm: promise-to-pay & kanban board design spec",
+      "id": "specs_collections_ptp_design"
     },
     {
       "label": "Promise-To-Pay (PTP) Hard Snooze Mechanism",
@@ -854,9 +778,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "specs_ptp_mechanism",
-      "community": 2,
-      "norm_label": "promise-to-pay (ptp) hard snooze mechanism"
+      "community": 8,
+      "norm_label": "promise-to-pay (ptp) hard snooze mechanism",
+      "id": "specs_ptp_mechanism"
     },
     {
       "label": "RM Neglect Highlight (3-Day Threshold)",
@@ -867,9 +791,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "specs_rm_neglect_highlight",
-      "community": 2,
-      "norm_label": "rm neglect highlight (3-day threshold)"
+      "community": 8,
+      "norm_label": "rm neglect highlight (3-day threshold)",
+      "id": "specs_rm_neglect_highlight"
     },
     {
       "label": "Kanban Board Columns: Overdue, Snoozed/PTP, Broken Promises",
@@ -880,9 +804,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "specs_kanban_board_columns",
-      "community": 2,
-      "norm_label": "kanban board columns: overdue, snoozed/ptp, broken promises"
+      "community": 8,
+      "norm_label": "kanban board columns: overdue, snoozed/ptp, broken promises",
+      "id": "specs_kanban_board_columns"
     },
     {
       "label": "Background Wake-Up: Broken Promise Auto-Transition",
@@ -893,9 +817,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "specs_broken_promise_wakup",
-      "community": 2,
-      "norm_label": "background wake-up: broken promise auto-transition"
+      "community": 8,
+      "norm_label": "background wake-up: broken promise auto-transition",
+      "id": "specs_broken_promise_wakup"
     },
     {
       "label": "CEO Plan: 3D Factory Pull-System Digital Twin",
@@ -906,9 +830,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_factory_pull_ceo_plan",
-      "community": 4,
-      "norm_label": "ceo plan: 3d factory pull-system digital twin"
+      "community": 2,
+      "norm_label": "ceo plan: 3d factory pull-system digital twin",
+      "id": "designs_factory_pull_ceo_plan"
     },
     {
       "label": "Client-Side Procedural Simulation Engine (Pre-Calculated Cache)",
@@ -919,9 +843,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_simulation_engine",
-      "community": 4,
-      "norm_label": "client-side procedural simulation engine (pre-calculated cache)"
+      "community": 2,
+      "norm_label": "client-side procedural simulation engine (pre-calculated cache)",
+      "id": "designs_simulation_engine"
     },
     {
       "label": "Pull System Flow Logic (MFG-to-ASRS)",
@@ -932,9 +856,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_pull_system_flow_logic",
-      "community": 0,
-      "norm_label": "pull system flow logic (mfg-to-asrs)"
+      "community": 2,
+      "norm_label": "pull system flow logic (mfg-to-asrs)",
+      "id": "designs_pull_system_flow_logic"
     },
     {
       "label": "Shock Events: Manual Factory Bottleneck Injection",
@@ -945,9 +869,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_shock_events",
-      "community": 0,
-      "norm_label": "shock events: manual factory bottleneck injection"
+      "community": 2,
+      "norm_label": "shock events: manual factory bottleneck injection",
+      "id": "designs_shock_events"
     },
     {
       "label": "X-Ray Flow-Pulse & Interactive Time-Traveler Feature",
@@ -958,9 +882,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_xray_flow_pulse",
-      "community": 0,
-      "norm_label": "x-ray flow-pulse & interactive time-traveler feature"
+      "community": 2,
+      "norm_label": "x-ray flow-pulse & interactive time-traveler feature",
+      "id": "designs_xray_flow_pulse"
     },
     {
       "label": "InstancedMesh Particle Flow (R3F useFrame)",
@@ -971,9 +895,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_instanced_mesh_particles",
-      "community": 4,
-      "norm_label": "instancedmesh particle flow (r3f useframe)"
+      "community": 2,
+      "norm_label": "instancedmesh particle flow (r3f useframe)",
+      "id": "designs_instanced_mesh_particles"
     },
     {
       "label": "WebGL Render Order Hierarchy for Transparent Floors",
@@ -984,9 +908,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_render_order_webgl",
-      "community": 4,
-      "norm_label": "webgl render order hierarchy for transparent floors"
+      "community": 2,
+      "norm_label": "webgl render order hierarchy for transparent floors",
+      "id": "designs_render_order_webgl"
     },
     {
       "label": "Camera Path Presets (Accepted Scope)",
@@ -997,9 +921,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_camera_path_presets",
-      "community": 4,
-      "norm_label": "camera path presets (accepted scope)"
+      "community": 2,
+      "norm_label": "camera path presets (accepted scope)",
+      "id": "designs_camera_path_presets"
     },
     {
       "label": "Local Storage Persistence (Accepted Scope)",
@@ -1010,9 +934,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "designs_local_storage_persistence_scope",
-      "community": 4,
-      "norm_label": "local storage persistence (accepted scope)"
+      "community": 2,
+      "norm_label": "local storage persistence (accepted scope)",
+      "id": "designs_local_storage_persistence_scope"
     },
     {
       "label": "Factory Twin E2E Playwright Test Suite",
@@ -1023,9 +947,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "test_e2e_factory_spec",
-      "community": 0,
-      "norm_label": "factory twin e2e playwright test suite"
+      "community": 2,
+      "norm_label": "factory twin e2e playwright test suite",
+      "id": "test_e2e_factory_spec"
     },
     {
       "label": "E2E Test Failure: page.goto Timeout (dev server not running)",
@@ -1036,9 +960,1474 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "test_e2e_timeout_failure",
+      "community": 2,
+      "norm_label": "e2e test failure: page.goto timeout (dev server not running)",
+      "id": "test_e2e_timeout_failure"
+    },
+    {
+      "label": "scratch_capture_models.js",
+      "file_type": "code",
+      "source_file": "scratch_capture_models.js",
+      "source_location": "L1",
+      "id": "scratch_capture_models_js",
+      "community": 11,
+      "norm_label": "scratch_capture_models.js"
+    },
+    {
+      "label": "MODELS",
+      "file_type": "code",
+      "source_file": "scratch_capture_models.js",
+      "source_location": "L11",
+      "id": "260521_kim_digital_twin_scratch_capture_models_models",
+      "community": 11,
+      "norm_label": "models"
+    },
+    {
+      "label": "screenshotPath",
+      "file_type": "code",
+      "source_file": "scratch_capture_models.js",
+      "source_location": "L52",
+      "id": "260521_kim_digital_twin_scratch_capture_models_screenshotpath",
+      "community": 11,
+      "norm_label": "screenshotpath"
+    },
+    {
+      "label": "@react-three/postprocessing",
+      "file_type": "code",
+      "source_file": "package.json",
+      "source_location": "L16",
+      "id": "260521_kim_digital_twin_package_dependencies_react_three_postprocessing",
+      "community": 3,
+      "norm_label": "@react-three/postprocessing"
+    },
+    {
+      "label": "MODELS",
+      "file_type": "code",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L13",
+      "id": "components_assetinspector_models",
       "community": 0,
-      "norm_label": "e2e test failure: page.goto timeout (dev server not running)"
+      "norm_label": "models"
+    },
+    {
+      "label": "ROWS",
+      "file_type": "code",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L35",
+      "id": "components_assetinspector_rows",
+      "community": 0,
+      "norm_label": "rows"
+    },
+    {
+      "label": "ModelGrid()",
+      "file_type": "code",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L40",
+      "id": "components_assetinspector_modelgrid",
+      "community": 0,
+      "norm_label": "modelgrid()"
+    },
+    {
+      "label": "GalleryCameraControls()",
+      "file_type": "code",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L109",
+      "id": "components_assetinspector_gallerycameracontrols",
+      "community": 0,
+      "norm_label": "gallerycameracontrols()"
+    },
+    {
+      "label": "AssetInspector()",
+      "file_type": "code",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L149",
+      "id": "components_assetinspector_assetinspector",
+      "community": 0,
+      "norm_label": "assetinspector()"
+    },
+    {
+      "label": "LayoutEditor.jsx",
+      "file_type": "code",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L1",
+      "id": "src_components_layouteditor_jsx",
+      "community": 6,
+      "norm_label": "layouteditor.jsx"
+    },
+    {
+      "label": "SITE_COLORS",
+      "file_type": "code",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L5",
+      "id": "components_layouteditor_site_colors",
+      "community": 6,
+      "norm_label": "site_colors"
+    },
+    {
+      "label": "FLOOR_LABELS",
+      "file_type": "code",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L6",
+      "id": "components_layouteditor_floor_labels",
+      "community": 6,
+      "norm_label": "floor_labels"
+    },
+    {
+      "label": "LEAF_TYPES",
+      "file_type": "code",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L9",
+      "id": "components_layouteditor_leaf_types",
+      "community": 6,
+      "norm_label": "leaf_types"
+    },
+    {
+      "label": "worldToCanvas()",
+      "file_type": "code",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L15",
+      "id": "components_layouteditor_worldtocanvas",
+      "community": 6,
+      "norm_label": "worldtocanvas()"
+    },
+    {
+      "label": "canvasToWorld()",
+      "file_type": "code",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L21",
+      "id": "components_layouteditor_canvastoworld",
+      "community": 6,
+      "norm_label": "canvastoworld()"
+    },
+    {
+      "label": "btnStyle()",
+      "file_type": "code",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L197",
+      "id": "components_layouteditor_btnstyle",
+      "community": 6,
+      "norm_label": "btnstyle()"
+    },
+    {
+      "label": "gridLines()",
+      "file_type": "code",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L209",
+      "id": "components_layouteditor_gridlines",
+      "community": 6,
+      "norm_label": "gridlines()"
+    },
+    {
+      "label": "FLOOR_Y",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L15",
+      "id": "components_factorytwin_floor_y",
+      "community": 1,
+      "norm_label": "floor_y"
+    },
+    {
+      "label": "FloorSurfaces()",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L42",
+      "id": "components_factorytwin_floorsurfaces",
+      "community": 1,
+      "norm_label": "floorsurfaces()"
+    },
+    {
+      "label": "MAT",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L8",
+      "id": "materials_factorymaterials_mat",
+      "community": 0,
+      "norm_label": "mat"
+    },
+    {
+      "label": "fillStateMat()",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L40",
+      "id": "materials_factorymaterials_fillstatemat",
+      "community": 0,
+      "norm_label": "fillstatemat()"
+    },
+    {
+      "label": "fillStateColor()",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L46",
+      "id": "materials_factorymaterials_fillstatecolor",
+      "community": 0,
+      "norm_label": "fillstatecolor()"
+    },
+    {
+      "label": "makeBrushedMetalNormal()",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L57",
+      "id": "materials_factorymaterials_makebrushedmetalnormal",
+      "community": 0,
+      "norm_label": "makebrushedmetalnormal()"
+    },
+    {
+      "label": "makeFloorGridNormal()",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L86",
+      "id": "materials_factorymaterials_makefloorgridnormal",
+      "community": 0,
+      "norm_label": "makefloorgridnormal()"
+    },
+    {
+      "label": "makeWarningStripeTexture()",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L124",
+      "id": "materials_factorymaterials_makewarningstripetexture",
+      "community": 0,
+      "norm_label": "makewarningstripetexture()"
+    },
+    {
+      "label": "metalNormalMap",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L147",
+      "id": "materials_factorymaterials_metalnormalmap",
+      "community": 0,
+      "norm_label": "metalnormalmap"
+    },
+    {
+      "label": "floorGridNormalMap",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L148",
+      "id": "materials_factorymaterials_floorgridnormalmap",
+      "community": 0,
+      "norm_label": "floorgridnormalmap"
+    },
+    {
+      "label": "warningStripeMap",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L149",
+      "id": "materials_factorymaterials_warningstripemap",
+      "community": 1,
+      "norm_label": "warningstripemap"
+    },
+    {
+      "label": "FloorPaths.jsx",
+      "file_type": "code",
+      "source_file": "src/scene/FloorPaths.jsx",
+      "source_location": "L1",
+      "id": "src_scene_floorpaths_jsx",
+      "community": 5,
+      "norm_label": "floorpaths.jsx"
+    },
+    {
+      "label": "GlbModel()",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L9",
+      "id": "scene_locationnode_glbmodel",
+      "community": 7,
+      "norm_label": "glbmodel()"
+    },
+    {
+      "label": "ModelBoundary",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L15",
+      "id": "scene_locationnode_modelboundary",
+      "community": 7,
+      "norm_label": "modelboundary"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L16",
+      "id": "scene_locationnode_modelboundary_constructor",
+      "community": 7,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": ".getDerivedStateFromError()",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L17",
+      "id": "scene_locationnode_modelboundary_getderivedstatefromerror",
+      "community": 7,
+      "norm_label": ".getderivedstatefromerror()"
+    },
+    {
+      "label": ".render()",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L18",
+      "id": "scene_locationnode_modelboundary_render",
+      "community": 7,
+      "norm_label": ".render()"
+    },
+    {
+      "label": "BufferLabel()",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L24",
+      "id": "scene_locationnode_bufferlabel",
+      "community": 7,
+      "norm_label": "bufferlabel()"
+    },
+    {
+      "label": "ProcMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L57",
+      "id": "scene_locationnode_procmesh",
+      "community": 7,
+      "norm_label": "procmesh()"
+    },
+    {
+      "label": "ROT",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L85",
+      "id": "scene_locationnode_rot",
+      "community": 7,
+      "norm_label": "rot"
+    },
+    {
+      "label": "locationRotation()",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L98",
+      "id": "scene_locationnode_locationrotation",
+      "community": 7,
+      "norm_label": "locationrotation()"
+    },
+    {
+      "label": "SelectRing()",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L103",
+      "id": "scene_locationnode_selectring",
+      "community": 7,
+      "norm_label": "selectring()"
+    },
+    {
+      "label": "ModelRegistry.js",
+      "file_type": "code",
+      "source_file": "src/scene/ModelRegistry.js",
+      "source_location": "L1",
+      "id": "src_scene_modelregistry_js",
+      "community": 7,
+      "norm_label": "modelregistry.js"
+    },
+    {
+      "label": "modelPath()",
+      "file_type": "code",
+      "source_file": "src/scene/ModelRegistry.js",
+      "source_location": "L11",
+      "id": "scene_modelregistry_modelpath",
+      "community": 7,
+      "norm_label": "modelpath()"
+    },
+    {
+      "label": "BuildingShells.jsx",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L1",
+      "id": "src_scene_buildingshells_jsx",
+      "community": 1,
+      "norm_label": "buildingshells.jsx"
+    },
+    {
+      "label": "KMP_BOUNDS",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L3",
+      "id": "scene_buildingshells_kmp_bounds",
+      "community": 1,
+      "norm_label": "kmp_bounds"
+    },
+    {
+      "label": "WH_BOUNDS",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L4",
+      "id": "scene_buildingshells_wh_bounds",
+      "community": 1,
+      "norm_label": "wh_bounds"
+    },
+    {
+      "label": "concreteCol",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L7",
+      "id": "scene_buildingshells_concretecol",
+      "community": 1,
+      "norm_label": "concretecol"
+    },
+    {
+      "label": "trimCol",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L8",
+      "id": "scene_buildingshells_trimcol",
+      "community": 1,
+      "norm_label": "trimcol"
+    },
+    {
+      "label": "slabEdgeCol",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L9",
+      "id": "scene_buildingshells_slabedgecol",
+      "community": 1,
+      "norm_label": "slabedgecol"
+    },
+    {
+      "label": "roofCol",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L10",
+      "id": "scene_buildingshells_roofcol",
+      "community": 1,
+      "norm_label": "roofcol"
+    },
+    {
+      "label": "glassCol",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L11",
+      "id": "scene_buildingshells_glasscol",
+      "community": 1,
+      "norm_label": "glasscol"
+    },
+    {
+      "label": "Column()",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L22",
+      "id": "scene_buildingshells_column",
+      "community": 1,
+      "norm_label": "column()"
+    },
+    {
+      "label": "FloorEdge()",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L32",
+      "id": "scene_buildingshells_flooredge",
+      "community": 1,
+      "norm_label": "flooredge()"
+    },
+    {
+      "label": "GlassPanel()",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L56",
+      "id": "scene_buildingshells_glasspanel",
+      "community": 1,
+      "norm_label": "glasspanel()"
+    },
+    {
+      "label": "Roof()",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L66",
+      "id": "scene_buildingshells_roof",
+      "community": 1,
+      "norm_label": "roof()"
+    },
+    {
+      "label": "Building()",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L102",
+      "id": "scene_buildingshells_building",
+      "community": 1,
+      "norm_label": "building()"
+    },
+    {
+      "label": "SiteGround()",
+      "file_type": "code",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L149",
+      "id": "scene_buildingshells_siteground",
+      "community": 1,
+      "norm_label": "siteground()"
+    },
+    {
+      "label": "ScenePostFX.jsx",
+      "file_type": "code",
+      "source_file": "src/scene/ScenePostFX.jsx",
+      "source_location": "L1",
+      "id": "src_scene_scenepostfx_jsx",
+      "community": 1,
+      "norm_label": "scenepostfx.jsx"
+    },
+    {
+      "label": "ParticleStream.jsx",
+      "file_type": "code",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L1",
+      "id": "src_scene_particlestream_jsx",
+      "community": 5,
+      "norm_label": "particlestream.jsx"
+    },
+    {
+      "label": "DUMMY",
+      "file_type": "code",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L7",
+      "id": "scene_particlestream_dummy",
+      "community": 5,
+      "norm_label": "dummy"
+    },
+    {
+      "label": "particleColor()",
+      "file_type": "code",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L9",
+      "id": "scene_particlestream_particlecolor",
+      "community": 5,
+      "norm_label": "particlecolor()"
+    },
+    {
+      "label": "PathRouter.js",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L1",
+      "id": "src_scene_pathrouter_js",
+      "community": 5,
+      "norm_label": "pathrouter.js"
+    },
+    {
+      "label": "LOC_BY_ID",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L27",
+      "id": "scene_pathrouter_loc_by_id",
+      "community": 5,
+      "norm_label": "loc_by_id"
+    },
+    {
+      "label": "v3()",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L29",
+      "id": "scene_pathrouter_v3",
+      "community": 5,
+      "norm_label": "v3()"
+    },
+    {
+      "label": "distSqXZ()",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L34",
+      "id": "scene_pathrouter_distsqxz",
+      "community": 5,
+      "norm_label": "distsqxz()"
+    },
+    {
+      "label": "nearestColumn()",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L41",
+      "id": "scene_pathrouter_nearestcolumn",
+      "community": 5,
+      "norm_label": "nearestcolumn()"
+    },
+    {
+      "label": "FLOOR_Y_MAP",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L70",
+      "id": "scene_pathrouter_floor_y_map",
+      "community": 5,
+      "norm_label": "floor_y_map"
+    },
+    {
+      "label": "yForFloor()",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L72",
+      "id": "scene_pathrouter_yforfloor",
+      "community": 5,
+      "norm_label": "yforfloor()"
+    },
+    {
+      "label": "bridgeEndpoint()",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L77",
+      "id": "scene_pathrouter_bridgeendpoint",
+      "community": 5,
+      "norm_label": "bridgeendpoint()"
+    },
+    {
+      "label": "routeWaypoints()",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L84",
+      "id": "scene_pathrouter_routewaypoints",
+      "community": 5,
+      "norm_label": "routewaypoints()"
+    },
+    {
+      "label": "arcLengths()",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L161",
+      "id": "scene_pathrouter_arclengths",
+      "community": 5,
+      "norm_label": "arclengths()"
+    },
+    {
+      "label": "pointAt()",
+      "file_type": "code",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L171",
+      "id": "scene_pathrouter_pointat",
+      "community": 5,
+      "norm_label": "pointat()"
+    },
+    {
+      "label": "SetDressing.jsx",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L1",
+      "id": "src_scene_setdressing_jsx",
+      "community": 1,
+      "norm_label": "setdressing.jsx"
+    },
+    {
+      "label": "mulberry32()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L14",
+      "id": "scene_setdressing_mulberry32",
+      "community": 1,
+      "norm_label": "mulberry32()"
+    },
+    {
+      "label": "NO_RAYCAST()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L24",
+      "id": "scene_setdressing_no_raycast",
+      "community": 1,
+      "norm_label": "no_raycast()"
+    },
+    {
+      "label": "PalletField()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L27",
+      "id": "scene_setdressing_palletfield",
+      "community": 1,
+      "norm_label": "palletfield()"
+    },
+    {
+      "label": "BollardCluster()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L60",
+      "id": "scene_setdressing_bollardcluster",
+      "community": 1,
+      "norm_label": "bollardcluster()"
+    },
+    {
+      "label": "PipeRun()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L79",
+      "id": "scene_setdressing_piperun",
+      "community": 1,
+      "norm_label": "piperun()"
+    },
+    {
+      "label": "CeilingPipes()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L92",
+      "id": "scene_setdressing_ceilingpipes",
+      "community": 1,
+      "norm_label": "ceilingpipes()"
+    },
+    {
+      "label": "CableTray()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L113",
+      "id": "scene_setdressing_cabletray",
+      "community": 1,
+      "norm_label": "cabletray()"
+    },
+    {
+      "label": "WalkwayHatch()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L135",
+      "id": "scene_setdressing_walkwayhatch",
+      "community": 1,
+      "norm_label": "walkwayhatch()"
+    },
+    {
+      "label": "RoofClutter()",
+      "file_type": "code",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L156",
+      "id": "scene_setdressing_roofclutter",
+      "community": 1,
+      "norm_label": "roofclutter()"
+    },
+    {
+      "label": "SceneAtmosphere.jsx",
+      "file_type": "code",
+      "source_file": "src/scene/SceneAtmosphere.jsx",
+      "source_location": "L1",
+      "id": "src_scene_sceneatmosphere_jsx",
+      "community": 1,
+      "norm_label": "sceneatmosphere.jsx"
+    },
+    {
+      "label": "FAMILY_BY_ZONE",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L3",
+      "id": "scene_machinemeshes_family_by_zone",
+      "community": 0,
+      "norm_label": "family_by_zone"
+    },
+    {
+      "label": "FAMILY_BY_TYPE",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L8",
+      "id": "scene_machinemeshes_family_by_type",
+      "community": 0,
+      "norm_label": "family_by_type"
+    },
+    {
+      "label": "familyMatKey()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L16",
+      "id": "scene_machinemeshes_familymatkey",
+      "community": 7,
+      "norm_label": "familymatkey()"
+    },
+    {
+      "label": "pbrProps()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L26",
+      "id": "scene_machinemeshes_pbrprops",
+      "community": 0,
+      "norm_label": "pbrprops()"
+    },
+    {
+      "label": "Box()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L44",
+      "id": "scene_machinemeshes_box",
+      "community": 0,
+      "norm_label": "box()"
+    },
+    {
+      "label": "Cyl()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L58",
+      "id": "scene_machinemeshes_cyl",
+      "community": 0,
+      "norm_label": "cyl()"
+    },
+    {
+      "label": "StackLight()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L76",
+      "id": "scene_machinemeshes_stacklight",
+      "community": 0,
+      "norm_label": "stacklight()"
+    },
+    {
+      "label": "HMIPanel()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L104",
+      "id": "scene_machinemeshes_hmipanel",
+      "community": 0,
+      "norm_label": "hmipanel()"
+    },
+    {
+      "label": "AccentStripe()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L134",
+      "id": "scene_machinemeshes_accentstripe",
+      "community": 0,
+      "norm_label": "accentstripe()"
+    },
+    {
+      "label": "SMTMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L155",
+      "id": "scene_machinemeshes_smtmesh",
+      "community": 0,
+      "norm_label": "smtmesh()"
+    },
+    {
+      "label": "FCTMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L186",
+      "id": "scene_machinemeshes_fctmesh",
+      "community": 0,
+      "norm_label": "fctmesh()"
+    },
+    {
+      "label": "TRSSMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L214",
+      "id": "scene_machinemeshes_trssmesh",
+      "community": 0,
+      "norm_label": "trssmesh()"
+    },
+    {
+      "label": "Assembly1PMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L230",
+      "id": "scene_machinemeshes_assembly1pmesh",
+      "community": 0,
+      "norm_label": "assembly1pmesh()"
+    },
+    {
+      "label": "SFGPackMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L240",
+      "id": "scene_machinemeshes_sfgpackmesh",
+      "community": 0,
+      "norm_label": "sfgpackmesh()"
+    },
+    {
+      "label": "VCMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L253",
+      "id": "scene_machinemeshes_vcmesh",
+      "community": 0,
+      "norm_label": "vcmesh()"
+    },
+    {
+      "label": "PackMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L266",
+      "id": "scene_machinemeshes_packmesh",
+      "community": 0,
+      "norm_label": "packmesh()"
+    },
+    {
+      "label": "DockMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L309",
+      "id": "scene_machinemeshes_dockmesh",
+      "community": 0,
+      "norm_label": "dockmesh()"
+    },
+    {
+      "label": "BufferMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L337",
+      "id": "scene_machinemeshes_buffermesh",
+      "community": 0,
+      "norm_label": "buffermesh()"
+    },
+    {
+      "label": "InspectionMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L378",
+      "id": "scene_machinemeshes_inspectionmesh",
+      "community": 0,
+      "norm_label": "inspectionmesh()"
+    },
+    {
+      "label": "StoreMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L415",
+      "id": "scene_machinemeshes_storemesh",
+      "community": 0,
+      "norm_label": "storemesh()"
+    },
+    {
+      "label": "LIFT_TOP_FLOOR_Y",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L444",
+      "id": "scene_machinemeshes_lift_top_floor_y",
+      "community": 0,
+      "norm_label": "lift_top_floor_y"
+    },
+    {
+      "label": "SHAFT_BY_ZONE",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L447",
+      "id": "scene_machinemeshes_shaft_by_zone",
+      "community": 0,
+      "norm_label": "shaft_by_zone"
+    },
+    {
+      "label": "LiftMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L452",
+      "id": "scene_machinemeshes_liftmesh",
+      "community": 0,
+      "norm_label": "liftmesh()"
+    },
+    {
+      "label": "RampMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L536",
+      "id": "scene_machinemeshes_rampmesh",
+      "community": 0,
+      "norm_label": "rampmesh()"
+    },
+    {
+      "label": "DispatchMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L575",
+      "id": "scene_machinemeshes_dispatchmesh",
+      "community": 0,
+      "norm_label": "dispatchmesh()"
+    },
+    {
+      "label": "ExternalMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L588",
+      "id": "scene_machinemeshes_externalmesh",
+      "community": 0,
+      "norm_label": "externalmesh()"
+    },
+    {
+      "label": "ASRSMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L600",
+      "id": "scene_machinemeshes_asrsmesh",
+      "community": 0,
+      "norm_label": "asrsmesh()"
+    },
+    {
+      "label": "ASRSPointMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L652",
+      "id": "scene_machinemeshes_asrspointmesh",
+      "community": 0,
+      "norm_label": "asrspointmesh()"
+    },
+    {
+      "label": "StairMesh()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L663",
+      "id": "scene_machinemeshes_stairmesh",
+      "community": 0,
+      "norm_label": "stairmesh()"
+    },
+    {
+      "label": "MESH_BY_TYPE",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L690",
+      "id": "scene_machinemeshes_mesh_by_type",
+      "community": 0,
+      "norm_label": "mesh_by_type"
+    },
+    {
+      "label": "MESH_BY_ZONE",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L705",
+      "id": "scene_machinemeshes_mesh_by_zone",
+      "community": 0,
+      "norm_label": "mesh_by_zone"
+    },
+    {
+      "label": "getMeshComponent()",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L715",
+      "id": "scene_machinemeshes_getmeshcomponent",
+      "community": 7,
+      "norm_label": "getmeshcomponent()"
+    },
+    {
+      "label": "useSimEngine.js",
+      "file_type": "code",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L1",
+      "id": "src_engine_usesimengine_js",
+      "community": 4,
+      "norm_label": "usesimengine.js"
+    },
+    {
+      "label": "SIM_EDGES",
+      "file_type": "code",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L11",
+      "id": "engine_usesimengine_sim_edges",
+      "community": 4,
+      "norm_label": "sim_edges"
+    },
+    {
+      "label": "BUFFER_LOCS",
+      "file_type": "code",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L53",
+      "id": "engine_usesimengine_buffer_locs",
+      "community": 4,
+      "norm_label": "buffer_locs"
+    },
+    {
+      "label": "buildInitialBuffers()",
+      "file_type": "code",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L56",
+      "id": "engine_usesimengine_buildinitialbuffers",
+      "community": 4,
+      "norm_label": "buildinitialbuffers()"
+    },
+    {
+      "label": "effectiveRate()",
+      "file_type": "code",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L64",
+      "id": "engine_usesimengine_effectiverate",
+      "community": 4,
+      "norm_label": "effectiverate()"
+    },
+    {
+      "label": "runSimulation()",
+      "file_type": "code",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L76",
+      "id": "engine_usesimengine_runsimulation",
+      "community": 4,
+      "norm_label": "runsimulation()"
+    },
+    {
+      "label": "autoLayout.js",
+      "file_type": "code",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L1",
+      "id": "src_layout_autolayout_js",
+      "community": 6,
+      "norm_label": "autolayout.js"
+    },
+    {
+      "label": "FLOOR_Y",
+      "file_type": "code",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L6",
+      "id": "layout_autolayout_floor_y",
+      "community": 6,
+      "norm_label": "floor_y"
+    },
+    {
+      "label": "BASELINE",
+      "file_type": "code",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L12",
+      "id": "layout_autolayout_baseline",
+      "community": 6,
+      "norm_label": "baseline"
+    },
+    {
+      "label": "loadOverrides()",
+      "file_type": "code",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L66",
+      "id": "layout_autolayout_loadoverrides",
+      "community": 6,
+      "norm_label": "loadoverrides()"
+    },
+    {
+      "label": "saveOverrides()",
+      "file_type": "code",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L74",
+      "id": "layout_autolayout_saveoverrides",
+      "community": 6,
+      "norm_label": "saveoverrides()"
+    },
+    {
+      "label": "resetOverrides()",
+      "file_type": "code",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L80",
+      "id": "layout_autolayout_resetoverrides",
+      "community": 6,
+      "norm_label": "resetoverrides()"
+    },
+    {
+      "label": "computeLayout()",
+      "file_type": "code",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L87",
+      "id": "layout_autolayout_computelayout",
+      "community": 6,
+      "norm_label": "computelayout()"
+    },
+    {
+      "label": "transport_topology.js",
+      "file_type": "code",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L1",
+      "id": "src_data_transport_topology_js",
+      "community": 5,
+      "norm_label": "transport_topology.js"
+    },
+    {
+      "label": "TRANSPORT_COLUMNS",
+      "file_type": "code",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L10",
+      "id": "data_transport_topology_transport_columns",
+      "community": 5,
+      "norm_label": "transport_columns"
+    },
+    {
+      "label": "LOCATION_COLUMN_OVERRIDES",
+      "file_type": "code",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L39",
+      "id": "data_transport_topology_location_column_overrides",
+      "community": 5,
+      "norm_label": "location_column_overrides"
+    },
+    {
+      "label": "COLUMNS_BY_ID",
+      "file_type": "code",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L46",
+      "id": "data_transport_topology_columns_by_id",
+      "community": 5,
+      "norm_label": "columns_by_id"
+    },
+    {
+      "label": "columnsForFloor()",
+      "file_type": "code",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L49",
+      "id": "data_transport_topology_columnsforfloor",
+      "community": 5,
+      "norm_label": "columnsforfloor()"
+    },
+    {
+      "label": "path",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L87",
+      "id": "data_m800_model_path",
+      "community": 1,
+      "norm_label": "path"
+    },
+    {
+      "label": "station",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L139",
+      "id": "data_m800_model_station",
+      "community": 4,
+      "norm_label": "station"
+    },
+    {
+      "label": "resource",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L161",
+      "id": "data_m800_model_resource",
+      "community": 4,
+      "norm_label": "resource"
+    },
+    {
+      "label": "process",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L178",
+      "id": "data_m800_model_process",
+      "community": 4,
+      "norm_label": "process"
+    },
+    {
+      "label": "route_step",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L209",
+      "id": "data_m800_model_route_step",
+      "community": 4,
+      "norm_label": "route_step"
+    },
+    {
+      "label": "material",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L252",
+      "id": "data_m800_model_material",
+      "community": 4,
+      "norm_label": "material"
+    },
+    {
+      "label": "material_state",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L281",
+      "id": "data_m800_model_material_state",
+      "community": 4,
+      "norm_label": "material_state"
+    },
+    {
+      "label": "container",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L323",
+      "id": "data_m800_model_container",
+      "community": 4,
+      "norm_label": "container"
+    },
+    {
+      "label": "quality_gate",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L340",
+      "id": "data_m800_model_quality_gate",
+      "community": 4,
+      "norm_label": "quality_gate"
+    },
+    {
+      "label": "system_event",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L357",
+      "id": "data_m800_model_system_event",
+      "community": 4,
+      "norm_label": "system_event"
+    },
+    {
+      "label": "inventory_position",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L382",
+      "id": "data_m800_model_inventory_position",
+      "community": 4,
+      "norm_label": "inventory_position"
+    },
+    {
+      "label": "live_status",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L394",
+      "id": "data_m800_model_live_status",
+      "community": 4,
+      "norm_label": "live_status"
+    },
+    {
+      "label": "event_log",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L409",
+      "id": "data_m800_model_event_log",
+      "community": 4,
+      "norm_label": "event_log"
+    },
+    {
+      "label": "scenario_override",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L421",
+      "id": "data_m800_model_scenario_override",
+      "community": 4,
+      "norm_label": "scenario_override"
+    },
+    {
+      "label": "sim_rates",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L492",
+      "id": "data_m800_model_sim_rates",
+      "community": 4,
+      "norm_label": "sim_rates"
+    },
+    {
+      "label": "NON_BUFFER_IDS",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L538",
+      "id": "data_m800_model_non_buffer_ids",
+      "community": 4,
+      "norm_label": "non_buffer_ids"
+    },
+    {
+      "label": "buffer_capacity",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L545",
+      "id": "data_m800_model_buffer_capacity",
+      "community": 4,
+      "norm_label": "buffer_capacity"
+    },
+    {
+      "label": "initial_fill",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L546",
+      "id": "data_m800_model_initial_fill",
+      "community": 4,
+      "norm_label": "initial_fill"
+    },
+    {
+      "label": "scenarioItem",
+      "file_type": "code",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L14",
+      "id": "tests_factory_spec_scenarioitem",
+      "community": 9,
+      "norm_label": "scenarioitem"
+    },
+    {
+      "label": "settings.local.json",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L1",
+      "id": "claude_settings_local_json",
+      "community": 10,
+      "norm_label": "settings.local.json"
+    },
+    {
+      "label": "permissions",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L2",
+      "id": "claude_settings_local_permissions",
+      "community": 10,
+      "norm_label": "permissions"
+    },
+    {
+      "label": "allow",
+      "file_type": "code",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L3",
+      "id": "claude_settings_local_permissions_allow",
+      "community": 10,
+      "norm_label": "allow"
+    },
+    {
+      "label": "M800 Digital Twin",
+      "file_type": "document",
+      "source_file": "3d_upgrade_guide.md",
+      "id": "3d_upgrade_guide_m800_digital_twin",
+      "community": 19,
+      "norm_label": "m800 digital twin"
+    },
+    {
+      "label": "App.jsx",
+      "file_type": "code",
+      "source_file": "src/App.jsx",
+      "id": "app_jsx",
+      "community": 6,
+      "norm_label": "app.jsx"
+    },
+    {
+      "label": "FactoryTwin.jsx",
+      "file_type": "code",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "id": "factory_twin_jsx",
+      "community": 1,
+      "norm_label": "factorytwin.jsx"
+    },
+    {
+      "label": "AssetInspector.jsx",
+      "file_type": "code",
+      "source_file": "src/components/AssetInspector.jsx",
+      "id": "asset_inspector_jsx",
+      "community": 0,
+      "norm_label": "assetinspector.jsx"
+    },
+    {
+      "label": "MachineMeshes.jsx",
+      "file_type": "code",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "id": "machine_meshes_jsx",
+      "community": 0,
+      "norm_label": "machinemeshes.jsx"
+    },
+    {
+      "label": "LocationNode.jsx",
+      "file_type": "code",
+      "source_file": "src/scene/LocationNode.jsx",
+      "id": "location_node_jsx",
+      "community": 7,
+      "norm_label": "locationnode.jsx"
+    },
+    {
+      "label": "factoryMaterials.js",
+      "file_type": "code",
+      "source_file": "src/materials/factoryMaterials.js",
+      "id": "factory_materials_js",
+      "community": 0,
+      "norm_label": "factorymaterials.js"
+    },
+    {
+      "label": "m800_model.js",
+      "file_type": "code",
+      "source_file": "src/data/m800_model.js",
+      "id": "m800_model_js",
+      "community": 4,
+      "norm_label": "m800_model.js"
+    },
+    {
+      "label": "usePullEngine.js",
+      "file_type": "code",
+      "source_file": "src/hooks/usePullEngine.js",
+      "id": "use_pull_engine_js",
+      "community": 2,
+      "norm_label": "usepullengine.js"
+    },
+    {
+      "label": "factory.spec.js",
+      "file_type": "code",
+      "source_file": "tests/factory.spec.js",
+      "id": "factory_spec_js",
+      "community": 9,
+      "norm_label": "factory.spec.js"
+    },
+    {
+      "label": "Playwright Test Report",
+      "file_type": "document",
+      "source_file": "playwright-report/index.html",
+      "id": "playwright_test_report",
+      "community": 9,
+      "norm_label": "playwright test report"
     }
   ],
   "links": [
@@ -1046,11 +2435,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_dependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "package_json",
+      "target": "260521_digital_twin_package_devdependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_json",
-      "target": "260521_digital_twin_package_name",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_name"
     },
     {
       "relation": "contains",
@@ -1058,29 +2467,9 @@
       "source_file": "package.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_json",
-      "target": "260521_digital_twin_package_private",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "package_json",
-      "target": "260521_digital_twin_package_version",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "package_json",
-      "target": "260521_digital_twin_package_type",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_private"
     },
     {
       "relation": "contains",
@@ -1088,39 +2477,29 @@
       "source_file": "package.json",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_json",
-      "target": "260521_digital_twin_package_scripts",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_scripts"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L13",
+      "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_json",
-      "target": "260521_digital_twin_package_dependencies",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_type"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
-      "source_location": "L21",
+      "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_json",
-      "target": "260521_digital_twin_package_devdependencies",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_scripts",
-      "target": "260521_digital_twin_package_scripts_dev",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_version"
     },
     {
       "relation": "contains",
@@ -1128,9 +2507,19 @@
       "source_file": "package.json",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "260521_digital_twin_package_scripts",
-      "target": "260521_digital_twin_package_scripts_build",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_scripts_build"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_scripts",
+      "target": "260521_digital_twin_package_scripts_dev"
     },
     {
       "relation": "contains",
@@ -1138,9 +2527,9 @@
       "source_file": "package.json",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "260521_digital_twin_package_scripts",
-      "target": "260521_digital_twin_package_scripts_preview",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_scripts_preview"
     },
     {
       "relation": "contains",
@@ -1148,9 +2537,9 @@
       "source_file": "package.json",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "260521_digital_twin_package_scripts",
-      "target": "260521_digital_twin_package_scripts_test",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_scripts_test"
     },
     {
       "relation": "contains",
@@ -1158,9 +2547,39 @@
       "source_file": "package.json",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "260521_digital_twin_package_scripts",
-      "target": "260521_digital_twin_package_scripts_test_e2e",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_scripts_test_e2e"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_lucide_react"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_react"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_react_dom"
     },
     {
       "relation": "contains",
@@ -1168,9 +2587,9 @@
       "source_file": "package.json",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "260521_digital_twin_package_dependencies",
-      "target": "260521_digital_twin_package_dependencies_react",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_dependencies_react_three_drei"
     },
     {
       "relation": "contains",
@@ -1178,9 +2597,19 @@
       "source_file": "package.json",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "260521_digital_twin_package_dependencies",
-      "target": "260521_digital_twin_package_dependencies_react_dom",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_dependencies_react_three_fiber"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_dependencies",
+      "target": "260521_digital_twin_package_dependencies_three"
     },
     {
       "relation": "contains",
@@ -1189,87 +2618,7 @@
       "source_location": "L16",
       "weight": 1.0,
       "source": "260521_digital_twin_package_dependencies",
-      "target": "260521_digital_twin_package_dependencies_three",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L17",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_dependencies",
-      "target": "260521_digital_twin_package_dependencies_react_three_fiber",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_dependencies",
-      "target": "260521_digital_twin_package_dependencies_react_three_drei",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_dependencies",
-      "target": "260521_digital_twin_package_dependencies_lucide_react",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L22",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_devdependencies",
-      "target": "260521_digital_twin_package_devdependencies_vite",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_devdependencies",
-      "target": "260521_digital_twin_package_devdependencies_vitest",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_devdependencies",
-      "target": "260521_digital_twin_package_devdependencies_jsdom",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_devdependencies",
-      "target": "260521_digital_twin_package_devdependencies_playwright_test",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "package.json",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "260521_digital_twin_package_devdependencies",
-      "target": "260521_digital_twin_package_devdependencies_types_react",
+      "target": "260521_kim_digital_twin_package_dependencies_react_three_postprocessing",
       "confidence_score": 1.0
     },
     {
@@ -1278,9 +2627,29 @@
       "source_file": "package.json",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "260521_digital_twin_package_devdependencies",
-      "target": "260521_digital_twin_package_devdependencies_types_react_dom",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_devdependencies_jsdom"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_playwright_test"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_types_react"
     },
     {
       "relation": "contains",
@@ -1288,9 +2657,29 @@
       "source_file": "package.json",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "260521_digital_twin_package_devdependencies",
-      "target": "260521_digital_twin_package_devdependencies_vitejs_plugin_react",
-      "confidence_score": 1.0
+      "target": "260521_digital_twin_package_devdependencies_vite"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_vitejs_plugin_react"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "package.json",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "260521_digital_twin_package_devdependencies",
+      "target": "260521_digital_twin_package_devdependencies_vitest"
     },
     {
       "relation": "contains",
@@ -1298,9 +2687,9 @@
       "source_file": "tests/factory.spec.js",
       "source_location": "L9",
       "weight": 1.0,
-      "source": "tests_factory_spec_js",
-      "target": "tests_factory_spec_canvas",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_spec_js",
+      "target": "tests_factory_spec_canvas"
     },
     {
       "relation": "contains",
@@ -1308,82 +2697,71 @@
       "source_file": "tests/factory.spec.js",
       "source_location": "L14",
       "weight": 1.0,
-      "source": "tests_factory_spec_js",
-      "target": "tests_factory_spec_shockbtn",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_spec_js",
+      "target": "tests_factory_spec_shockbtn"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/factory.spec.js",
-      "source_location": "L28",
+      "source_location": "L29",
       "weight": 1.0,
-      "source": "tests_factory_spec_js",
-      "target": "tests_factory_spec_timelineinput",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_spec_js",
+      "target": "tests_factory_spec_timelineinput"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/factory.spec.js",
-      "source_location": "L32",
+      "source_location": "L33",
       "weight": 1.0,
-      "source": "tests_factory_spec_js",
-      "target": "tests_factory_spec_resumebtn",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/App.jsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "src_app_jsx",
-      "target": "src_hooks_usepullengine_js",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/App.jsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "src_app_jsx",
-      "target": "hooks_usepullengine_usepullengine",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/App.jsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "src_app_jsx",
-      "target": "src_components_factorytwin_jsx",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_spec_js",
+      "target": "tests_factory_spec_resumebtn"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/App.jsx",
-      "source_location": "L6",
+      "source_location": "L10",
       "weight": 1.0,
-      "source": "src_app_jsx",
-      "target": "src_app_app",
+      "confidence_score": 1.0,
+      "source": "app_jsx",
+      "target": "src_app_app"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "src_app_app",
+      "target": "layout_autolayout_computelayout",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "src/main.jsx",
-      "source_location": "L3",
+      "source_file": "src/App.jsx",
+      "source_location": "L22",
       "weight": 1.0,
-      "source": "src_main_jsx",
-      "target": "src_app_jsx",
+      "source": "src_app_app",
+      "target": "layout_autolayout_loadoverrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_app_app",
+      "target": "src_engine_usesimengine_js",
       "confidence_score": 1.0
     },
     {
@@ -1395,7 +2773,18 @@
       "source_location": "L7",
       "weight": 1.0,
       "source": "src_app_app",
-      "target": "hooks_usepullengine_usepullengine"
+      "target": "use_pull_engine_js"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_main_jsx",
+      "target": "app_jsx"
     },
     {
       "relation": "contains",
@@ -1403,9 +2792,9 @@
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L7",
       "weight": 1.0,
-      "source": "src_components_factorytwin_jsx",
-      "target": "components_factorytwin_dummy",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "components_factorytwin_dummy"
     },
     {
       "relation": "contains",
@@ -1413,9 +2802,9 @@
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L8",
       "weight": 1.0,
-      "source": "src_components_factorytwin_jsx",
-      "target": "components_factorytwin_target_vec",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "components_factorytwin_target_vec"
     },
     {
       "relation": "contains",
@@ -1423,9 +2812,9 @@
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L9",
       "weight": 1.0,
-      "source": "src_components_factorytwin_jsx",
-      "target": "components_factorytwin_current_vec",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "components_factorytwin_current_vec"
     },
     {
       "relation": "contains",
@@ -1433,70 +2822,29 @@
       "source_file": "src/components/FactoryTwin.jsx",
       "source_location": "L12",
       "weight": 1.0,
-      "source": "src_components_factorytwin_jsx",
-      "target": "components_factorytwin_nodes",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "components_factorytwin_nodes"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/FactoryTwin.jsx",
-      "source_location": "L23",
+      "source_location": "L22",
       "weight": 1.0,
-      "source": "src_components_factorytwin_jsx",
-      "target": "components_factorytwin_floorplate",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "components_factorytwin_floorplate"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/FactoryTwin.jsx",
-      "source_location": "L51",
+      "source_location": "L114",
       "weight": 1.0,
-      "source": "src_components_factorytwin_jsx",
-      "target": "components_factorytwin_twinscene",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/FactoryTwin.jsx",
-      "source_location": "L264",
-      "weight": 1.0,
-      "source": "src_components_factorytwin_jsx",
-      "target": "components_factorytwin_factorytwin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/hooks/usePullEngine.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "src_hooks_usepullengine_js",
-      "target": "hooks_usepullengine_runsimulation",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/hooks/usePullEngine.js",
-      "source_location": "L161",
-      "weight": 1.0,
-      "source": "src_hooks_usepullengine_js",
-      "target": "hooks_usepullengine_usepullengine",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/hooks/usePullEngine.test.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "src_hooks_usepullengine_test_js",
-      "target": "src_hooks_usepullengine_js",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "components_factorytwin_twinscene"
     },
     {
       "relation": "imports",
@@ -1505,29 +2853,19 @@
       "source_file": "src/hooks/usePullEngine.test.js",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_hooks_usepullengine_test_js",
-      "target": "hooks_usepullengine_runsimulation",
-      "confidence_score": 1.0
+      "target": "hooks_usepullengine_runsimulation"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/hooks/usePullEngine.test.js",
-      "source_location": "L19",
+      "source_file": "src/hooks/usePullEngine.js",
+      "source_location": "L4",
       "weight": 1.0,
-      "source": "src_hooks_usepullengine_test_js",
-      "target": "hooks_usepullengine_test_states",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/hooks/usePullEngine.test.js",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "src_hooks_usepullengine_test_js",
-      "target": "hooks_usepullengine_test_hasblocked",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "use_pull_engine_js",
+      "target": "hooks_usepullengine_runsimulation"
     },
     {
       "relation": "contains",
@@ -1535,19 +2873,40 @@
       "source_file": "src/hooks/usePullEngine.test.js",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_hooks_usepullengine_test_js",
-      "target": "hooks_usepullengine_test_happystates",
-      "confidence_score": 1.0
+      "target": "hooks_usepullengine_test_happystates"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "test-results/.last-run.json",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_hooks_usepullengine_test_js",
+      "target": "hooks_usepullengine_test_hasblocked"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.test.js",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_hooks_usepullengine_test_js",
+      "target": "hooks_usepullengine_test_states"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/hooks/usePullEngine.test.js",
       "source_location": "L2",
       "weight": 1.0,
-      "source": "test_results_last_run_json",
-      "target": "test_results_last_run_status",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "src_hooks_usepullengine_test_js",
+      "target": "use_pull_engine_js"
     },
     {
       "relation": "contains",
@@ -1555,9 +2914,37 @@
       "source_file": "test-results/.last-run.json",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "test_results_last_run_json",
-      "target": "test_results_last_run_failedtests",
-      "confidence_score": 1.0
+      "target": "test_results_last_run_failedtests"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "test-results/.last-run.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "test_results_last_run_json",
+      "target": "test_results_last_run_status"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "designs_camera_path_presets",
+      "target": "todos_dynamic_camera_presets"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TODOS.md",
+      "source": "todos_dynamic_camera_presets",
+      "target": "factory_twin_jsx"
     },
     {
       "relation": "references",
@@ -1576,8 +2963,8 @@
       "source_file": "docs/designs/factory-pull-digital-twin.md",
       "source_location": null,
       "weight": 1.0,
-      "source": "designs_camera_path_presets",
-      "target": "todos_dynamic_camera_presets"
+      "source": "designs_local_storage_persistence_scope",
+      "target": "todos_local_storage_persistence"
     },
     {
       "relation": "references",
@@ -1590,14 +2977,12 @@
       "target": "todos_use_pull_engine"
     },
     {
-      "relation": "conceptually_related_to",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "docs/designs/factory-pull-digital-twin.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "designs_local_storage_persistence_scope",
-      "target": "todos_local_storage_persistence"
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "TODOS.md",
+      "source": "todos_local_storage_persistence",
+      "target": "use_pull_engine_js"
     },
     {
       "relation": "conceptually_related_to",
@@ -1644,6 +3029,36 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "gstack-sketch.html",
+      "source_location": "line 327",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_asrs_system"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 424",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_bottleneck_diagnosis"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
+      "source_location": "line 323",
+      "weight": 1.0,
+      "source": "gstack_sketch_digital_twin_wireframe",
+      "target": "gstack_sketch_conveyor_bridge"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "gstack-sketch.html",
       "source_location": "line 399",
       "weight": 1.0,
       "source": "gstack_sketch_digital_twin_wireframe",
@@ -1668,36 +3083,6 @@
       "weight": 1.0,
       "source": "gstack_sketch_digital_twin_wireframe",
       "target": "gstack_sketch_timeline_slider"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "gstack-sketch.html",
-      "source_location": "line 424",
-      "weight": 1.0,
-      "source": "gstack_sketch_digital_twin_wireframe",
-      "target": "gstack_sketch_bottleneck_diagnosis"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "gstack-sketch.html",
-      "source_location": "line 327",
-      "weight": 1.0,
-      "source": "gstack_sketch_digital_twin_wireframe",
-      "target": "gstack_sketch_asrs_system"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "gstack-sketch.html",
-      "source_location": "line 323",
-      "weight": 1.0,
-      "source": "gstack_sketch_digital_twin_wireframe",
-      "target": "gstack_sketch_conveyor_bridge"
     },
     {
       "relation": "conceptually_related_to",
@@ -1744,6 +3129,16 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_location": "line 163",
+      "weight": 1.0,
+      "source": "plans_collections_ptp_kanban_plan",
+      "target": "plans_collections_client_tsx"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
       "source_location": "line 13",
       "weight": 1.0,
       "source": "plans_collections_ptp_kanban_plan",
@@ -1761,23 +3156,13 @@
     },
     {
       "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
-      "source_location": "line 163",
-      "weight": 1.0,
-      "source": "plans_collections_ptp_kanban_plan",
-      "target": "plans_collections_client_tsx"
-    },
-    {
-      "relation": "references",
       "confidence": "INFERRED",
       "confidence_score": 0.95,
-      "source_file": "docs/superpowers/plans/2026-05-04-collections-ptp-kanban-plan.md",
+      "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
       "source_location": null,
       "weight": 1.0,
-      "source": "plans_collections_ptp_kanban_plan",
-      "target": "specs_collections_ptp_design"
+      "source": "specs_collections_ptp_design",
+      "target": "plans_collections_ptp_kanban_plan"
     },
     {
       "relation": "references",
@@ -1806,7 +3191,7 @@
       "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
       "source_location": null,
       "weight": 1.0,
-      "source": "specs_rm_neglect_highlight",
+      "source": "specs_kanban_board_columns",
       "target": "plans_collections_client_tsx"
     },
     {
@@ -1816,7 +3201,7 @@
       "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
       "source_location": null,
       "weight": 1.0,
-      "source": "specs_kanban_board_columns",
+      "source": "specs_rm_neglect_highlight",
       "target": "plans_collections_client_tsx"
     },
     {
@@ -1834,10 +3219,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
-      "source_location": "line 6",
+      "source_location": "line 17",
       "weight": 1.0,
       "source": "specs_collections_ptp_design",
-      "target": "specs_ptp_mechanism"
+      "target": "specs_broken_promise_wakup"
     },
     {
       "relation": "references",
@@ -1854,80 +3239,20 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
-      "source_location": "line 31",
+      "source_location": "line 6",
       "weight": 1.0,
       "source": "specs_collections_ptp_design",
-      "target": "specs_rm_neglect_highlight"
+      "target": "specs_ptp_mechanism"
     },
     {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/superpowers/specs/2026-05-04-collections-ptp-kanban-design.md",
-      "source_location": "line 17",
+      "source_location": "line 31",
       "weight": 1.0,
       "source": "specs_collections_ptp_design",
-      "target": "specs_broken_promise_wakup"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/designs/factory-pull-digital-twin.md",
-      "source_location": "line 13",
-      "weight": 1.0,
-      "source": "designs_factory_pull_ceo_plan",
-      "target": "designs_simulation_engine"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/designs/factory-pull-digital-twin.md",
-      "source_location": "line 14",
-      "weight": 1.0,
-      "source": "designs_factory_pull_ceo_plan",
-      "target": "designs_pull_system_flow_logic"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/designs/factory-pull-digital-twin.md",
-      "source_location": "line 15",
-      "weight": 1.0,
-      "source": "designs_factory_pull_ceo_plan",
-      "target": "designs_shock_events"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/designs/factory-pull-digital-twin.md",
-      "source_location": "line 11",
-      "weight": 1.0,
-      "source": "designs_factory_pull_ceo_plan",
-      "target": "designs_xray_flow_pulse"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/designs/factory-pull-digital-twin.md",
-      "source_location": "line 35",
-      "weight": 1.0,
-      "source": "designs_factory_pull_ceo_plan",
-      "target": "designs_instanced_mesh_particles"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "docs/designs/factory-pull-digital-twin.md",
-      "source_location": "line 34",
-      "weight": 1.0,
-      "source": "designs_factory_pull_ceo_plan",
-      "target": "designs_render_order_webgl"
+      "target": "specs_rm_neglect_highlight"
     },
     {
       "relation": "references",
@@ -1944,10 +3269,70 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 35",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_instanced_mesh_particles"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
       "source_location": "line 28",
       "weight": 1.0,
       "source": "designs_factory_pull_ceo_plan",
       "target": "designs_local_storage_persistence_scope"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 14",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_pull_system_flow_logic"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 34",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_render_order_webgl"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 15",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_shock_events"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 13",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_simulation_engine"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "docs/designs/factory-pull-digital-twin.md",
+      "source_location": "line 11",
+      "weight": 1.0,
+      "source": "designs_factory_pull_ceo_plan",
+      "target": "designs_xray_flow_pulse"
     },
     {
       "relation": "references",
@@ -1958,6 +3343,2530 @@
       "weight": 1.0,
       "source": "test_e2e_timeout_failure",
       "target": "test_e2e_factory_spec"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch_capture_models.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "scratch_capture_models_js",
+      "target": "260521_kim_digital_twin_scratch_capture_models_models",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scratch_capture_models.js",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "scratch_capture_models_js",
+      "target": "260521_kim_digital_twin_scratch_capture_models_screenshotpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "components_assetinspector_models",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "components_assetinspector_rows",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "components_assetinspector_modelgrid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "components_assetinspector_gallerycameracontrols",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "components_assetinspector_assetinspector",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "app_jsx",
+      "target": "src_components_layouteditor_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L197",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "components_layouteditor_btnstyle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "components_layouteditor_canvastoworld",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "components_layouteditor_floor_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "components_layouteditor_gridlines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "components_layouteditor_leaf_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "components_layouteditor_site_colors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "components_layouteditor_worldtocanvas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "layout_autolayout_computelayout"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "layout_autolayout_loadoverrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "layout_autolayout_resetoverrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "layout_autolayout_saveoverrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "location_node_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "m800_model_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/LayoutEditor.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_components_layouteditor_jsx",
+      "target": "src_layout_autolayout_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "components_factorytwin_floor_y",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "components_factorytwin_floorsurfaces",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "materials_factorymaterials_mat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_mat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "materials_factorymaterials_mat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "materials_factorymaterials_mat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_fillstatemat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_fillstatecolor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "materials_factorymaterials_fillstatecolor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L605",
+      "weight": 1.0,
+      "source": "scene_machinemeshes_asrsmesh",
+      "target": "materials_factorymaterials_fillstatecolor"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L340",
+      "weight": 1.0,
+      "source": "scene_machinemeshes_buffermesh",
+      "target": "materials_factorymaterials_fillstatecolor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_makebrushedmetalnormal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_makefloorgridnormal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_makewarningstripetexture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_metalnormalmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "materials_factorymaterials_metalnormalmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_floorgridnormalmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "materials_factorymaterials_floorgridnormalmap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/materials/factoryMaterials.js",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "factory_materials_js",
+      "target": "materials_factorymaterials_warningstripemap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "materials_factorymaterials_warningstripemap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "materials_factorymaterials_warningstripemap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "src_scene_floorpaths_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/FloorPaths.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_floorpaths_jsx",
+      "target": "scene_pathrouter_routewaypoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/FloorPaths.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_floorpaths_jsx",
+      "target": "src_scene_pathrouter_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_locationnode_glbmodel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_locationnode_modelboundary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "scene_locationnode_modelboundary",
+      "target": "scene_locationnode_modelboundary_constructor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "scene_locationnode_modelboundary",
+      "target": "scene_locationnode_modelboundary_getderivedstatefromerror",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scene_locationnode_modelboundary",
+      "target": "scene_locationnode_modelboundary_render",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_locationnode_bufferlabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_locationnode_procmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "scene_locationnode_procmesh",
+      "target": "scene_machinemeshes_familymatkey",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "scene_locationnode_procmesh",
+      "target": "scene_machinemeshes_getmeshcomponent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_locationnode_rot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L98",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_locationnode_locationrotation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_locationnode_selectring",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "src_scene_modelregistry_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/ModelRegistry.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_scene_modelregistry_js",
+      "target": "scene_modelregistry_modelpath",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_modelregistry_modelpath"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "src_scene_buildingshells_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_building",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_column",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_concretecol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_flooredge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_glasscol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_glasspanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_kmp_bounds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_roof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_roofcol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_siteground",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_slabedgecol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_trimcol",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/BuildingShells.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_scene_buildingshells_jsx",
+      "target": "scene_buildingshells_wh_bounds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "src_scene_buildingshells_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "scene_buildingshells_kmp_bounds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_buildingshells_kmp_bounds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "scene_buildingshells_wh_bounds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_buildingshells_wh_bounds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "src_scene_scenepostfx_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "src_scene_particlestream_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "src_scene_particlestream_jsx",
+      "target": "scene_particlestream_dummy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_scene_particlestream_jsx",
+      "target": "scene_particlestream_particlecolor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_scene_particlestream_jsx",
+      "target": "scene_pathrouter_arclengths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_scene_particlestream_jsx",
+      "target": "scene_pathrouter_pointat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_scene_particlestream_jsx",
+      "target": "scene_pathrouter_routewaypoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/ParticleStream.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_scene_particlestream_jsx",
+      "target": "src_scene_pathrouter_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "data_transport_topology_columns_by_id",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "data_transport_topology_columnsforfloor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "data_transport_topology_location_column_overrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "data_transport_topology_transport_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "location_node_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "m800_model_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_arclengths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_bridgeendpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_distsqxz",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_floor_y_map",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_loc_by_id",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_nearestcolumn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_pointat",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_routewaypoints",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_v3",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "scene_pathrouter_yforfloor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "src_scene_pathrouter_js",
+      "target": "src_data_transport_topology_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "scene_pathrouter_routewaypoints",
+      "target": "scene_pathrouter_v3",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "scene_pathrouter_nearestcolumn",
+      "target": "scene_pathrouter_distsqxz",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "scene_pathrouter_nearestcolumn",
+      "target": "data_transport_topology_columnsforfloor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "scene_pathrouter_routewaypoints",
+      "target": "scene_pathrouter_nearestcolumn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L127",
+      "weight": 1.0,
+      "source": "scene_pathrouter_routewaypoints",
+      "target": "scene_pathrouter_yforfloor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L140",
+      "weight": 1.0,
+      "source": "scene_pathrouter_routewaypoints",
+      "target": "scene_pathrouter_bridgeendpoint",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/PathRouter.js",
+      "source_location": "L174",
+      "weight": 1.0,
+      "source": "scene_pathrouter_pointat",
+      "target": "scene_pathrouter_arclengths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "src_scene_setdressing_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "factory_materials_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_bollardcluster",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_cabletray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_ceilingpipes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_mulberry32",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_no_raycast",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_palletfield",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_piperun",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_roofclutter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "src_scene_setdressing_jsx",
+      "target": "scene_setdressing_walkwayhatch",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/SetDressing.jsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "scene_setdressing_palletfield",
+      "target": "scene_setdressing_mulberry32",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "src_scene_sceneatmosphere_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_family_by_zone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_family_by_type",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_machinemeshes_familymatkey",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_familymatkey",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_pbrprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "scene_machinemeshes_box",
+      "target": "scene_machinemeshes_pbrprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "scene_machinemeshes_cyl",
+      "target": "scene_machinemeshes_pbrprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_box",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_cyl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_stacklight",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_hmipanel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_accentstripe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_smtmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_smtmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_fctmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L186",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_fctmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_trssmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L214",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_trssmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_assembly1pmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_assembly1pmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_sfgpackmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L240",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_sfgpackmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_vcmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L253",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_vcmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_packmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L266",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_packmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_dockmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L309",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_dockmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_buffermesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L337",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_buffermesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_inspectionmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L378",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_inspectionmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_storemesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L415",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_storemesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L444",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_lift_top_floor_y",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L447",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_shaft_by_zone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_liftmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L452",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_liftmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_rampmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L536",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_rampmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_dispatchmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L575",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_dispatchmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_externalmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L588",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_externalmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_asrsmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L600",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_asrsmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "scene_machinemeshes_asrspointmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L652",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_asrspointmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L663",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_stairmesh",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L690",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_mesh_by_type",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L705",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_mesh_by_zone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "scene_machinemeshes_getmeshcomponent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/MachineMeshes.jsx",
+      "source_location": "L715",
+      "weight": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "scene_machinemeshes_getmeshcomponent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "app_jsx",
+      "target": "src_engine_usesimengine_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "data_m800_model_buffer_capacity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "data_m800_model_initial_fill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "data_m800_model_scenario_override",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "engine_usesimengine_buffer_locs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "engine_usesimengine_buildinitialbuffers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "engine_usesimengine_effectiverate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "engine_usesimengine_runsimulation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "engine_usesimengine_sim_edges",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "src_engine_usesimengine_js",
+      "target": "m800_model_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "engine_usesimengine_runsimulation",
+      "target": "engine_usesimengine_buildinitialbuffers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/engine/useSimEngine.js",
+      "source_location": "L93",
+      "weight": 1.0,
+      "source": "engine_usesimengine_runsimulation",
+      "target": "engine_usesimengine_effectiverate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "app_jsx",
+      "target": "src_layout_autolayout_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "src_layout_autolayout_js",
+      "target": "layout_autolayout_baseline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "src_layout_autolayout_js",
+      "target": "layout_autolayout_computelayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "src_layout_autolayout_js",
+      "target": "layout_autolayout_floor_y",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L66",
+      "weight": 1.0,
+      "source": "src_layout_autolayout_js",
+      "target": "layout_autolayout_loadoverrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "src_layout_autolayout_js",
+      "target": "layout_autolayout_resetoverrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/layout/autoLayout.js",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "src_layout_autolayout_js",
+      "target": "layout_autolayout_saveoverrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "app_jsx",
+      "target": "layout_autolayout_loadoverrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "app_jsx",
+      "target": "layout_autolayout_computelayout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "src_data_transport_topology_js",
+      "target": "data_transport_topology_columns_by_id",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "src_data_transport_topology_js",
+      "target": "data_transport_topology_columnsforfloor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "src_data_transport_topology_js",
+      "target": "data_transport_topology_location_column_overrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/transport_topology.js",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "src_data_transport_topology_js",
+      "target": "data_transport_topology_transport_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "data_m800_model_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_station",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_resource",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_process",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L209",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_route_step",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L252",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_material",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L281",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_material_state",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L323",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_container",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L340",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_quality_gate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L357",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_system_event",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L382",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_inventory_position",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L394",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_live_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L409",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_event_log",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L421",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_scenario_override",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L492",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_sim_rates",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L538",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_non_buffer_ids",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_jsx",
+      "target": "data_m800_model_buffer_capacity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "data_m800_model_buffer_capacity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L545",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_buffer_capacity",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L546",
+      "weight": 1.0,
+      "source": "m800_model_js",
+      "target": "data_m800_model_initial_fill",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/factory.spec.js",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "factory_spec_js",
+      "target": "tests_factory_spec_scenarioitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "claude_settings_local_json",
+      "target": "claude_settings_local_permissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.local.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "claude_settings_local_permissions",
+      "target": "claude_settings_local_permissions_allow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "3d_upgrade_guide.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_jsx",
+      "target": "asset_inspector_jsx"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_jsx",
+      "target": "factory_twin_jsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_jsx",
+      "target": "location_node_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "app_jsx",
+      "target": "m800_model_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/App.jsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_jsx",
+      "target": "use_pull_engine_js"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "factory_materials_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "location_node_jsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/FactoryTwin.jsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "factory_twin_jsx",
+      "target": "m800_model_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/AssetInspector.jsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "asset_inspector_jsx",
+      "target": "factory_materials_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "shares_data_with",
+      "context": "import",
+      "confidence": "INFERRED",
+      "source_file": "3d_upgrade_guide.md",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 0.8,
+      "source": "machine_meshes_jsx",
+      "target": "asset_inspector_jsx"
+    },
+    {
+      "relation": "imports_from",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/scene/LocationNode.jsx",
+      "context": "import",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "machine_meshes_jsx"
+    },
+    {
+      "relation": "references",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "3d_upgrade_guide.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "machine_meshes_jsx",
+      "target": "factory_materials_js"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/scene/LocationNode.jsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "location_node_jsx",
+      "target": "factory_materials_js",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/data/m800_model.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 0.9,
+      "source": "m800_model_js",
+      "target": "location_node_jsx"
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "playwright-report/data/fbcad5ceed2625b309729a98a0b5a69f94886bc3.md",
+      "source": "factory_spec_js",
+      "target": "playwright_test_report"
     }
   ],
   "hyperedges": [
@@ -1988,19 +5897,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "docs/designs/factory-pull-digital-twin.md"
-    },
-    {
-      "id": "factory_twin_e2e_test_coverage",
-      "label": "E2E Test Coverage for Factory Twin: Timeline, Shock, Viewport Canvas",
-      "nodes": [
-        "test_e2e_factory_spec",
-        "gstack_sketch_shock_injection",
-        "gstack_sketch_timeline_slider"
-      ],
-      "relation": "participate_in",
-      "confidence": "INFERRED",
-      "confidence_score": 0.75,
-      "source_file": "test-results/factory-Factory-Twin-E2E-should-manipulate-timeline-chromium/error-context.md"
     }
-  ]
+  ],
+  "built_at_commit": "db952893806628b1ab128b8f9d81bb09e8d48cd1"
 }
