@@ -84,27 +84,25 @@ describe('makeTrackSegment', () => {
 describe('makeStation', () => {
   test('builds a station with processes', () => {
     const st = makeStation({
-      id: 'heat',
-      name: 'Heating Station',
+      id: 'heat', name: 'Heating Station', node_id: 'n_heat',
       processes: [{ process_id: 'heat_proc', parallel_slots: 1, takt_seconds: 30, operators_per_slot: 1 }],
     });
     expect(st.id).toBe('heat');
+    expect(st.node_id).toBe('n_heat');
     expect(st.processes[0].process_id).toBe('heat_proc');
     expect(st.processes[0].parallel_slots).toBe(1);
     expect(Object.isFrozen(st)).toBe(true);
   });
   test('defaults operators_per_slot to 0 (fully automated)', () => {
     const st = makeStation({
-      id: 'auto',
-      name: 'Auto',
+      id: 'auto', name: 'Auto', node_id: 'n_auto',
       processes: [{ process_id: 'p1', parallel_slots: 2, takt_seconds: 10 }],
     });
     expect(st.processes[0].operators_per_slot).toBe(0);
   });
   test('defaults automation_level to 0', () => {
     const st = makeStation({
-      id: 's',
-      name: 'S',
+      id: 's', name: 'S', node_id: 'n_s',
       processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }],
     });
     expect(st.processes[0].automation_level).toBe(0);
@@ -112,11 +110,15 @@ describe('makeStation', () => {
   test('rejects parallel_slots < 1', () => {
     expect(() =>
       makeStation({
-        id: 's',
-        name: 'S',
+        id: 's', name: 'S', node_id: 'n_s',
         processes: [{ process_id: 'p', parallel_slots: 0, takt_seconds: 10 }],
       }),
     ).toThrow(/parallel_slots must be >= 1/);
+  });
+  test('rejects missing node_id', () => {
+    expect(() =>
+      makeStation({ id: 's', name: 'S', processes: [] }),
+    ).toThrow(/node_id is required/);
   });
 });
 
@@ -199,7 +201,8 @@ describe('makeFactoryConfig', () => {
     expect(() => makeFactoryConfig({ materials: [mat], orders: [order] })).toThrow(/unknown process/);
   });
   test('rejects station referencing unknown process', () => {
-    const st = makeStation({ id: 's', name: 'S', processes: [{ process_id: 'UNKNOWN', parallel_slots: 1, takt_seconds: 10 }] });
-    expect(() => makeFactoryConfig({ stations: [st] })).toThrow(/unknown process/);
+    const n = makeTrackNode({ id: 'n_s', type: NODE_TYPE.STATION_INPUT });
+    const st = makeStation({ id: 's', name: 'S', node_id: 'n_s', processes: [{ process_id: 'UNKNOWN', parallel_slots: 1, takt_seconds: 10 }] });
+    expect(() => makeFactoryConfig({ nodes: [n], stations: [st] })).toThrow(/unknown process/);
   });
 });

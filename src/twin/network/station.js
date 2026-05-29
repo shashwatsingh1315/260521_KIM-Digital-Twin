@@ -19,12 +19,14 @@ export const AUTOMATION_LEVEL = Object.freeze({
  * @param {object} args
  * @param {string} args.id
  * @param {string} args.name
+ * @param {string} args.node_id              network node this station sits at
  * @param {number} [args.entry_buffer_capacity=10]
  * @param {Array<{process_id:string, automation_level?:number, parallel_slots:number, takt_seconds:number, operators_per_slot?:number}>} args.processes
  */
-export function makeStation({ id, name, entry_buffer_capacity = 10, processes = [] }) {
+export function makeStation({ id, name, node_id, entry_buffer_capacity = 10, processes = [] }) {
   invariant(typeof id === 'string' && id.length > 0, 'station.id is required');
   invariant(typeof name === 'string' && name.length > 0, `station.name is required (${id})`);
+  invariant(typeof node_id === 'string' && node_id.length > 0, `station.node_id is required (${id})`);
   invariant(Number.isInteger(entry_buffer_capacity) && entry_buffer_capacity > 0, `station.entry_buffer_capacity must be > 0 (${id})`);
   invariant(Array.isArray(processes), `station.processes must be an array (${id})`);
 
@@ -49,6 +51,7 @@ export function makeStation({ id, name, entry_buffer_capacity = 10, processes = 
     kind_of: 'station',
     id,
     name,
+    node_id,
     entry_buffer_capacity,
     processes: Object.freeze(normProcs),
   });

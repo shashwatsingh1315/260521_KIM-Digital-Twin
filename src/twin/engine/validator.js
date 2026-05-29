@@ -4,6 +4,8 @@
 // Errors are fatal (graph cycles, dead-ends, unreachable processes, inspect without scrap).
 // Warnings are advisory (bottleneck ties, etc.).
 
+import { effectiveSlots, capacityPerHour } from './derive.js';
+
 /**
  * Validate a FactoryConfig. Returns {errors: string[], warnings: string[]}.
  * @param {object} config FactoryConfig
@@ -243,15 +245,12 @@ function checkBottleneck(config) {
   const capacities = [];
   for (const station of config.stations) {
     for (const stProc of station.processes) {
-      const effectiveSlots = Math.min(
-        stProc.parallel_slots,
-        Math.floor((stProc.operators_per_slot === 0 ? stProc.parallel_slots : 1000) / (stProc.operators_per_slot || 1)),
-      );
-      const capacityPerHour = (3600 / stProc.takt_seconds) * effectiveSlots;
+      const effSlots = effectiveSlots(stProc.parallel_slots, stProc.operators_per_slot);
+      const capHr = capacityPerHour(stProc.takt_seconds, effSlots);
       capacities.push({
         station: station.id,
         process: stProc.process_id,
-        capacityPerHour,
+        capacityPerHour: capHr,
       });
     }
   }

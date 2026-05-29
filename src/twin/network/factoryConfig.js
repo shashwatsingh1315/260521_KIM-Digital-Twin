@@ -86,6 +86,7 @@ export function makeFactoryConfig({
     invariant(s.kind_of === 'station', 'stations[] must contain Station objects');
     invariant(!stationIds.has(s.id), `station id "${s.id}" is duplicated`);
     stationIds.add(s.id);
+    invariant(nodeIds.has(s.node_id), `station "${s.id}" references unknown node "${s.node_id}"`);
     s.processes.forEach((sp) => {
       invariant(procIds.has(sp.process_id), `station "${s.id}" references unknown process "${sp.process_id}"`);
     });
@@ -96,7 +97,11 @@ export function makeFactoryConfig({
     invariant(!segmentIds.has(seg.id), `segment id "${seg.id}" is duplicated`);
     segmentIds.add(seg.id);
     invariant(nodeIds.has(seg.from_node_id), `segment "${seg.id}" references unknown node "${seg.from_node_id}"`);
-    invariant(nodeIds.has(seg.to_node_id), `segment "${seg.id}" references unknown node "${seg.to_node_id}"`);
+    // to_node_id may be a network node OR an exit node.
+    invariant(
+      nodeIds.has(seg.to_node_id) || exitIds.has(seg.to_node_id),
+      `segment "${seg.id}" references unknown destination "${seg.to_node_id}"`,
+    );
     if (seg.transport.class === 'carrier') {
       invariant(poolIds.has(seg.transport.pool_id), `segment "${seg.id}" references unknown pool "${seg.transport.pool_id}"`);
     }

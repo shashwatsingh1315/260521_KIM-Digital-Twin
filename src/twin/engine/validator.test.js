@@ -60,14 +60,15 @@ describe('validateFactoryConfig', () => {
     });
 
     const exit = makeExitNode({ id: 'exit', kind: EXIT_KIND.SHIP });
-    const st = makeStation({ id: 'st', name: 'S', processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }] });
+    const nSt = makeTrackNode({ id: 'n_st', type: NODE_TYPE.STATION_INPUT });
+    const st = makeStation({ id: 'st', name: 'S', node_id: 'n_st', processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }] });
 
     const cfg = makeFactoryConfig({
       materials: [mat],
       processes: [proc],
       stations: [st],
       segments: [segAB, segBC, segCA],
-      nodes: [nA, nB, nC],
+      nodes: [nA, nB, nC, nSt],
       exits: [exit],
       orders: [],
     });
@@ -81,15 +82,16 @@ describe('validateFactoryConfig', () => {
     const proc = makeProcess({ id: 'p', name: 'P', kind: KIND.TRANSFORM, output_material: 'M' });
 
     const nA = makeTrackNode({ id: 'a', type: NODE_TYPE.BUFFER });
+    const nSt = makeTrackNode({ id: 'n_st', type: NODE_TYPE.STATION_INPUT });
     const scrapExit = makeExitNode({ id: 'scrap', kind: EXIT_KIND.SCRAP });
-    const st = makeStation({ id: 'st', name: 'S', processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }] });
+    const st = makeStation({ id: 'st', name: 'S', node_id: 'n_st', processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }] });
 
     const cfg = makeFactoryConfig({
       materials: [mat],
       processes: [proc],
       stations: [st],
       segments: [],
-      nodes: [nA],
+      nodes: [nA, nSt],
       exits: [scrapExit],
       orders: [],
     });
@@ -105,14 +107,15 @@ describe('validateFactoryConfig', () => {
     const order = makeOrder({ id: 'O', material_type: 'M', quantity: 1, process_sequence: ['unused'] });
 
     const exit = makeExitNode({ id: 'exit', kind: EXIT_KIND.SHIP });
-    const st = makeStation({ id: 'st', name: 'S', processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }] });
+    const nSt = makeTrackNode({ id: 'n_st', type: NODE_TYPE.STATION_INPUT });
+    const st = makeStation({ id: 'st', name: 'S', node_id: 'n_st', processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }] });
 
     const cfg = makeFactoryConfig({
       materials: [mat],
       processes: [proc1, proc2],
       stations: [st],
       segments: [],
-      nodes: [],
+      nodes: [nSt],
       exits: [exit],
       orders: [order],
     });
@@ -189,14 +192,15 @@ describe('validateFactoryConfig', () => {
     });
 
     const exit = makeExitNode({ id: 'exit', kind: EXIT_KIND.SHIP });
-    const st = makeStation({ id: 'st', name: 'S', processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }] });
+    const nSt = makeTrackNode({ id: 'n_st', type: NODE_TYPE.STATION_INPUT });
+    const st = makeStation({ id: 'st', name: 'S', node_id: 'n_st', processes: [{ process_id: 'p', parallel_slots: 1, takt_seconds: 10 }] });
 
     const cfg = makeFactoryConfig({
       materials: [mat],
       processes: [proc],
       stations: [st],
       segments: [seg1, seg2],
-      nodes: [nA, nB, nC],
+      nodes: [nA, nB, nC, nSt],
       exits: [exit],
       carrierPools: [pool],
       orders: [],
@@ -211,15 +215,14 @@ describe('validateFactoryConfig', () => {
     const p1 = makeProcess({ id: 'p1', name: 'P1', kind: KIND.TRANSFORM, output_material: 'M' });
     const p2 = makeProcess({ id: 'p2', name: 'P2', kind: KIND.TRANSFORM, output_material: 'M' });
 
+    const n1 = makeTrackNode({ id: 'n_st1', type: NODE_TYPE.STATION_INPUT });
+    const n2 = makeTrackNode({ id: 'n_st2', type: NODE_TYPE.STATION_INPUT });
     const st1 = makeStation({
-      id: 'st1',
-      name: 'S1',
+      id: 'st1', name: 'S1', node_id: 'n_st1',
       processes: [{ process_id: 'p1', parallel_slots: 1, takt_seconds: 60, operators_per_slot: 0 }],
     });
-
     const st2 = makeStation({
-      id: 'st2',
-      name: 'S2',
+      id: 'st2', name: 'S2', node_id: 'n_st2',
       processes: [{ process_id: 'p2', parallel_slots: 1, takt_seconds: 60, operators_per_slot: 0 }],
     });
 
@@ -230,7 +233,7 @@ describe('validateFactoryConfig', () => {
       processes: [p1, p2],
       stations: [st1, st2],
       segments: [],
-      nodes: [],
+      nodes: [n1, n2],
       exits: [exit],
       orders: [],
     });
