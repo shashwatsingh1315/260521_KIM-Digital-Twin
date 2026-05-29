@@ -6,11 +6,16 @@
 import { makeClock } from './clock.js';
 import { sortEvents, unitCreated, stationStarted, stationCompleted, unitExited, scrapped } from './events.js';
 import { makeSchedulerState, nextEventTime, dueCompletions, startSlot, freeSlot, freeSlotCount } from './taktScheduler.js';
-import { makeFlowState, launchOnSegment, nextArrivalTime, applyArrivals, drainOutputBuffers } from './flow.js';
+import { makeFlowState, launchOnSegment, nextArrivalTime, applyArrivals, drainOutputBuffers, tryFlushHeld } from './flow.js';
 import { applyProcess, checkAssemblyKit, assembleUnit } from './processApply.js';
 import { tryAdmit, derivedWipCap } from './releaseGovernor.js';
 import { procesExits, computeSummary } from './aggregator.js';
 import { makeRng } from '../util/rng.js';
+import {
+  makeCarrierState, enqueueForCarrier, dispatchCarriers,
+  processCarrierDrops, processCarrierReturns, tryFlushCarrierHeld,
+  nextCarrierEventTime,
+} from './carriers.js';
 
 /**
  * Run a complete simulation to completion (or maxTime).
@@ -36,6 +41,7 @@ export function runTwin(config, opts = {}) {
   const schedState = makeSchedulerState(config);
   const flowState = makeFlowState(config);
   flowState._config = config; // aggregator needs it for exit-kind lookup
+  const carrierState = makeCarrierState(config);
 
   // Build lookup tables used in the inner loop.
   const stationMap = new Map(config.stations.map((s) => [s.id, s]));
@@ -115,7 +121,8 @@ export function runTwin(config, opts = {}) {
     return order.process_sequence[idx + 1];
   }
 
-  // Helper: route a completed unit onto an outbound segment or output buffer.
+  // Helper: route a completed unit onto an outbound segment.
+  // If the segment is full, the unit waits in the station's output buffer instead.
   function routeUnit(unit, stationId, now) {
     const station = stationMap.get(stationId);
     const segs = outboundSegments(station.node_id);
@@ -123,44 +130,89 @@ export function runTwin(config, opts = {}) {
 
     if (segs.length === 0) return;
 
+    let targetSeg = null;
+
     if (!unit.next_process) {
-      // Route to ship exit segment.
-      const shipSeg = segs.find((s) => {
+      targetSeg = segs.find((s) => {
         const exit = config.exits.find((e) => e.id === s.to_node_id);
         return exit && exit.kind === 'ship';
       });
-      if (shipSeg) launchOnSegment(flowState, shipSeg, unit, now);
-      return;
+    } else {
+      for (const seg of segs) {
+        if (exitIds.has(seg.to_node_id)) continue;
+        const dest = nodeToStation.get(seg.to_node_id);
+        if (dest && dest.processes.some((sp) => sp.process_id === unit.next_process)) {
+          targetSeg = seg;
+          break;
+        }
+      }
+      if (!targetSeg) targetSeg = segs[0];
     }
 
-    // Route based on next_process: find a station that does it.
-    for (const seg of segs) {
-      if (exitIds.has(seg.to_node_id)) continue;
-      const dest = nodeToStation.get(seg.to_node_id);
-      if (dest && dest.processes.some((sp) => sp.process_id === unit.next_process)) {
-        launchOnSegment(flowState, seg, unit, now);
-        return;
+    if (targetSeg) {
+      if (targetSeg.transport.class === 'carrier') {
+        // Carrier segment — enqueue unit for carrier pickup (always succeeds).
+        enqueueForCarrier(carrierState, targetSeg, unit);
+      } else {
+        const arr = launchOnSegment(flowState, targetSeg, unit, now);
+        if (arr === null) {
+          // Outbound segment full — wait in the station output buffer.
+          flowState.stationOutputBuffers.get(stationId)?.push(unit);
+        }
       }
     }
-
-    // Fallback for single-path DAGs.
-    launchOnSegment(flowState, segs[0], unit, now);
   }
 
-  // Admit the first batch of units before the loop.
+  // Drain output-buffer units destined for carrier segments into carrier pickup queues.
+  function drainCarrierOutputBuffers(stationMap, flowState, carrierState, config) {
+    for (const station of config.stations) {
+      const outBuf = flowState.stationOutputBuffers.get(station.id);
+      if (!outBuf || outBuf.length === 0) continue;
+      const segs = outboundSegments(station.node_id);
+      const remaining = [];
+      for (const unit of outBuf) {
+        const seg = segs.find((s) => s.transport.class === 'carrier' &&
+          (() => {
+            const dest = nodeToStation.get(s.to_node_id);
+            return dest && dest.processes.some((sp) => sp.process_id === unit.next_process);
+          })());
+        if (seg) {
+          enqueueForCarrier(carrierState, seg, unit);
+        } else {
+          remaining.push(unit);
+        }
+      }
+      flowState.stationOutputBuffers.set(station.id, remaining);
+    }
+  }
+
+  // Admit the next batch of units from pending orders.
+  // Stops if the intake segment is full (no space to launch).
   function admitUnits(now) {
     let admitted;
     do {
       admitted = tryAdmit(govState, config, orders, now);
       if (admitted) {
-        allEvents.push(unitCreated(now, admitted.id, admitted.order_id, admitted.material));
-        // Place unit on the intake segment leading to its first station.
         const firstProcess = admitted.next_process;
         const seg = intakeSegments.find((s) => {
           const dest = nodeToStation.get(s.to_node_id);
           return dest && dest.processes.some((sp) => sp.process_id === firstProcess);
         }) || intakeSegments[0];
-        if (seg) launchOnSegment(flowState, seg, admitted, now);
+        if (seg) {
+          const arr = launchOnSegment(flowState, seg, admitted, now);
+          if (arr === null) {
+            // Intake segment full — undo this admission and stop.
+            govState.wipCount--;
+            const ord = orders.find((o) => o.id === admitted.order_id);
+            if (ord) {
+              ord.units_created--;
+              if (ord.units_created === 0) ord.status = 'pending';
+            }
+            admitted = null;
+            break;
+          }
+        }
+        allEvents.push(unitCreated(now, admitted.id, admitted.order_id, admitted.material));
       }
     } while (admitted);
   }
@@ -181,14 +233,18 @@ export function runTwin(config, opts = {}) {
 
     const tSched = nextEventTime(schedState);
     const tFlow = nextArrivalTime(flowState);
-    const t = Math.min(tSched, tFlow);
+    const tCarrier = nextCarrierEventTime(carrierState);
+    const t = Math.min(tSched, tFlow, tCarrier);
 
     if (t === Infinity) break; // stall / deadlock
 
     clock.setTime(t);
 
-    // 1. Apply segment arrivals.
+    // 1. Apply segment arrivals and carrier returns/drops at t.
     applyArrivals(flowState, config, t);
+    processCarrierReturns(carrierState, t);
+    const carrierDeliveries = processCarrierDrops(carrierState, flowState, config, t);
+    dispatchCarriers(carrierState, config, t);
 
     // 2. Process scheduler completions at t.
     const completions = dueCompletions(schedState, t);
@@ -264,6 +320,14 @@ export function runTwin(config, opts = {}) {
 
     // 5. Start eligible units from buffers.
     startEligible(t);
+
+    // 6. Drain held arrivals and carrier-held deliveries into freed buffers; drain output buffers.
+    tryFlushHeld(flowState, config);
+    tryFlushCarrierHeld(carrierState, flowState, config, t);
+    drainOutputBuffers(flowState, config, t);
+    // Drain output-buffer units queued for carrier pickup.
+    drainCarrierOutputBuffers(stationMap, flowState, carrierState, config);
+    dispatchCarriers(carrierState, config, t);
 
     states.push({ time: t });
   }

@@ -2,12 +2,20 @@
 //
 // Models the physical network: units travel along segments at conveyor speed,
 // land in station input buffers (or exit nodes), and respect capacity limits.
+//
+// Back-pressure rules:
+//   - Segment occupancy (in-transit + held) ≤ segment.capacity.
+//   - Station input buffer ≤ station.entry_buffer_capacity.
+//   - If input buffer is full on arrival, unit waits on the segment (segmentHeld).
+//   - If outbound segment is full on dispatch, unit waits in stationOutputBuffers.
 
 /**
  * Build initial flow state from config.
- * stationBuffers: Map<stationId, Unit[]>   — FIFO input queue at each station
- * segmentUnits:   Map<segId, {unit, arrival_time}[]>  — in-transit units
- * exitedUnits:    {unit, exitId, time}[]   — accumulated, consumed by aggregator
+ * stationBuffers:       Map<stationId, Unit[]>   — FIFO input queue
+ * stationOutputBuffers: Map<stationId, Unit[]>   — completed units waiting for segment room
+ * segmentUnits:         Map<segId, {unit, arrival_time}[]> — in-transit units
+ * segmentHeld:          Map<segId, {unit}[]>     — arrived but destination buffer full
+ * exitedUnits:          {unit, exit_id, time}[]  — consumed by aggregator
  */
 export function makeFlowState(config) {
   const stationBuffers = new Map();
@@ -17,17 +25,26 @@ export function makeFlowState(config) {
     stationOutputBuffers.set(station.id, []);
   }
   const segmentUnits = new Map();
+  const segmentHeld = new Map();
   for (const seg of config.segments) {
     segmentUnits.set(seg.id, []);
+    segmentHeld.set(seg.id, []);
   }
-  return { stationBuffers, stationOutputBuffers, segmentUnits, exitedUnits: [] };
+  return { stationBuffers, stationOutputBuffers, segmentUnits, segmentHeld, exitedUnits: [] };
+}
+
+// Total units occupying a segment (in-transit + held at destination).
+function segmentOccupancy(flowState, segId) {
+  return (flowState.segmentUnits.get(segId)?.length ?? 0) +
+         (flowState.segmentHeld.get(segId)?.length ?? 0);
 }
 
 /**
- * Place a unit onto a passive segment. Records its arrival time at the destination.
- * speed_m_per_min → travel_seconds = length_m / (speed/60)
+ * Place a unit onto a passive segment.
+ * Returns arrival_time if there is room, null if the segment is at capacity.
  */
 export function launchOnSegment(flowState, segment, unit, now) {
+  if (segmentOccupancy(flowState, segment.id) >= segment.capacity) return null;
   const travelSeconds = (segment.length_m / segment.transport.speed_m_per_min) * 60;
   const arrivalTime = now + travelSeconds;
   flowState.segmentUnits.get(segment.id).push({ unit, arrival_time: arrivalTime });
@@ -49,29 +66,23 @@ export function nextArrivalTime(flowState) {
 
 /**
  * Process all segment arrivals at time t.
- * For each unit arriving at t:
- *   - If destination is a station node → push to that station's input buffer.
- *   - If destination is an exit → push to exitedUnits.
- * config is needed to resolve node → station and node → exit mappings.
- * Returns list of {unit, stationId} for units that just entered a station buffer.
+ * If the destination input buffer is full, the unit is placed in segmentHeld
+ * (still counts toward segment occupancy — blocking upstream launches).
+ * Returns list of {unit, stationId} for units that entered a station buffer.
  */
 export function applyArrivals(flowState, config, t) {
-  // Build lookup: node_id → station
-  const nodeToStation = new Map();
-  for (const station of config.stations) {
-    nodeToStation.set(station.node_id, station);
-  }
-  // Build lookup: exit_id → exit
+  const nodeToStation = new Map(config.stations.map((s) => [s.node_id, s]));
   const exitIds = new Set(config.exits.map((e) => e.id));
+  const segMap = new Map(config.segments.map((s) => [s.id, s]));
 
   const arrivals = [];
 
   for (const [segId, inTransit] of flowState.segmentUnits.entries()) {
-    const seg = config.segments.find((s) => s.id === segId);
     const arriving = inTransit.filter((e) => e.arrival_time === t);
-    const remaining = inTransit.filter((e) => e.arrival_time !== t);
-    flowState.segmentUnits.set(segId, remaining);
+    if (arriving.length === 0) continue;
+    flowState.segmentUnits.set(segId, inTransit.filter((e) => e.arrival_time !== t));
 
+    const seg = segMap.get(segId);
     for (const { unit } of arriving) {
       const destId = seg.to_node_id;
       if (exitIds.has(destId)) {
@@ -79,8 +90,14 @@ export function applyArrivals(flowState, config, t) {
       } else {
         const station = nodeToStation.get(destId);
         if (station) {
-          flowState.stationBuffers.get(station.id).push(unit);
-          arrivals.push({ unit, stationId: station.id });
+          const buf = flowState.stationBuffers.get(station.id);
+          if (buf.length < station.entry_buffer_capacity) {
+            buf.push(unit);
+            arrivals.push({ unit, stationId: station.id });
+          } else {
+            // Input buffer full — hold on segment (still counts toward occupancy)
+            flowState.segmentHeld.get(segId).push({ unit });
+          }
         }
       }
     }
@@ -90,8 +107,39 @@ export function applyArrivals(flowState, config, t) {
 }
 
 /**
- * Move units from stationOutputBuffers onto outbound segments.
- * Returns segment arrival times scheduled.
+ * Try to move held arrivals into their destination input buffers.
+ * Called after startEligible frees buffer slots.
+ * Returns list of {unit, stationId} that successfully entered their buffer.
+ */
+export function tryFlushHeld(flowState, config) {
+  const nodeToStation = new Map(config.stations.map((s) => [s.node_id, s]));
+  const segMap = new Map(config.segments.map((s) => [s.id, s]));
+  const arrivals = [];
+
+  for (const [segId, held] of flowState.segmentHeld.entries()) {
+    if (held.length === 0) continue;
+    const seg = segMap.get(segId);
+    if (!seg) continue;
+    const destStation = nodeToStation.get(seg.to_node_id);
+    if (!destStation) continue;
+
+    const buf = flowState.stationBuffers.get(destStation.id);
+    let i = 0;
+    while (i < held.length && buf.length < destStation.entry_buffer_capacity) {
+      buf.push(held[i].unit);
+      arrivals.push({ unit: held[i].unit, stationId: destStation.id });
+      i++;
+    }
+    if (i > 0) flowState.segmentHeld.set(segId, held.slice(i));
+  }
+
+  return arrivals;
+}
+
+/**
+ * Try to move units from stationOutputBuffers onto outbound segments.
+ * Respects segment capacity — units that cannot launch stay in the output buffer.
+ * Called each tick; on the next tick it retries if the segment freed up.
  */
 export function drainOutputBuffers(flowState, config, now) {
   const nodeToOutbound = new Map();
@@ -108,42 +156,42 @@ export function drainOutputBuffers(flowState, config, now) {
     const outSegs = nodeToOutbound.get(station.node_id) || [];
     if (outSegs.length === 0) continue;
 
-    while (outBuf.length > 0) {
-      const unit = outBuf.shift();
-      // Route by next_process: find the segment whose destination station does that process.
+    const remaining = [];
+    for (const unit of outBuf) {
       const seg = chooseOutboundSegment(outSegs, unit, config);
-      if (seg) {
-        launchOnSegment(flowState, seg, unit, now);
+      if (!seg) {
+        remaining.push(unit);
+        continue;
+      }
+      if (seg.transport.class !== 'passive') {
+        // Carrier segment — engine handles carrier enqueuing separately.
+        remaining.push(unit);
+        continue;
+      }
+      const arr = launchOnSegment(flowState, seg, unit, now);
+      if (arr === null) {
+        remaining.push(unit); // Segment still full
       }
     }
+    flowState.stationOutputBuffers.set(station.id, remaining);
   }
 }
 
 /**
  * Choose the outbound segment for a unit based on its next_process.
- * For linear lines there's one outbound segment; for multi-path, pick the one
- * whose destination station handles next_process (or first exit if no next_process).
  */
 function chooseOutboundSegment(outSegs, unit, config) {
   if (!unit.next_process) {
-    // Route to any exit segment.
     const exitIds = new Set(config.exits.map((e) => e.id));
-    const exitSeg = outSegs.find((s) => exitIds.has(s.to_node_id));
-    return exitSeg || outSegs[0];
+    return outSegs.find((s) => exitIds.has(s.to_node_id)) || outSegs[0];
   }
 
-  const nodeToStation = new Map();
-  for (const station of config.stations) {
-    nodeToStation.set(station.node_id, station);
-  }
-
+  const nodeToStation = new Map(config.stations.map((s) => [s.node_id, s]));
   for (const seg of outSegs) {
     const destStation = nodeToStation.get(seg.to_node_id);
     if (destStation && destStation.processes.some((sp) => sp.process_id === unit.next_process)) {
       return seg;
     }
   }
-
-  // Fallback: first segment (works for linear/DAG).
   return outSegs[0];
 }
