@@ -1,0 +1,131 @@
+// FactoryConfig — the complete factory specification (§7).
+//
+// Bundles all static entities: materials, processes, stations, network topology,
+// carrier pools, shifts, and orders. Validated by the engine before run.
+// This is the single document the simulation consumes.
+
+import { invariant } from '../util/assert.js';
+
+/**
+ * @param {object} args
+ * @param {Array} args.materials            Material[]
+ * @param {Array} args.processes            Process[]
+ * @param {Array} args.stations             Station[]
+ * @param {Array} args.segments             TrackSegment[]
+ * @param {Array} args.nodes                TrackNode[]
+ * @param {Array} args.exits                ExitNode[]
+ * @param {Array} args.carrierPools         CarrierPool[]
+ * @param {Array} args.shifts               Shift[]
+ * @param {Array} args.orders               Order[]
+ */
+export function makeFactoryConfig({
+  materials = [],
+  processes = [],
+  stations = [],
+  segments = [],
+  nodes = [],
+  exits = [],
+  carrierPools = [],
+  shifts = [],
+  orders = [],
+}) {
+  invariant(Array.isArray(materials), 'factoryConfig.materials must be an array');
+  invariant(Array.isArray(processes), 'factoryConfig.processes must be an array');
+  invariant(Array.isArray(stations), 'factoryConfig.stations must be an array');
+  invariant(Array.isArray(segments), 'factoryConfig.segments must be an array');
+  invariant(Array.isArray(nodes), 'factoryConfig.nodes must be an array');
+  invariant(Array.isArray(exits), 'factoryConfig.exits must be an array');
+  invariant(Array.isArray(carrierPools), 'factoryConfig.carrierPools must be an array');
+  invariant(Array.isArray(shifts), 'factoryConfig.shifts must be an array');
+  invariant(Array.isArray(orders), 'factoryConfig.orders must be an array');
+
+  // Build lookup maps for uniqueness validation.
+  const matIds = new Set();
+  const procIds = new Set();
+  const stationIds = new Set();
+  const segmentIds = new Set();
+  const nodeIds = new Set();
+  const exitIds = new Set();
+  const poolIds = new Set();
+  const shiftIds = new Set();
+  const orderIds = new Set();
+
+  materials.forEach((m) => {
+    invariant(m.kind_of === 'material', 'materials[] must contain Material objects');
+    invariant(!matIds.has(m.id), `material id "${m.id}" is duplicated`);
+    matIds.add(m.id);
+  });
+
+  processes.forEach((p) => {
+    invariant(p.kind_of === 'process', 'processes[] must contain Process objects');
+    invariant(!procIds.has(p.id), `process id "${p.id}" is duplicated`);
+    procIds.add(p.id);
+  });
+
+  stations.forEach((s) => {
+    invariant(s.kind_of === 'station', 'stations[] must contain Station objects');
+    invariant(!stationIds.has(s.id), `station id "${s.id}" is duplicated`);
+    stationIds.add(s.id);
+    s.processes.forEach((sp) => {
+      invariant(procIds.has(sp.process_id), `station "${s.id}" references unknown process "${sp.process_id}"`);
+    });
+  });
+
+  nodes.forEach((n) => {
+    invariant(n.kind_of === 'track_node', 'nodes[] must contain TrackNode objects');
+    invariant(!nodeIds.has(n.id), `node id "${n.id}" is duplicated`);
+    nodeIds.add(n.id);
+  });
+
+  segments.forEach((seg) => {
+    invariant(seg.kind_of === 'track_segment', 'segments[] must contain TrackSegment objects');
+    invariant(!segmentIds.has(seg.id), `segment id "${seg.id}" is duplicated`);
+    segmentIds.add(seg.id);
+    invariant(nodeIds.has(seg.from_node_id), `segment "${seg.id}" references unknown node "${seg.from_node_id}"`);
+    invariant(nodeIds.has(seg.to_node_id), `segment "${seg.id}" references unknown node "${seg.to_node_id}"`);
+    if (seg.transport.class === 'carrier') {
+      invariant(poolIds.has(seg.transport.pool_id), `segment "${seg.id}" references unknown pool "${seg.transport.pool_id}"`);
+    }
+  });
+
+  exits.forEach((e) => {
+    invariant(e.kind_of === 'exit_node', 'exits[] must contain ExitNode objects');
+    invariant(!exitIds.has(e.id), `exit id "${e.id}" is duplicated`);
+    exitIds.add(e.id);
+  });
+
+  carrierPools.forEach((p) => {
+    invariant(p.kind_of === 'carrier_pool', 'carrierPools[] must contain CarrierPool objects');
+    invariant(!poolIds.has(p.id), `pool id "${p.id}" is duplicated`);
+    poolIds.add(p.id);
+  });
+
+  shifts.forEach((sh) => {
+    invariant(sh.kind_of === 'shift', 'shifts[] must contain Shift objects');
+    invariant(!shiftIds.has(sh.id), `shift id "${sh.id}" is duplicated`);
+    shiftIds.add(sh.id);
+  });
+
+  orders.forEach((o) => {
+    invariant(o.kind_of === 'order', 'orders[] must contain Order objects');
+    invariant(!orderIds.has(o.id), `order id "${o.id}" is duplicated`);
+    orderIds.add(o.id);
+    invariant(matIds.has(o.material_type), `order "${o.id}" references unknown material "${o.material_type}"`);
+    o.process_sequence.forEach((pid, idx) => {
+      invariant(procIds.has(pid), `order "${o.id}" process_sequence[${idx}] references unknown process "${pid}"`);
+    });
+  });
+
+  return Object.freeze({
+    kind_of: 'factory_config',
+    materials: Object.freeze([...materials]),
+    processes: Object.freeze([...processes]),
+    stations: Object.freeze([...stations]),
+    segments: Object.freeze([...segments]),
+    nodes: Object.freeze([...nodes]),
+    exits: Object.freeze([...exits]),
+    carrierPools: Object.freeze([...carrierPools]),
+    shifts: Object.freeze([...shifts]),
+    orders: Object.freeze([...orders]),
+  });
+}
