@@ -1,7 +1,9 @@
 // Engine core — deterministic event-driven simulation (§5, §8).
 //
-// runTwin(config, options) → { states, events, summary }
-// Pure function: no I/O, no Date.now(), no Math.random() outside makeRng.
+// Public API:
+//   initState(config, opts) → { state, events }   — create initial state + t=0 events
+//   step(state)             → { state, events, done } — advance one tick
+//   runTwin(config, opts)   → { states, events, summary } — thin batch loop over step
 
 import { makeClock } from './clock.js';
 import { sortEvents, unitCreated, stationStarted, stationCompleted, unitExited, scrapped } from './events.js';
@@ -18,18 +20,168 @@ import {
   nextCarrierEventTime,
 } from './carriers.js';
 
+// ---- Helpers that operate on an explicit engine state ----
+
+function startEligible(state, events, now) {
+  const { config, orders, govState, schedState, flowState, processMap } = state;
+  for (const station of config.stations) {
+    const buf = flowState.stationBuffers.get(station.id);
+    if (!buf || buf.length === 0) continue;
+
+    for (const stProc of station.processes) {
+      if (freeSlotCount(schedState, station.id, stProc.process_id) === 0) continue;
+
+      const proc = processMap.get(stProc.process_id);
+
+      if (proc && proc.kind === 'assembly') {
+        const { complete, kitUnits } = checkAssemblyKit(buf, proc.bom);
+        if (!complete) continue;
+        const kitIds = new Set(kitUnits.map((u) => u.id));
+        flowState.stationBuffers.set(station.id, buf.filter((u) => !kitIds.has(u.id)));
+        govState.wipCount -= kitUnits.length;
+        for (const ku of kitUnits) {
+          const compOrder = orders.find((o) => o.id === ku.order_id);
+          if (compOrder) {
+            compOrder.units_completed++;
+            if (compOrder.units_completed >= compOrder.units_created &&
+                compOrder.units_created >= compOrder.quantity) {
+              compOrder.status = 'completed';
+            }
+          }
+        }
+        const sentinelUnit = { id: `kit@${now}`, material: proc.output_material, order_id: null, next_process: stProc.process_id, _kit: kitUnits };
+        const slot = startSlot(schedState, station.id, stProc.process_id, sentinelUnit.id, now, stProc.takt_seconds);
+        if (!slot) continue;
+        slot._unit = sentinelUnit;
+        events.push(stationStarted(now, station.id, stProc.process_id, `kit@${now}`));
+        continue;
+      }
+
+      const idx = buf.findIndex((u) => u.next_process === stProc.process_id);
+      if (idx === -1) continue;
+
+      const [unit] = buf.splice(idx, 1);
+      const slot = startSlot(schedState, station.id, stProc.process_id, unit.id, now, stProc.takt_seconds);
+      slot._unit = unit;
+      events.push(stationStarted(now, station.id, stProc.process_id, unit.id));
+    }
+  }
+}
+
+function outboundSegments(state, stationNodeId) {
+  return state.config.segments.filter((s) => s.from_node_id === stationNodeId);
+}
+
+function advanceNextProcess(state, unit, orderId) {
+  const order = state.orders.find((o) => o.id === orderId);
+  if (!order) return null;
+  const idx = order.process_sequence.indexOf(unit.next_process);
+  if (idx === -1 || idx === order.process_sequence.length - 1) return null;
+  return order.process_sequence[idx + 1];
+}
+
+function routeUnit(state, unit, stationId, now) {
+  const { config, flowState, carrierState, stationMap, nodeToStation, exitIds } = state;
+  const station = stationMap.get(stationId);
+  const segs = outboundSegments(state, station.node_id);
+
+  if (segs.length === 0) return;
+
+  let targetSeg = null;
+
+  if (!unit.next_process) {
+    targetSeg = segs.find((s) => {
+      const exit = config.exits.find((e) => e.id === s.to_node_id);
+      return exit && exit.kind === 'ship';
+    });
+  } else {
+    for (const seg of segs) {
+      if (exitIds.has(seg.to_node_id)) continue;
+      const dest = nodeToStation.get(seg.to_node_id);
+      if (dest && dest.processes.some((sp) => sp.process_id === unit.next_process)) {
+        targetSeg = seg;
+        break;
+      }
+    }
+    if (!targetSeg) targetSeg = segs[0];
+  }
+
+  if (targetSeg) {
+    if (targetSeg.transport.class === 'carrier') {
+      enqueueForCarrier(carrierState, targetSeg, unit);
+    } else {
+      const arr = launchOnSegment(flowState, targetSeg, unit, now);
+      if (arr === null) {
+        flowState.stationOutputBuffers.get(stationId)?.push(unit);
+      }
+    }
+  }
+}
+
+function drainCarrierOutputBuffers(state) {
+  const { config, flowState, carrierState, nodeToStation } = state;
+  for (const station of config.stations) {
+    const outBuf = flowState.stationOutputBuffers.get(station.id);
+    if (!outBuf || outBuf.length === 0) continue;
+    const segs = outboundSegments(state, station.node_id);
+    const remaining = [];
+    for (const unit of outBuf) {
+      const seg = segs.find((s) => s.transport.class === 'carrier' &&
+        (() => {
+          const dest = nodeToStation.get(s.to_node_id);
+          return dest && dest.processes.some((sp) => sp.process_id === unit.next_process);
+        })());
+      if (seg) {
+        enqueueForCarrier(carrierState, seg, unit);
+      } else {
+        remaining.push(unit);
+      }
+    }
+    flowState.stationOutputBuffers.set(station.id, remaining);
+  }
+}
+
+function admitUnits(state, events, now) {
+  const { config, orders, govState, flowState, intakeSegments, nodeToStation } = state;
+  let admitted;
+  do {
+    admitted = tryAdmit(govState, config, orders, now);
+    if (admitted) {
+      const firstProcess = admitted.next_process;
+      const seg = intakeSegments.find((s) => {
+        const dest = nodeToStation.get(s.to_node_id);
+        return dest && dest.processes.some((sp) => sp.process_id === firstProcess);
+      }) || intakeSegments[0];
+      if (seg) {
+        const arr = launchOnSegment(flowState, seg, admitted, now);
+        if (arr === null) {
+          govState.wipCount--;
+          const ord = orders.find((o) => o.id === admitted.order_id);
+          if (ord) {
+            ord.units_created--;
+            if (ord.units_created === 0) ord.status = 'pending';
+          }
+          admitted = null;
+          break;
+        }
+      }
+      events.push(unitCreated(now, admitted.id, admitted.order_id, admitted.material));
+    }
+  } while (admitted);
+}
+
+// ---- Public API ----
+
 /**
- * Run a complete simulation to completion (or maxTime).
- * @param {object} config  FactoryConfig
- * @param {object} [opts]  { seed?: number, maxTime?: number }
- * @returns {{ states, events, summary }}
+ * Create initial engine state from a FactoryConfig.
+ * Runs the t=0 bootstrap (admit + start eligible).
+ * @returns {{ state, events }}
  */
-export function runTwin(config, opts = {}) {
-  const { seed = 0, maxTime = Infinity } = opts;
+export function initState(config, opts = {}) {
+  const { seed = 0 } = opts;
   const rng = makeRng(seed);
   const clock = makeClock(0);
 
-  // Mutable runtime copies of orders.
   const orders = config.orders.map((o) => ({
     ...o,
     units_created: 0,
@@ -41,305 +193,172 @@ export function runTwin(config, opts = {}) {
   const govState = { wipCount: 0 };
   const schedState = makeSchedulerState(config);
   const flowState = makeFlowState(config);
-  flowState._config = config; // aggregator needs it for exit-kind lookup
+  flowState._config = config;
   const carrierState = makeCarrierState(config);
 
-  // Build lookup tables used in the inner loop.
   const stationMap = new Map(config.stations.map((s) => [s.id, s]));
   const processMap = new Map(config.processes.map((p) => [p.id, p]));
   const nodeToStation = new Map(config.stations.map((s) => [s.node_id, s]));
   const intakeNodes = new Set(config.nodes.filter((n) => n.type === 'intake').map((n) => n.id));
-
-  // Find intake segment: from intake node to the first station.
   const intakeSegments = config.segments.filter((s) => intakeNodes.has(s.from_node_id));
+  const exitIds = new Set(config.exits.map((e) => e.id));
 
-  const allEvents = [];
-  const states = [];
+  const state = {
+    config, rng, clock, orders, govState, schedState, flowState, carrierState,
+    stationMap, processMap, nodeToStation, intakeSegments, exitIds,
+  };
 
-  // Helper: try to start eligible units from input buffers into free scheduler slots.
-  function startEligible(now) {
-    for (const station of config.stations) {
-      const buf = flowState.stationBuffers.get(station.id);
-      if (!buf || buf.length === 0) continue;
+  const events = [];
+  admitUnits(state, events, 0);
+  startEligible(state, events, 0);
 
-      for (const stProc of station.processes) {
-        if (freeSlotCount(schedState, station.id, stProc.process_id) === 0) continue;
+  return { state, events };
+}
 
-        const proc = processMap.get(stProc.process_id);
+/**
+ * Advance one simulation tick (to the next event time).
+ * Mutates state in place and returns the same reference plus emitted events.
+ * @returns {{ state, events, done: boolean }}
+ */
+export function step(state) {
+  const { config, rng, clock, orders, govState, schedState, flowState, carrierState,
+          stationMap, processMap } = state;
+  const events = [];
 
-        if (proc && proc.kind === 'assembly') {
-          // Assembly: start only when a full kit is in the buffer.
-          const { complete, kitUnits } = checkAssemblyKit(buf, proc.bom);
-          if (!complete) continue;
-          // Consume the kit from the buffer immediately on start.
-          const kitIds = new Set(kitUnits.map((u) => u.id));
-          flowState.stationBuffers.set(station.id, buf.filter((u) => !kitIds.has(u.id)));
-          // Decrement wipCount for consumed component units.
-          govState.wipCount -= kitUnits.length;
-          // Mark component orders' units as "consumed" (fulfilled by assembly).
-          for (const ku of kitUnits) {
-            const compOrder = orders.find((o) => o.id === ku.order_id);
-            if (compOrder) {
-              compOrder.units_completed++;
-              if (compOrder.units_completed >= compOrder.units_created &&
-                  compOrder.units_created >= compOrder.quantity) {
-                compOrder.status = 'completed';
-              }
-            }
-          }
-          // Start slot with a sentinel unit (kit metadata).
-          const sentinelUnit = { id: `kit@${now}`, material: proc.output_material, order_id: null, next_process: stProc.process_id, _kit: kitUnits };
-          const slot = startSlot(schedState, station.id, stProc.process_id, sentinelUnit.id, now, stProc.takt_seconds);
-          if (!slot) continue;
-          slot._unit = sentinelUnit;
-          allEvents.push(stationStarted(now, station.id, stProc.process_id, `kit@${now}`));
-          continue;
-        }
+  const hasActiveOrders = orders.some(
+    (o) => o.status === 'pending' || o.status === 'in_progress',
+  );
+  if (!hasActiveOrders) return { state, events, done: true };
 
-        // Normal unit: find the first buffered unit that needs this process.
-        const idx = buf.findIndex((u) => u.next_process === stProc.process_id);
-        if (idx === -1) continue;
+  const tSched = nextEventTime(schedState);
+  const tFlow = nextArrivalTime(flowState);
+  const tCarrier = nextCarrierEventTime(carrierState);
+  const t = Math.min(tSched, tFlow, tCarrier);
 
-        const [unit] = buf.splice(idx, 1);
-        const slot = startSlot(schedState, station.id, stProc.process_id, unit.id, now, stProc.takt_seconds);
-        slot._unit = unit; // store unit on slot for retrieval at completion
-        allEvents.push(stationStarted(now, station.id, stProc.process_id, unit.id));
+  if (t === Infinity) {
+    const shocks = detectDeadlock(flowState, carrierState, config, orders, clock.now());
+    for (const ev of shocks) events.push(ev);
+    return { state, events, done: true };
+  }
+
+  clock.setTime(t);
+
+  // 1. Arrivals and carrier events.
+  applyArrivals(flowState, config, t);
+  processCarrierReturns(carrierState, t);
+  processCarrierDrops(carrierState, flowState, config, t);
+  dispatchCarriers(carrierState, config, t);
+
+  // 2. Scheduler completions.
+  const completions = dueCompletions(schedState, t);
+  for (const slot of completions) {
+    const unit = slot._unit;
+    freeSlot(slot);
+    events.push(stationCompleted(t, slot.station_id, slot.process_id, unit.id));
+
+    const proc = processMap.get(slot.process_id);
+
+    if (proc.kind === 'assembly') {
+      const kitUnits = unit._kit || [];
+      const productOrder = orders.find(
+        (o) => o.process_sequence.includes(slot.process_id) &&
+               o.status !== 'completed' && o.status !== 'short' &&
+               o.units_created < o.quantity,
+      );
+      if (productOrder) {
+        const newUnit = assembleUnit({ process: proc, kitUnits, productOrder, now: t });
+        productOrder.units_created++;
+        if (productOrder.status === 'pending') productOrder.status = 'in_progress';
+        govState.wipCount++;
+        newUnit.next_process = (() => {
+          const idx = productOrder.process_sequence.indexOf(slot.process_id);
+          return idx < productOrder.process_sequence.length - 1
+            ? productOrder.process_sequence[idx + 1]
+            : null;
+        })();
+        events.push(unitCreated(t, newUnit.id, newUnit.order_id, newUnit.material));
+        routeUnit(state, newUnit, slot.station_id, t);
       }
+      continue;
     }
-  }
 
-  // Helper: get the segment leading from a station node to the next destination.
-  function outboundSegments(stationNodeId) {
-    return config.segments.filter((s) => s.from_node_id === stationNodeId);
-  }
+    const result = applyProcess({ unit, process: proc, order: orders.find((o) => o.id === unit.order_id), allOrders: orders, rng });
 
-  // Helper: advance a unit's next_process pointer.
-  function advanceNextProcess(unit, orderId) {
-    const order = orders.find((o) => o.id === orderId);
-    if (!order) return null;
-    const idx = order.process_sequence.indexOf(unit.next_process);
-    if (idx === -1 || idx === order.process_sequence.length - 1) return null;
-    return order.process_sequence[idx + 1];
-  }
-
-  // Helper: route a completed unit onto an outbound segment.
-  // If the segment is full, the unit waits in the station's output buffer instead.
-  function routeUnit(unit, stationId, now) {
-    const station = stationMap.get(stationId);
-    const segs = outboundSegments(station.node_id);
-    const exitIds = new Set(config.exits.map((e) => e.id));
-
-    if (segs.length === 0) return;
-
-    let targetSeg = null;
-
-    if (!unit.next_process) {
-      targetSeg = segs.find((s) => {
+    if (result.scrap) {
+      events.push(scrapped(t, unit.id));
+      const scrapSeg = config.segments.find((s) => {
         const exit = config.exits.find((e) => e.id === s.to_node_id);
-        return exit && exit.kind === 'ship';
+        return exit && exit.kind === 'scrap' && s.from_node_id === stationMap.get(slot.station_id).node_id;
       });
-    } else {
-      for (const seg of segs) {
-        if (exitIds.has(seg.to_node_id)) continue;
-        const dest = nodeToStation.get(seg.to_node_id);
-        if (dest && dest.processes.some((sp) => sp.process_id === unit.next_process)) {
-          targetSeg = seg;
-          break;
-        }
-      }
-      if (!targetSeg) targetSeg = segs[0];
-    }
-
-    if (targetSeg) {
-      if (targetSeg.transport.class === 'carrier') {
-        // Carrier segment — enqueue unit for carrier pickup (always succeeds).
-        enqueueForCarrier(carrierState, targetSeg, unit);
+      if (scrapSeg) {
+        launchOnSegment(flowState, scrapSeg, unit, t);
       } else {
-        const arr = launchOnSegment(flowState, targetSeg, unit, now);
-        if (arr === null) {
-          // Outbound segment full — wait in the station output buffer.
-          flowState.stationOutputBuffers.get(stationId)?.push(unit);
+        const scrapExit = config.exits.find((e) => e.kind === 'scrap');
+        if (scrapExit) {
+          flowState.exitedUnits.push({ unit, exit_id: scrapExit.id, time: t });
         }
       }
+    } else if (result.keep) {
+      const kept = result.keep;
+      kept.next_process = advanceNextProcess(state, kept, kept.order_id);
+      routeUnit(state, kept, slot.station_id, t);
     }
   }
 
-  // Drain output-buffer units destined for carrier segments into carrier pickup queues.
-  function drainCarrierOutputBuffers(stationMap, flowState, carrierState, config) {
-    for (const station of config.stations) {
-      const outBuf = flowState.stationOutputBuffers.get(station.id);
-      if (!outBuf || outBuf.length === 0) continue;
-      const segs = outboundSegments(station.node_id);
-      const remaining = [];
-      for (const unit of outBuf) {
-        const seg = segs.find((s) => s.transport.class === 'carrier' &&
-          (() => {
-            const dest = nodeToStation.get(s.to_node_id);
-            return dest && dest.processes.some((sp) => sp.process_id === unit.next_process);
-          })());
-        if (seg) {
-          enqueueForCarrier(carrierState, seg, unit);
-        } else {
-          remaining.push(unit);
-        }
-      }
-      flowState.stationOutputBuffers.set(station.id, remaining);
+  // 3. Exits.
+  const exitEvents = procesExits(flowState, orders, govState);
+  for (const ev of exitEvents) {
+    if (ev.type === 'unit_exited') {
+      events.push(unitExited(ev.timestamp, ev.unit_id, ev.exit_id, ''));
+    } else {
+      events.push(scrapped(ev.timestamp, ev.unit_id));
     }
   }
 
-  // Admit the next batch of units from pending orders.
-  // Stops if the intake segment is full (no space to launch).
-  function admitUnits(now) {
-    let admitted;
-    do {
-      admitted = tryAdmit(govState, config, orders, now);
-      if (admitted) {
-        const firstProcess = admitted.next_process;
-        const seg = intakeSegments.find((s) => {
-          const dest = nodeToStation.get(s.to_node_id);
-          return dest && dest.processes.some((sp) => sp.process_id === firstProcess);
-        }) || intakeSegments[0];
-        if (seg) {
-          const arr = launchOnSegment(flowState, seg, admitted, now);
-          if (arr === null) {
-            // Intake segment full — undo this admission and stop.
-            govState.wipCount--;
-            const ord = orders.find((o) => o.id === admitted.order_id);
-            if (ord) {
-              ord.units_created--;
-              if (ord.units_created === 0) ord.status = 'pending';
-            }
-            admitted = null;
-            break;
-          }
-        }
-        allEvents.push(unitCreated(now, admitted.id, admitted.order_id, admitted.material));
-      }
-    } while (admitted);
-  }
+  // 4. Admit new units.
+  admitUnits(state, events, t);
 
-  // Main loop.
-  admitUnits(0);
-  startEligible(0);
+  // 5. Start eligible.
+  startEligible(state, events, t);
+
+  // 6. Flush held / output buffers.
+  tryFlushHeld(flowState, config);
+  tryFlushCarrierHeld(carrierState, flowState, config, t);
+  drainOutputBuffers(flowState, config, t);
+  drainCarrierOutputBuffers(state);
+  dispatchCarriers(carrierState, config, t);
+
+  return { state, events, done: false };
+}
+
+/**
+ * Run a complete simulation to completion (or maxTime).
+ * Thin loop over initState + step.
+ * @param {object} config  FactoryConfig
+ * @param {object} [opts]  { seed?: number, maxTime?: number }
+ * @returns {{ states, events, summary }}
+ */
+export function runTwin(config, opts = {}) {
+  const { maxTime = Infinity } = opts;
+
+  let { state, events: initEvents } = initState(config, opts);
+  const allEvents = [...initEvents];
+  const states = [];
 
   let iterations = 0;
   const MAX_ITER = 100000;
 
   while (iterations++ < MAX_ITER) {
-    const hasActiveOrders = orders.some(
-      (o) => o.status === 'pending' || o.status === 'in_progress',
-    );
-    if (!hasActiveOrders) break;
-    if (clock.now() >= maxTime) break;
-
-    const tSched = nextEventTime(schedState);
-    const tFlow = nextArrivalTime(flowState);
-    const tCarrier = nextCarrierEventTime(carrierState);
-    const t = Math.min(tSched, tFlow, tCarrier);
-
-    if (t === Infinity) {
-      // Stall: no future events. Check for deadlock (cycle) vs benign starvation.
-      const shocks = detectDeadlock(flowState, carrierState, config, orders, clock.now());
-      for (const ev of shocks) allEvents.push(ev);
-      break;
-    }
-
-    clock.setTime(t);
-
-    // 1. Apply segment arrivals and carrier returns/drops at t.
-    applyArrivals(flowState, config, t);
-    processCarrierReturns(carrierState, t);
-    const carrierDeliveries = processCarrierDrops(carrierState, flowState, config, t);
-    dispatchCarriers(carrierState, config, t);
-
-    // 2. Process scheduler completions at t.
-    const completions = dueCompletions(schedState, t);
-    for (const slot of completions) {
-      const unit = slot._unit;
-      freeSlot(slot);
-      allEvents.push(stationCompleted(t, slot.station_id, slot.process_id, unit.id));
-
-      const proc = processMap.get(slot.process_id);
-
-      if (proc.kind === 'assembly') {
-        // Kit was consumed at start; _unit holds the sentinel with _kit.
-        const kitUnits = unit._kit || [];
-        // Find the product order (FIFO: first pending/in_progress whose sequence includes this assembly).
-        const productOrder = orders.find(
-          (o) => o.process_sequence.includes(slot.process_id) &&
-                 o.status !== 'completed' && o.status !== 'short' &&
-                 o.units_created < o.quantity,
-        );
-        if (productOrder) {
-          const newUnit = assembleUnit({ process: proc, kitUnits, productOrder, now: t });
-          productOrder.units_created++;
-          if (productOrder.status === 'pending') productOrder.status = 'in_progress';
-          govState.wipCount++; // new product unit enters WIP
-          newUnit.next_process = (() => {
-            const idx = productOrder.process_sequence.indexOf(slot.process_id);
-            return idx < productOrder.process_sequence.length - 1
-              ? productOrder.process_sequence[idx + 1]
-              : null;
-          })();
-          allEvents.push(unitCreated(t, newUnit.id, newUnit.order_id, newUnit.material));
-          routeUnit(newUnit, slot.station_id, t);
-        }
-        continue;
-      }
-
-      const result = applyProcess({ unit, process: proc, order: orders.find((o) => o.id === unit.order_id), allOrders: orders, rng });
-
-      if (result.scrap) {
-        allEvents.push(scrapped(t, unit.id));
-        const scrapSeg = config.segments.find((s) => {
-          const exit = config.exits.find((e) => e.id === s.to_node_id);
-          return exit && exit.kind === 'scrap' && s.from_node_id === stationMap.get(slot.station_id).node_id;
-        });
-        if (scrapSeg) {
-          launchOnSegment(flowState, scrapSeg, unit, t);
-        } else {
-          // Direct scrap: treat as immediate exit.
-          const scrapExit = config.exits.find((e) => e.kind === 'scrap');
-          if (scrapExit) {
-            flowState.exitedUnits.push({ unit, exit_id: scrapExit.id, time: t });
-          }
-        }
-      } else if (result.keep) {
-        const kept = result.keep;
-        kept.next_process = advanceNextProcess(kept, kept.order_id);
-        routeUnit(kept, slot.station_id, t);
-      }
-    }
-
-    // 3. Process exits via aggregator.
-    const exitEvents = procesExits(flowState, orders, govState);
-    for (const ev of exitEvents) {
-      if (ev.type === 'unit_exited') {
-        allEvents.push(unitExited(ev.timestamp, ev.unit_id, ev.exit_id, ''));
-      } else {
-        allEvents.push(scrapped(ev.timestamp, ev.unit_id));
-      }
-    }
-
-    // 4. Admit new units.
-    admitUnits(t);
-
-    // 5. Start eligible units from buffers.
-    startEligible(t);
-
-    // 6. Drain held arrivals and carrier-held deliveries into freed buffers; drain output buffers.
-    tryFlushHeld(flowState, config);
-    tryFlushCarrierHeld(carrierState, flowState, config, t);
-    drainOutputBuffers(flowState, config, t);
-    // Drain output-buffer units queued for carrier pickup.
-    drainCarrierOutputBuffers(stationMap, flowState, carrierState, config);
-    dispatchCarriers(carrierState, config, t);
-
-    states.push({ time: t });
+    if (state.clock.now() >= maxTime) break;
+    const result = step(state);
+    state = result.state;
+    for (const ev of result.events) allEvents.push(ev);
+    if (!result.done) states.push({ time: state.clock.now() });
+    if (result.done) break;
   }
 
   // Finalize order statuses.
-  for (const order of orders) {
+  for (const order of state.orders) {
     if (order.status === 'in_progress') {
       if (order.units_completed >= order.quantity) order.status = 'completed';
       else order.status = 'short';
@@ -349,7 +368,7 @@ export function runTwin(config, opts = {}) {
   return Object.freeze({
     states,
     events: sortEvents(allEvents),
-    summary: computeSummary(config, orders, clock.now()),
-    orders,
+    summary: computeSummary(config, state.orders, state.clock.now()),
+    orders: state.orders,
   });
 }
