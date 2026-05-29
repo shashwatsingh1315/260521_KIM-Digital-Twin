@@ -39,7 +39,7 @@ export function makeFactoryConfig({
   invariant(Array.isArray(shifts), 'factoryConfig.shifts must be an array');
   invariant(Array.isArray(orders), 'factoryConfig.orders must be an array');
 
-  // Build lookup maps for uniqueness validation.
+  // Build lookup maps first (before validating references).
   const matIds = new Set();
   const procIds = new Set();
   const stationIds = new Set();
@@ -50,6 +50,7 @@ export function makeFactoryConfig({
   const shiftIds = new Set();
   const orderIds = new Set();
 
+  // First pass: build all lookup sets.
   materials.forEach((m) => {
     invariant(m.kind_of === 'material', 'materials[] must contain Material objects');
     invariant(!matIds.has(m.id), `material id "${m.id}" is duplicated`);
@@ -62,30 +63,10 @@ export function makeFactoryConfig({
     procIds.add(p.id);
   });
 
-  stations.forEach((s) => {
-    invariant(s.kind_of === 'station', 'stations[] must contain Station objects');
-    invariant(!stationIds.has(s.id), `station id "${s.id}" is duplicated`);
-    stationIds.add(s.id);
-    s.processes.forEach((sp) => {
-      invariant(procIds.has(sp.process_id), `station "${s.id}" references unknown process "${sp.process_id}"`);
-    });
-  });
-
   nodes.forEach((n) => {
     invariant(n.kind_of === 'track_node', 'nodes[] must contain TrackNode objects');
     invariant(!nodeIds.has(n.id), `node id "${n.id}" is duplicated`);
     nodeIds.add(n.id);
-  });
-
-  segments.forEach((seg) => {
-    invariant(seg.kind_of === 'track_segment', 'segments[] must contain TrackSegment objects');
-    invariant(!segmentIds.has(seg.id), `segment id "${seg.id}" is duplicated`);
-    segmentIds.add(seg.id);
-    invariant(nodeIds.has(seg.from_node_id), `segment "${seg.id}" references unknown node "${seg.from_node_id}"`);
-    invariant(nodeIds.has(seg.to_node_id), `segment "${seg.id}" references unknown node "${seg.to_node_id}"`);
-    if (seg.transport.class === 'carrier') {
-      invariant(poolIds.has(seg.transport.pool_id), `segment "${seg.id}" references unknown pool "${seg.transport.pool_id}"`);
-    }
   });
 
   exits.forEach((e) => {
@@ -98,6 +79,27 @@ export function makeFactoryConfig({
     invariant(p.kind_of === 'carrier_pool', 'carrierPools[] must contain CarrierPool objects');
     invariant(!poolIds.has(p.id), `pool id "${p.id}" is duplicated`);
     poolIds.add(p.id);
+  });
+
+  // Second pass: validate references using complete lookup sets.
+  stations.forEach((s) => {
+    invariant(s.kind_of === 'station', 'stations[] must contain Station objects');
+    invariant(!stationIds.has(s.id), `station id "${s.id}" is duplicated`);
+    stationIds.add(s.id);
+    s.processes.forEach((sp) => {
+      invariant(procIds.has(sp.process_id), `station "${s.id}" references unknown process "${sp.process_id}"`);
+    });
+  });
+
+  segments.forEach((seg) => {
+    invariant(seg.kind_of === 'track_segment', 'segments[] must contain TrackSegment objects');
+    invariant(!segmentIds.has(seg.id), `segment id "${seg.id}" is duplicated`);
+    segmentIds.add(seg.id);
+    invariant(nodeIds.has(seg.from_node_id), `segment "${seg.id}" references unknown node "${seg.from_node_id}"`);
+    invariant(nodeIds.has(seg.to_node_id), `segment "${seg.id}" references unknown node "${seg.to_node_id}"`);
+    if (seg.transport.class === 'carrier') {
+      invariant(poolIds.has(seg.transport.pool_id), `segment "${seg.id}" references unknown pool "${seg.transport.pool_id}"`);
+    }
   });
 
   shifts.forEach((sh) => {
