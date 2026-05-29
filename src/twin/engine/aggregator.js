@@ -1,9 +1,12 @@
-// aggregator.js — order completion counting at exits (§7.4, §8.1.7).
+// aggregator.js — order completion counting + live readouts (§7.4, §8.1.7).
 //
-// Consumes exitedUnits from flowState, updates order counters,
-// marks orders completed or short.
+// procesExits: consumes exitedUnits, updates order counters.
+// computeSummary: final metrics for a completed run.
+// liveMetrics: per-step snapshot of peopleRequired, amrFleet, carrier utilization,
+//              buffer fullness — all values sourced from derive.js.
 
 import { ORDER_STATUS } from '../domain/order.js';
+import { peopleRequired, amrFleet, poolThroughput, roundTripTime } from './derive.js';
 
 /**
  * Process all pending exits, updating order status.
@@ -63,4 +66,55 @@ export function computeSummary(config, orders, finalTime) {
     units_shipped: orders.reduce((s, o) => s + o.units_completed, 0),
     units_scrapped: orders.reduce((s, o) => s + o.scrap, 0),
   };
+}
+
+/**
+ * Per-step live metrics snapshot (§7.4, §8.1.7).
+ * All values sourced from derive.js; nothing recomputed inline.
+ *
+ * @param {object} config           FactoryConfig
+ * @param {object} flowState        flow runtime state
+ * @param {object} carrierState     carrier runtime state
+ * @param {string} [shiftId]        shift to compute peopleRequired for
+ * @returns {{ peopleRequired, amrFleet, carrierUtilization, bufferFullness }}
+ */
+export function liveMetrics(config, flowState, carrierState, shiftId) {
+  const shift = shiftId || config.shifts?.[0]?.id;
+  return {
+    peopleRequired: peopleRequired(config, shift),
+    amrFleet: amrFleet(config),
+    carrierUtilization: computeCarrierUtilization(config, carrierState),
+    bufferFullness: computeBufferFullness(config, flowState),
+  };
+}
+
+function computeCarrierUtilization(config, carrierState) {
+  const result = {};
+  for (const [, entry] of carrierState.pools.entries()) {
+    const { pool, seg, carriers } = entry;
+    const rtt = roundTripTime(
+      seg.length_m,
+      pool.load_unload_seconds,
+      pool.speed_loaded_m_per_min,
+      pool.speed_empty_m_per_min,
+    );
+    const maxThroughput = poolThroughput(pool.count, pool.units_per_trip, rtt);
+    // Instantaneous utilization: fraction of carriers busy (loaded, returning, or held).
+    const busy = carriers.filter((c) => c.state !== 'idle').length;
+    const utilization = pool.count > 0 ? busy / pool.count : 0;
+    result[seg.id] = { utilization, maxThroughput };
+  }
+  return result;
+}
+
+function computeBufferFullness(config, flowState) {
+  const result = {};
+  for (const station of config.stations) {
+    const buf = flowState.stationBuffers.get(station.id);
+    const count = buf?.length ?? 0;
+    result[station.id] = station.entry_buffer_capacity > 0
+      ? count / station.entry_buffer_capacity
+      : 0;
+  }
+  return result;
 }

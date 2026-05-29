@@ -11,6 +11,7 @@ import { applyProcess, checkAssemblyKit, assembleUnit } from './processApply.js'
 import { tryAdmit, derivedWipCap } from './releaseGovernor.js';
 import { procesExits, computeSummary } from './aggregator.js';
 import { makeRng } from '../util/rng.js';
+import { detectDeadlock } from './deadlock.js';
 import {
   makeCarrierState, enqueueForCarrier, dispatchCarriers,
   processCarrierDrops, processCarrierReturns, tryFlushCarrierHeld,
@@ -236,7 +237,12 @@ export function runTwin(config, opts = {}) {
     const tCarrier = nextCarrierEventTime(carrierState);
     const t = Math.min(tSched, tFlow, tCarrier);
 
-    if (t === Infinity) break; // stall / deadlock
+    if (t === Infinity) {
+      // Stall: no future events. Check for deadlock (cycle) vs benign starvation.
+      const shocks = detectDeadlock(flowState, carrierState, config, orders, clock.now());
+      for (const ev of shocks) allEvents.push(ev);
+      break;
+    }
 
     clock.setTime(t);
 
