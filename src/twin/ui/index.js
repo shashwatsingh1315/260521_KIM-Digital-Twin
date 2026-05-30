@@ -4,3 +4,8 @@ export { default as TwinApp } from './TwinApp.jsx';
 export { TwinProvider, TwinContext, useTwinContext } from './TwinProvider.jsx';
 export { useTwin } from './useTwin.js';
 export { computeTwinLayout, unitPositions, loadTwinLayoutOverrides, saveTwinLayoutOverrides } from './twinLayout.js';
+export { default as SimControls } from './SimControls.jsx';
+export { default as WipHeatmap } from './WipHeatmap.jsx';
+export { default as HeadcountPanel } from './HeadcountPanel.jsx';
+export { default as ShockConsole } from './ShockConsole.jsx';
+export { default as ProcessForm } from './ProcessForm.jsx';

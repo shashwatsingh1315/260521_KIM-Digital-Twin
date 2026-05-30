@@ -6,6 +6,11 @@
 import { useState } from 'react';
 import { TwinProvider } from './TwinProvider.jsx';
 import TwinCanvas from './TwinCanvas.jsx';
+import SimControls from './SimControls.jsx';
+import WipHeatmap from './WipHeatmap.jsx';
+import HeadcountPanel from './HeadcountPanel.jsx';
+import ShockConsole from './ShockConsole.jsx';
+import ProcessForm from './ProcessForm.jsx';
 import { makeLinearLineFixture } from '../fixtures/linearLine.js';
 
 export default function TwinApp() {
@@ -22,7 +27,16 @@ export default function TwinApp() {
           onSelectStation={setSelectedStationId}
           selectedStationId={selectedStationId}
         />
-        {/* D4+ panels mount here as position:absolute overlays */}
+        <HeadcountPanel />
+        <WipHeatmap />
+        <SimControls />
+        <ShockConsole />
+        {selectedStationId && (
+          <ProcessForm
+            selectedStationId={selectedStationId}
+            onClose={() => setSelectedStationId(null)}
+          />
+        )}
       </TwinProvider>
     </div>
   );

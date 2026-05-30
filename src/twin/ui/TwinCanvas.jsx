@@ -6,7 +6,7 @@
 
 import { useRef, useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Grid } from '@react-three/drei';
+import { OrbitControls, Grid, Html } from '@react-three/drei';
 import SceneAtmosphere from '../../scene/SceneAtmosphere.jsx';
 import ScenePostFX from '../../scene/ScenePostFX.jsx';
 import LocationNode from '../../scene/LocationNode.jsx';
@@ -63,15 +63,30 @@ function SceneContent({ onSelectStation, selectedStationId }) {
         if (!pos) return null;
         const fillRatio = metrics?.bufferFullness?.[station.id] ?? 0;
         return (
-          <LocationNode
-            key={station.id}
-            loc={toLocShape(station)}
-            pos={pos}
-            fillRatio={fillRatio}
-            isSelected={selectedStationId === station.id}
-            onSelect={() => onSelectStation?.(station.id)}
-            simState={null}
-          />
+          <group key={station.id}>
+            <LocationNode
+              loc={toLocShape(station)}
+              pos={pos}
+              fillRatio={fillRatio}
+              isSelected={selectedStationId === station.id}
+              onSelect={() => onSelectStation?.(station.id)}
+              simState={null}
+            />
+            {/* Invisible HTML anchor for E2E test targeting */}
+            <Html position={[pos.x, pos.y + 3, pos.z]} center style={{ pointerEvents: 'none' }}>
+              <div
+                data-testid={`station-${station.id}`}
+                onClick={() => onSelectStation?.(station.id)}
+                style={{
+                  width: 40,
+                  height: 40,
+                  cursor: 'pointer',
+                  pointerEvents: 'all',
+                  background: 'transparent',
+                }}
+              />
+            </Html>
+          </group>
         );
       })}
 
