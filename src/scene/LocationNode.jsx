@@ -54,10 +54,11 @@ function BufferLabel({ loc, simState, isSelected, dimmed }) {
 }
 
 // ─── Procedural mesh ─────────────────────────────────────────────────────────
-function ProcMesh({ loc, simState, dimmed }) {
+function ProcMesh({ loc, simState, dimmed, fillRatio: fillRatioProp }) {
   const bufVal    = simState?.buffers?.[loc.location_id] ?? null;
   const cap       = buffer_capacity[loc.location_id] ?? null;
-  const fillRatio = (bufVal !== null && cap) ? bufVal / cap : 0.5;
+  // fillRatioProp (from Twin engine) overrides the old simState-based calculation
+  const fillRatio = fillRatioProp ?? ((bufVal !== null && cap) ? bufVal / cap : 0.5);
 
   const MeshComp = getMeshComponent(loc);
   if (!MeshComp) {
@@ -110,10 +111,10 @@ function SelectRing() {
 }
 
 // ─── LocationNode ─────────────────────────────────────────────────────────────
-export default function LocationNode({ loc, pos, simState, onSelect, isSelected, dimmed }) {
+export default function LocationNode({ loc, pos, simState, onSelect, isSelected, dimmed, fillRatio }) {
   if (!pos) return null;
   const glbPath = modelPath(loc);
-  const fallback = <ProcMesh loc={loc} simState={simState} dimmed={dimmed} />;
+  const fallback = <ProcMesh loc={loc} simState={simState} dimmed={dimmed} fillRatio={fillRatio} />;
 
   const handleClick = (e) => {
     e.stopPropagation();
