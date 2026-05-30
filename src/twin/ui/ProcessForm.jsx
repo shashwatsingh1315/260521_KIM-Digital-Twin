@@ -9,6 +9,7 @@ import { useTwinContext } from './TwinProvider.jsx';
 import { effectiveSlots, capacityPerHour } from '../engine/derive.js';
 import { makeStation } from '../network/station.js';
 import { makeFactoryConfig } from '../network/factoryConfig.js';
+import SchemaMatrixPanel from './SchemaMatrixPanel.jsx';
 
 // State machine states
 const IDLE = 'idle';
@@ -111,11 +112,11 @@ export default function ProcessForm({ selectedStationId, onClose }) {
   const [activeTabIdx, setActiveTabIdx] = useState(0);
   const [drafts, setDrafts] = useState(null); // array of station process drafts when Editing
   const [error, setError] = useState(null);
+  const [showSchema, setShowSchema] = useState(false);
 
+  // Non-hook derivations (null-safe: station may be absent after a config swap).
   const station = config.stations.find((s) => s.id === selectedStationId);
-  if (!station) return null;
-
-  const processes = station.processes ?? [];
+  const processes = station?.processes ?? [];
   const activeProc = processes[activeTabIdx] ?? processes[0];
 
   // Map process_id → process def for kind lookup
@@ -170,6 +171,9 @@ export default function ProcessForm({ selectedStationId, onClose }) {
   }, [station, drafts, config, applyConfig, resume]);
 
   const activeDraft = drafts?.[activeTabIdx] ?? drafts?.[0];
+
+  // All hooks above this line — safe to bail out now.
+  if (!station) return null;
 
   return (
     <div
@@ -255,6 +259,14 @@ export default function ProcessForm({ selectedStationId, onClose }) {
             >
               Edit
             </button>
+            <button
+              data-testid="schema-toggle-btn"
+              onClick={() => setShowSchema((s) => !s)}
+              style={{ ...btnStyle, marginTop: 6, background: 'transparent', color: '#64748b', width: '100%', border: '1px solid #1e293b' }}
+            >
+              {showSchema ? 'Hide schema impact ▴' : 'Schema impact ▾'}
+            </button>
+            {showSchema && <SchemaMatrixPanel stationId={selectedStationId} />}
           </div>
         ) : (
           /* Editing view */

@@ -3,6 +3,8 @@
 // Wraps children with TwinContext providing:
 //   twinHook   — the useTwin handle (advanceFrame, pause, resume, etc.)
 //   config     — the FactoryConfig
+//   setConfig  — replace the whole config (triggers a clean engine re-init);
+//                used by structural editors (network/carrier/fixture swap)
 
 import { createContext, useContext, useLayoutEffect, useRef } from 'react';
 import { useTwin } from './useTwin.js';
@@ -15,7 +17,7 @@ export function useTwinContext() {
   return ctx;
 }
 
-export function TwinProvider({ config, seed = 0, children }) {
+export function TwinProvider({ config, seed = 0, setConfig = null, children }) {
   const twinHook = useTwin(config, { seed });
   const rafRef = useRef(null);
   const lastTimeRef = useRef(null);
@@ -41,7 +43,7 @@ export function TwinProvider({ config, seed = 0, children }) {
   }, [twinHook.advanceFrame]);
 
   return (
-    <TwinContext.Provider value={{ config, twinHook }}>
+    <TwinContext.Provider value={{ config, twinHook, setConfig }}>
       {children}
     </TwinContext.Provider>
   );

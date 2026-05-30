@@ -23,22 +23,24 @@ function SegmentLine({ segment, fromPos, toPos, occupancy }) {
     new THREE.Vector3(toPos.x,   toPos.y   + 0.05, toPos.z),
   ], [fromPos, toPos]);
 
-  if (isCarrier) {
-    // Carrier segments: elevated dashed tube
+  // Carrier tube geometry — computed unconditionally (Rules of Hooks); only
+  // mounted in the carrier branch below.
+  const tubeGeom = useMemo(() => {
     const mid = {
       x: (fromPos.x + toPos.x) / 2,
       y: fromPos.y + 1.5,
       z: (fromPos.z + toPos.z) / 2,
     };
-    const pts = useMemo(() => [
+    const pts = [
       new THREE.Vector3(fromPos.x, fromPos.y + 1.5, fromPos.z),
       new THREE.Vector3(mid.x, mid.y + 0.5, mid.z),
       new THREE.Vector3(toPos.x, toPos.y + 1.5, toPos.z),
-    ], [fromPos, toPos]);
+    ];
+    const curve = new THREE.CatmullRomCurve3(pts);
+    return new THREE.TubeGeometry(curve, 12, 0.08, 6, false);
+  }, [fromPos, toPos]);
 
-    const curve = useMemo(() => new THREE.CatmullRomCurve3(pts), [pts]);
-    const tubeGeom = useMemo(() => new THREE.TubeGeometry(curve, 12, 0.08, 6, false), [curve]);
-
+  if (isCarrier) {
     return (
       <mesh geometry={tubeGeom}>
         <meshBasicMaterial color={color} />

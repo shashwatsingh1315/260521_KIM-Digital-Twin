@@ -53,3 +53,61 @@ test.describe('Twin UI — golden path', () => {
     expect(t2).not.toBe(t1);   // running again
   });
 });
+
+test.describe('Twin UI — config editors (Part E)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/twin');
+    await page.waitForSelector('[data-testid="twin-canvas"]');
+  });
+
+  test('schema-impact matrix shows CRUD rows on station click', async ({ page }) => {
+    await page.click('[data-testid="station-station_b"]');
+    await page.waitForSelector('[data-testid="process-form"]');
+    await page.click('[data-testid="schema-toggle-btn"]');
+    await page.waitForSelector('[data-testid="schema-matrix-panel"]');
+    // Station B (treat) documents an MES row creating Treat_Batch.
+    await expect(page.locator('[data-testid="schema-row-MES"]')).toContainText('Treat_Batch');
+    await expect(page.locator('[data-testid="schema-row-WMS"]')).toContainText('Location');
+  });
+
+  test('track editor applies a valid segment change', async ({ page }) => {
+    await page.click('[data-testid="open-track-editor"]');
+    await page.waitForSelector('[data-testid="track-editor"]');
+    await page.click('[data-testid="track-edit-btn"]');
+    await expect(page.locator('[data-testid="track-paused-banner"]')).toBeVisible();
+    await page.fill('[data-testid="seg-capacity-s_a_b"]', '7');
+    await page.click('[data-testid="track-apply-btn"]');
+    // Valid change → edit mode exits (banner gone), no validation errors.
+    await expect(page.locator('[data-testid="track-paused-banner"]')).not.toBeVisible();
+  });
+
+  test('track editor blocks an invalid segment change', async ({ page }) => {
+    await page.click('[data-testid="open-track-editor"]');
+    await page.waitForSelector('[data-testid="track-editor"]');
+    await page.click('[data-testid="track-edit-btn"]');
+    await page.fill('[data-testid="seg-length-s_a_b"]', '0'); // length must be > 0
+    await expect(page.locator('[data-testid="track-errors"]')).toBeVisible();
+    await expect(page.locator('[data-testid="track-apply-btn"]')).toBeDisabled();
+  });
+
+  test('carrier pool panel edits a pool on the carrier scenario', async ({ page }) => {
+    await page.click('[data-testid="fixture-carrierLine"]');
+    await page.waitForTimeout(700); // engine re-init
+    await page.click('[data-testid="open-carrier-panel"]');
+    await page.waitForSelector('[data-testid="pool-row-amr1"]');
+    await page.click('[data-testid="carrier-edit-btn"]');
+    await expect(page.locator('[data-testid="carrier-paused-banner"]')).toBeVisible();
+    await page.fill('[data-testid="pool-count-amr1"]', '5');
+    await page.click('[data-testid="carrier-apply-btn"]');
+    await expect(page.locator('[data-testid="carrier-paused-banner"]')).not.toBeVisible();
+  });
+
+  test('fixture selector switches scenario and sim keeps running', async ({ page }) => {
+    await page.click('[data-testid="fixture-assemblyLine"]');
+    await page.waitForTimeout(700);
+    const t0 = await page.locator('[data-testid="sim-time"]').textContent();
+    await page.waitForTimeout(1500);
+    const t1 = await page.locator('[data-testid="sim-time"]').textContent();
+    expect(t1).not.toBe(t0);
+  });
+});

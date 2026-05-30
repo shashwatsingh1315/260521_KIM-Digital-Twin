@@ -11,6 +11,7 @@
 
 import { makeMaterial } from '../domain/material.js';
 import { makeProcess, KIND } from '../domain/process.js';
+import { makeSchemaMatrix } from '../domain/schemaMatrix.js';
 import { makeOrder } from '../domain/order.js';
 import { makeShift } from '../domain/shift.js';
 import { makeTrackNode, NODE_TYPE } from '../network/trackNode.js';
@@ -30,7 +31,18 @@ export function makeLinearLineFixture() {
   });
 
   const heat = makeProcess({ id: 'heat', name: 'Heat', kind: KIND.TRANSFORM, output_material: 'BLANK' });
-  const treat = makeProcess({ id: 'treat', name: 'Treat', kind: KIND.TRANSFORM, output_material: 'BLANK' });
+  const treat = makeProcess({
+    id: 'treat', name: 'Treat', kind: KIND.TRANSFORM, output_material: 'BLANK',
+    // §9 schema-impact documentation (static; no runtime effect).
+    schema_impact: makeSchemaMatrix({
+      process_id: 'treat',
+      rows: [
+        { system: 'MES', create: ['Treat_Batch'], read: ['Blank_Id'], update: ['Status'] },
+        { system: 'WMS', read: ['Location'], update: ['Location'] },
+        { system: 'SAP', update: ['WIP_Value'] },
+      ],
+    }),
+  });
   const cool = makeProcess({ id: 'cool', name: 'Cool', kind: KIND.TRANSFORM, output_material: 'BLANK' });
 
   // One node per station; intake is a pure source, exit is a sink.

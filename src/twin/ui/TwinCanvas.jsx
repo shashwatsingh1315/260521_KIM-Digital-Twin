@@ -122,7 +122,6 @@ export default function TwinCanvas({ onSelectStation, selectedStationId, isMobil
       style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}
     >
       <Canvas
-        shadows
         camera={{ position: [20, 25, 20], fov: 55 }}
         gl={{ antialias: true }}
       >

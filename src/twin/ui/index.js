@@ -9,3 +9,7 @@ export { default as WipHeatmap } from './WipHeatmap.jsx';
 export { default as HeadcountPanel } from './HeadcountPanel.jsx';
 export { default as ShockConsole } from './ShockConsole.jsx';
 export { default as ProcessForm } from './ProcessForm.jsx';
+export { default as SchemaMatrixPanel } from './SchemaMatrixPanel.jsx';
+export { default as FixtureSelector } from './FixtureSelector.jsx';
+export { default as TrackEditor } from './TrackEditor.jsx';
+export { default as CarrierPoolPanel } from './CarrierPoolPanel.jsx';
