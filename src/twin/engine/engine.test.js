@@ -1,7 +1,36 @@
 import { describe, test, expect } from 'vitest';
-import { runTwin } from './engine.js';
+import { runTwin, initState, step, peekNextEventTime } from './engine.js';
 import { makeLinearLineFixture } from '../fixtures/linearLine.js';
 import { validateFactoryConfig } from './validator.js';
+
+describe('peekNextEventTime', () => {
+  test('returns the next event time without mutating the clock', () => {
+    const { state } = initState(makeLinearLineFixture());
+    const before = state.clock.now();
+    const tNext = peekNextEventTime(state);
+    expect(tNext).toBeGreaterThan(before);
+    expect(Number.isFinite(tNext)).toBe(true);
+    // Clock is untouched by peeking.
+    expect(state.clock.now()).toBe(before);
+  });
+
+  test('matches the time step() advances the clock to', () => {
+    const { state } = initState(makeLinearLineFixture());
+    const tNext = peekNextEventTime(state);
+    step(state);
+    expect(state.clock.now()).toBe(tNext);
+  });
+
+  test('returns Infinity once all orders are complete', () => {
+    const { state } = initState(makeLinearLineFixture());
+    // Drive to completion.
+    for (let i = 0; i < 10000; i++) {
+      const { done } = step(state);
+      if (done) break;
+    }
+    expect(peekNextEventTime(state)).toBe(Infinity);
+  });
+});
 
 describe('runTwin', () => {
   test('accepts valid linearLine config', () => {

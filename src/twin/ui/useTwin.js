@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
-import { initState, step } from '../engine/engine.js';
+import { initState, step, peekNextEventTime } from '../engine/engine.js';
 import { liveMetrics } from '../engine/aggregator.js';
 import { restore, snapshot } from '../engine/mode/snapshot.js';
 import { validateFactoryConfig } from '../engine/validator.js';
@@ -49,8 +49,30 @@ export function useTwin(config, opts = {}) {
     let steps = 0;
     const newShocks = [];
 
+    // Pace the event-driven engine against the wall-clock budget: process every
+    // event whose time is within [now, targetSim], then advance the clock
+    // smoothly to targetSim (units interpolate between events on screen). This
+    // prevents the sim from teleporting to completion in a single frame.
     while (steps++ < MAX_STEPS_PER_FRAME) {
-      if (state.clock.now() >= targetSim) break;
+      const tNext = peekNextEventTime(state);
+
+      // No events remain (complete or deadlocked): let step() emit the
+      // terminal done/shock signal once, then stop.
+      if (tNext === Infinity) {
+        const result = step(state);
+        for (const ev of result.events) {
+          if (ev.type === 'shock_raised') newShocks.push(ev);
+        }
+        setDone(true);
+        break;
+      }
+
+      // Next event is beyond this frame's budget — glide the clock to
+      // targetSim (units interpolate on screen) and wait for the next frame.
+      if (tNext > targetSim) {
+        if (state.clock.now() < targetSim) state.clock.setTime(targetSim);
+        break;
+      }
 
       const result = step(state);
       // step() mutates state in place and returns same ref.

@@ -3,3 +3,7 @@ dist/
 .env
 .env.local
 *.local
+
+# Playwright generated artifacts
+playwright-report/
+test-results/

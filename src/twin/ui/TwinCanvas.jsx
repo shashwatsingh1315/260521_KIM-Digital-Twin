@@ -7,8 +7,7 @@
 import { useRef, useMemo, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Grid, Html } from '@react-three/drei';
-import SceneAtmosphere from '../../scene/SceneAtmosphere.jsx';
-import ScenePostFX from '../../scene/ScenePostFX.jsx';
+import TwinAtmosphere from './TwinAtmosphere.jsx';
 import LocationNode from '../../scene/LocationNode.jsx';
 import TrackSegmentLines from './TrackSegmentLines.jsx';
 import UnitStream from './UnitStream.jsx';
@@ -40,7 +39,7 @@ function SceneContent({ onSelectStation, selectedStationId }) {
 
   return (
     <>
-      <SceneAtmosphere />
+      <TwinAtmosphere />
 
       {/* Ground grid */}
       <Grid
@@ -131,7 +130,6 @@ export default function TwinCanvas({ onSelectStation, selectedStationId, isMobil
           onSelectStation={onSelectStation}
           selectedStationId={selectedStationId}
         />
-        <ScenePostFX isMobile={isMobile} />
       </Canvas>
     </div>
   );

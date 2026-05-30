@@ -220,6 +220,26 @@ export function initState(config, opts = {}) {
  * Mutates state in place and returns the same reference plus emitted events.
  * @returns {{ state, events, done: boolean }}
  */
+/**
+ * Peek the time of the next pending event without mutating state.
+ * Returns Infinity when no events remain (idle / deadlocked / complete).
+ * Used by real-time pacing (the UI) to advance the clock smoothly between
+ * events instead of teleporting to each event time.
+ * @returns {number} seconds, or Infinity
+ */
+export function peekNextEventTime(state) {
+  const { orders, schedState, flowState, carrierState } = state;
+  const hasActiveOrders = orders.some(
+    (o) => o.status === 'pending' || o.status === 'in_progress',
+  );
+  if (!hasActiveOrders) return Infinity;
+  return Math.min(
+    nextEventTime(schedState),
+    nextArrivalTime(flowState),
+    nextCarrierEventTime(carrierState),
+  );
+}
+
 export function step(state) {
   const { config, rng, clock, orders, govState, schedState, flowState, carrierState,
           stationMap, processMap } = state;
