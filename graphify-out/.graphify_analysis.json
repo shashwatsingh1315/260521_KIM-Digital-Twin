@@ -1,0 +1,429 @@
+{
+  "communities": {
+    "0": [
+      "asset_inspector_jsx",
+      "components_assetinspector_assetinspector",
+      "components_assetinspector_gallerycameracontrols",
+      "components_assetinspector_modelgrid",
+      "components_assetinspector_models",
+      "components_assetinspector_rows",
+      "factory_materials_js",
+      "machine_meshes_jsx",
+      "materials_factorymaterials_fillstatecolor",
+      "materials_factorymaterials_fillstatemat",
+      "materials_factorymaterials_floorgridnormalmap",
+      "materials_factorymaterials_makebrushedmetalnormal",
+      "materials_factorymaterials_makefloorgridnormal",
+      "materials_factorymaterials_makewarningstripetexture",
+      "materials_factorymaterials_mat",
+      "materials_factorymaterials_metalnormalmap",
+      "scene_machinemeshes_accentstripe",
+      "scene_machinemeshes_asrsmesh",
+      "scene_machinemeshes_asrspointmesh",
+      "scene_machinemeshes_assembly1pmesh",
+      "scene_machinemeshes_box",
+      "scene_machinemeshes_buffermesh",
+      "scene_machinemeshes_cyl",
+      "scene_machinemeshes_dispatchmesh",
+      "scene_machinemeshes_dockmesh",
+      "scene_machinemeshes_externalmesh",
+      "scene_machinemeshes_family_by_type",
+      "scene_machinemeshes_family_by_zone",
+      "scene_machinemeshes_fctmesh",
+      "scene_machinemeshes_hmipanel",
+      "scene_machinemeshes_inspectionmesh",
+      "scene_machinemeshes_lift_top_floor_y",
+      "scene_machinemeshes_liftmesh",
+      "scene_machinemeshes_mesh_by_type",
+      "scene_machinemeshes_mesh_by_zone",
+      "scene_machinemeshes_packmesh",
+      "scene_machinemeshes_pbrprops",
+      "scene_machinemeshes_rampmesh",
+      "scene_machinemeshes_sfgpackmesh",
+      "scene_machinemeshes_shaft_by_zone",
+      "scene_machinemeshes_smtmesh",
+      "scene_machinemeshes_stacklight",
+      "scene_machinemeshes_stairmesh",
+      "scene_machinemeshes_storemesh",
+      "scene_machinemeshes_trssmesh",
+      "scene_machinemeshes_vcmesh"
+    ],
+    "1": [
+      "components_factorytwin_current_vec",
+      "components_factorytwin_dummy",
+      "components_factorytwin_floor_y",
+      "components_factorytwin_floorplate",
+      "components_factorytwin_floorsurfaces",
+      "components_factorytwin_nodes",
+      "components_factorytwin_target_vec",
+      "components_factorytwin_twinscene",
+      "data_m800_model_path",
+      "factory_twin_jsx",
+      "materials_factorymaterials_warningstripemap",
+      "scene_buildingshells_building",
+      "scene_buildingshells_column",
+      "scene_buildingshells_concretecol",
+      "scene_buildingshells_flooredge",
+      "scene_buildingshells_glasscol",
+      "scene_buildingshells_glasspanel",
+      "scene_buildingshells_kmp_bounds",
+      "scene_buildingshells_roof",
+      "scene_buildingshells_roofcol",
+      "scene_buildingshells_siteground",
+      "scene_buildingshells_slabedgecol",
+      "scene_buildingshells_trimcol",
+      "scene_buildingshells_wh_bounds",
+      "scene_setdressing_bollardcluster",
+      "scene_setdressing_cabletray",
+      "scene_setdressing_ceilingpipes",
+      "scene_setdressing_mulberry32",
+      "scene_setdressing_no_raycast",
+      "scene_setdressing_palletfield",
+      "scene_setdressing_piperun",
+      "scene_setdressing_roofclutter",
+      "scene_setdressing_walkwayhatch",
+      "src_scene_buildingshells_jsx",
+      "src_scene_sceneatmosphere_jsx",
+      "src_scene_scenepostfx_jsx",
+      "src_scene_setdressing_jsx"
+    ],
+    "2": [
+      "designs_camera_path_presets",
+      "designs_factory_pull_ceo_plan",
+      "designs_instanced_mesh_particles",
+      "designs_local_storage_persistence_scope",
+      "designs_pull_system_flow_logic",
+      "designs_render_order_webgl",
+      "designs_shock_events",
+      "designs_simulation_engine",
+      "designs_xray_flow_pulse",
+      "gstack_sketch_3d_viewport",
+      "gstack_sketch_asrs_system",
+      "gstack_sketch_bottleneck_diagnosis",
+      "gstack_sketch_conveyor_bridge",
+      "gstack_sketch_digital_twin_wireframe",
+      "gstack_sketch_pull_demand_queue",
+      "gstack_sketch_shock_injection",
+      "gstack_sketch_timeline_slider",
+      "hooks_usepullengine_runsimulation",
+      "hooks_usepullengine_test_happystates",
+      "hooks_usepullengine_test_hasblocked",
+      "hooks_usepullengine_test_states",
+      "index_factory_pull_digital_twin_app",
+      "index_main_jsx",
+      "src_hooks_usepullengine_test_js",
+      "test_e2e_factory_spec",
+      "test_e2e_timeout_failure",
+      "todos_dynamic_camera_presets",
+      "todos_factory_twin_jsx",
+      "todos_local_storage_persistence",
+      "todos_use_pull_engine",
+      "use_pull_engine_js"
+    ],
+    "3": [
+      "260521_digital_twin_package_dependencies",
+      "260521_digital_twin_package_dependencies_lucide_react",
+      "260521_digital_twin_package_dependencies_react",
+      "260521_digital_twin_package_dependencies_react_dom",
+      "260521_digital_twin_package_dependencies_react_three_drei",
+      "260521_digital_twin_package_dependencies_react_three_fiber",
+      "260521_digital_twin_package_dependencies_three",
+      "260521_digital_twin_package_devdependencies",
+      "260521_digital_twin_package_devdependencies_jsdom",
+      "260521_digital_twin_package_devdependencies_playwright_test",
+      "260521_digital_twin_package_devdependencies_types_react",
+      "260521_digital_twin_package_devdependencies_vite",
+      "260521_digital_twin_package_devdependencies_vitejs_plugin_react",
+      "260521_digital_twin_package_devdependencies_vitest",
+      "260521_digital_twin_package_name",
+      "260521_digital_twin_package_private",
+      "260521_digital_twin_package_scripts",
+      "260521_digital_twin_package_scripts_build",
+      "260521_digital_twin_package_scripts_dev",
+      "260521_digital_twin_package_scripts_preview",
+      "260521_digital_twin_package_scripts_test",
+      "260521_digital_twin_package_scripts_test_e2e",
+      "260521_digital_twin_package_type",
+      "260521_digital_twin_package_version",
+      "260521_kim_digital_twin_package_dependencies_react_three_postprocessing",
+      "package_json"
+    ],
+    "4": [
+      "data_m800_model_buffer_capacity",
+      "data_m800_model_container",
+      "data_m800_model_event_log",
+      "data_m800_model_initial_fill",
+      "data_m800_model_inventory_position",
+      "data_m800_model_live_status",
+      "data_m800_model_material",
+      "data_m800_model_material_state",
+      "data_m800_model_non_buffer_ids",
+      "data_m800_model_process",
+      "data_m800_model_quality_gate",
+      "data_m800_model_resource",
+      "data_m800_model_route_step",
+      "data_m800_model_scenario_override",
+      "data_m800_model_sim_rates",
+      "data_m800_model_station",
+      "data_m800_model_system_event",
+      "engine_usesimengine_buffer_locs",
+      "engine_usesimengine_buildinitialbuffers",
+      "engine_usesimengine_effectiverate",
+      "engine_usesimengine_runsimulation",
+      "engine_usesimengine_sim_edges",
+      "m800_model_js",
+      "src_engine_usesimengine_js"
+    ],
+    "5": [
+      "data_transport_topology_columns_by_id",
+      "data_transport_topology_columnsforfloor",
+      "data_transport_topology_location_column_overrides",
+      "data_transport_topology_transport_columns",
+      "scene_particlestream_dummy",
+      "scene_particlestream_particlecolor",
+      "scene_pathrouter_arclengths",
+      "scene_pathrouter_bridgeendpoint",
+      "scene_pathrouter_distsqxz",
+      "scene_pathrouter_floor_y_map",
+      "scene_pathrouter_loc_by_id",
+      "scene_pathrouter_nearestcolumn",
+      "scene_pathrouter_pointat",
+      "scene_pathrouter_routewaypoints",
+      "scene_pathrouter_v3",
+      "scene_pathrouter_yforfloor",
+      "src_data_transport_topology_js",
+      "src_scene_floorpaths_jsx",
+      "src_scene_particlestream_jsx",
+      "src_scene_pathrouter_js"
+    ],
+    "6": [
+      "app_jsx",
+      "components_layouteditor_btnstyle",
+      "components_layouteditor_canvastoworld",
+      "components_layouteditor_floor_labels",
+      "components_layouteditor_gridlines",
+      "components_layouteditor_leaf_types",
+      "components_layouteditor_site_colors",
+      "components_layouteditor_worldtocanvas",
+      "layout_autolayout_baseline",
+      "layout_autolayout_computelayout",
+      "layout_autolayout_floor_y",
+      "layout_autolayout_loadoverrides",
+      "layout_autolayout_resetoverrides",
+      "layout_autolayout_saveoverrides",
+      "src_app_app",
+      "src_components_layouteditor_jsx",
+      "src_layout_autolayout_js",
+      "src_main_jsx"
+    ],
+    "7": [
+      "location_node_jsx",
+      "scene_locationnode_bufferlabel",
+      "scene_locationnode_glbmodel",
+      "scene_locationnode_locationrotation",
+      "scene_locationnode_modelboundary",
+      "scene_locationnode_modelboundary_constructor",
+      "scene_locationnode_modelboundary_getderivedstatefromerror",
+      "scene_locationnode_modelboundary_render",
+      "scene_locationnode_procmesh",
+      "scene_locationnode_rot",
+      "scene_locationnode_selectring",
+      "scene_machinemeshes_familymatkey",
+      "scene_machinemeshes_getmeshcomponent",
+      "scene_modelregistry_modelpath",
+      "src_scene_modelregistry_js"
+    ],
+    "8": [
+      "plans_collections_client_tsx",
+      "plans_collections_db_migration",
+      "plans_collections_ptp_kanban_plan",
+      "plans_collections_server_actions",
+      "plans_refresh_ptp_statuses_rpc",
+      "specs_broken_promise_wakup",
+      "specs_collections_ptp_design",
+      "specs_kanban_board_columns",
+      "specs_ptp_mechanism",
+      "specs_rm_neglect_highlight"
+    ],
+    "9": [
+      "factory_spec_js",
+      "playwright_test_report",
+      "tests_factory_spec_canvas",
+      "tests_factory_spec_resumebtn",
+      "tests_factory_spec_scenarioitem",
+      "tests_factory_spec_shockbtn",
+      "tests_factory_spec_timelineinput"
+    ],
+    "10": [
+      "claude_settings_local_json",
+      "claude_settings_local_permissions",
+      "claude_settings_local_permissions_allow"
+    ],
+    "11": [
+      "260521_kim_digital_twin_scratch_capture_models_models",
+      "260521_kim_digital_twin_scratch_capture_models_screenshotpath",
+      "scratch_capture_models_js"
+    ],
+    "12": [
+      "test_results_last_run_failedtests",
+      "test_results_last_run_json",
+      "test_results_last_run_status"
+    ],
+    "13": [
+      "playwright_config_js"
+    ],
+    "14": [
+      "vite_config_js"
+    ],
+    "15": [
+      "plans_critical_fixes_new_case_form"
+    ],
+    "16": [
+      "plans_critical_fixes_e2e_auth_bypass"
+    ],
+    "17": [
+      "plans_critical_fixes_uuid_generation"
+    ],
+    "18": [
+      "plans_critical_fixes_round_type"
+    ],
+    "19": [
+      "3d_upgrade_guide_m800_digital_twin"
+    ]
+  },
+  "cohesion": {
+    "0": 0.06859903381642513,
+    "1": 0.06456456456456457,
+    "2": 0.07311827956989247,
+    "3": 0.07692307692307693,
+    "4": 0.10144927536231885,
+    "5": 0.17894736842105263,
+    "6": 0.16993464052287582,
+    "7": 0.1619047619047619,
+    "8": 0.28888888888888886,
+    "9": 0.2857142857142857,
+    "10": 0.6666666666666666,
+    "11": 0.6666666666666666,
+    "12": 0.6666666666666666,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0
+  },
+  "gods": [
+    {
+      "id": "gstack_sketch_digital_twin_wireframe",
+      "label": "Digital Twin Wireframe Sketch - Factory Flow & Pull System",
+      "degree": 8
+    },
+    {
+      "id": "designs_factory_pull_ceo_plan",
+      "label": "CEO Plan: 3D Factory Pull-System Digital Twin",
+      "degree": 8
+    },
+    {
+      "id": "scene_pathrouter_routewaypoints",
+      "label": "routeWaypoints()",
+      "degree": 7
+    },
+    {
+      "id": "260521_digital_twin_package_scripts",
+      "label": "scripts",
+      "degree": 6
+    },
+    {
+      "id": "src_app_app",
+      "label": "App()",
+      "degree": 5
+    },
+    {
+      "id": "specs_collections_ptp_design",
+      "label": "Collections CRM: Promise-To-Pay & Kanban Board Design Spec",
+      "degree": 5
+    },
+    {
+      "id": "plans_collections_ptp_kanban_plan",
+      "label": "Collections CRM PTP Kanban Implementation Plan",
+      "degree": 4
+    },
+    {
+      "id": "materials_factorymaterials_mat",
+      "label": "MAT",
+      "degree": 4
+    },
+    {
+      "id": "materials_factorymaterials_fillstatecolor",
+      "label": "fillStateColor()",
+      "degree": 4
+    },
+    {
+      "id": "scene_locationnode_modelboundary",
+      "label": "ModelBoundary",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Shock Events: Manual Factory Bottleneck Injection",
+      "target": "Shock Injection (Inject Shock / Jam)",
+      "source_files": [
+        "docs/designs/factory-pull-digital-twin.md",
+        "gstack-sketch.html"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "Time Travel Timeline Slider",
+      "target": "X-Ray Flow-Pulse & Interactive Time-Traveler Feature",
+      "source_files": [
+        "gstack-sketch.html",
+        "docs/designs/factory-pull-digital-twin.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "ASRS Warehouse System (4-Level)",
+      "target": "Pull System Flow Logic (MFG-to-ASRS)",
+      "source_files": [
+        "gstack-sketch.html",
+        "docs/designs/factory-pull-digital-twin.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "Camera Path Presets (Accepted Scope)",
+      "target": "Dynamic Camera Presets TODO",
+      "source_files": [
+        "docs/designs/factory-pull-digital-twin.md",
+        "TODOS.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "Local Storage Persistence (Accepted Scope)",
+      "target": "Local Storage Persistence TODO",
+      "source_files": [
+        "docs/designs/factory-pull-digital-twin.md",
+        "TODOS.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    }
+  ],
+  "tokens": {
+    "input": 21170,
+    "output": 1453
+  }
+}

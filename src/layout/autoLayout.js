@@ -105,3 +105,74 @@ export function computeLayout(locationNodes, overrides = {}) {
 
   return layout;
 }
+
+// Generalized DAG layout: assign positions to any nodes in a directed graph.
+// Performs topological sort and assigns x = depth * LANE_WIDTH, z = index * LANE_DEPTH.
+// y is always 0 (ground level); the Twin UI can assign y per-story if needed.
+// overrides = { nodeId: { x, z } } are applied after baseline.
+const LANE_WIDTH = 15;
+const LANE_DEPTH = 8;
+
+function topologicalSort(nodes, edges) {
+  const adj = new Map(nodes.map((n) => [n.id, []]));
+  const inDegree = new Map(nodes.map((n) => [n.id, 0]));
+
+  for (const edge of edges) {
+    if (!adj.has(edge.from_node_id)) continue;
+    adj.get(edge.from_node_id).push(edge.to_node_id);
+    inDegree.set(edge.to_node_id, (inDegree.get(edge.to_node_id) || 0) + 1);
+  }
+
+  const queue = [...nodes].filter((n) => inDegree.get(n.id) === 0);
+  const sorted = [];
+  while (queue.length) {
+    const node = queue.shift();
+    sorted.push(node.id);
+    for (const next of adj.get(node.id)) {
+      inDegree.set(next, inDegree.get(next) - 1);
+      if (inDegree.get(next) === 0) {
+        queue.push(...nodes.filter((n) => n.id === next));
+      }
+    }
+  }
+  return sorted;
+}
+
+export function computeTwinLayout(nodes, edges, overrides = {}) {
+  const sorted = topologicalSort(nodes, edges);
+
+  // Assign depths (x position)
+  const depths = new Map();
+  for (const id of sorted) {
+    let maxInDepth = -1;
+    for (const edge of edges) {
+      if (edge.to_node_id === id && depths.has(edge.from_node_id)) {
+        maxInDepth = Math.max(maxInDepth, depths.get(edge.from_node_id));
+      }
+    }
+    depths.set(id, maxInDepth + 1);
+  }
+
+  // Group by depth and assign z positions within each layer
+  const byDepth = new Map();
+  for (const id of sorted) {
+    const d = depths.get(id);
+    if (!byDepth.has(d)) byDepth.set(d, []);
+    byDepth.get(d).push(id);
+  }
+
+  const layout = {};
+  for (const [d, ids] of byDepth) {
+    for (let i = 0; i < ids.length; i++) {
+      const id = ids[i];
+      const over = overrides[id] || {};
+      layout[id] = {
+        x: over.x ?? d * LANE_WIDTH,
+        y: 0,
+        z: over.z ?? (i - Math.floor(ids.length / 2)) * LANE_DEPTH,
+      };
+    }
+  }
+
+  return layout;
+}

@@ -17,6 +17,10 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         launchOptions: {
+          // Allow pointing at a pre-provisioned browser binary (e.g. CI/sandbox
+          // images where the Playwright CDN is unreachable). Falls back to the
+          // managed download when unset.
+          executablePath: process.env.PW_EXECUTABLE_PATH || undefined,
           args: [
             '--use-gl=angle',
             '--use-gl=swiftshader',
