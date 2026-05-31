@@ -14,17 +14,15 @@ export default function HeadcountPanel() {
     <div
       data-testid="headcount-panel"
       style={{
-        position: 'absolute',
-        top: 16,
-        left: 16,
+        position: 'relative',
+        width: '100%',
+        boxSizing: 'border-box',
         background: 'rgba(12,19,34,0.85)',
         backdropFilter: 'blur(8px)',
         border: '1px solid #1e3a5f',
         borderRadius: 8,
         padding: '10px 14px',
         color: '#cbd5e1',
-        zIndex: 100,
-        minWidth: 180,
       }}
     >
       <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1, color: '#64748b', marginBottom: 8, textTransform: 'uppercase' }}>

@@ -111,3 +111,48 @@ test.describe('Twin UI — config editors (Part E)', () => {
     expect(t1).not.toBe(t0);
   });
 });
+
+test.describe('Twin UI — Configuration panel', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/twin');
+    await page.waitForSelector('[data-testid="twin-canvas"]');
+  });
+
+  test('config panel is open by default and shows the orders tab', async ({ page }) => {
+    await expect(page.locator('[data-testid="config-panel"]')).toBeVisible();
+    await expect(page.locator('[data-testid="config-tab-orders"]')).toBeVisible();
+    await expect(page.locator('[data-testid="config-errors"]')).toHaveCount(0);
+  });
+
+  test('editing an order quantity pauses sim and applies cleanly', async ({ page }) => {
+    await page.fill('[data-testid="order-qty-0"]', '6');
+    // Editing marks dirty → the panel shows the "Sim paused" banner.
+    await expect(page.locator('[data-testid="config-dirty-banner"]')).toBeVisible();
+    // Apply → re-init + resume; banner clears.
+    await page.click('[data-testid="config-apply"]');
+    await expect(page.locator('[data-testid="config-dirty-banner"]')).not.toBeVisible();
+    // Resumed: advancing fast moves the clock off zero.
+    await page.click('[data-testid="speed-100"]');
+    await page.waitForTimeout(1500);
+    const t = (await page.locator('[data-testid="sim-time"]').textContent()).trim();
+    expect(t).not.toBe('00:00:00');
+  });
+
+  test('an invalid edit disables Apply and shows an error', async ({ page }) => {
+    await page.click('[data-testid="config-tab-network"]');
+    await page.waitForSelector('[data-testid="add-segment"]');
+    const lenInput = page.locator('[data-testid="segment-card-s_in_a"] input[type="number"]').first();
+    await lenInput.fill('0');
+    await expect(page.locator('[data-testid="config-errors"]')).toBeVisible();
+    await expect(page.locator('[data-testid="config-apply"]')).toBeDisabled();
+  });
+
+  test('switching tabs exposes processes, stations and shifts editors', async ({ page }) => {
+    await page.click('[data-testid="config-tab-processes"]');
+    await expect(page.locator('[data-testid="add-process"]')).toBeVisible();
+    await page.click('[data-testid="config-tab-stations"]');
+    await expect(page.locator('[data-testid="add-station"]')).toBeVisible();
+    await page.click('[data-testid="config-tab-shifts"]');
+    await expect(page.locator('[data-testid="add-shift"]')).toBeVisible();
+  });
+});
