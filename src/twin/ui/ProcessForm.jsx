@@ -4,7 +4,7 @@
 // The twin is paused only when the user explicitly clicks "Edit",
 // NOT on every onChange keystroke.
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTwinContext } from './TwinProvider.jsx';
 import { effectiveSlots, capacityPerHour } from '../engine/derive.js';
 import { makeStation } from '../network/station.js';
@@ -171,6 +171,15 @@ export default function ProcessForm({ selectedStationId, onClose }) {
   }, [station, drafts, config, applyConfig, resume]);
 
   const activeDraft = drafts?.[activeTabIdx] ?? drafts?.[0];
+
+  // Cleanup: if the form unmounts while in EDITING mode, resume the twin.
+  useEffect(() => {
+    return () => {
+      if (mode === EDITING) {
+        resume();
+      }
+    };
+  }, [mode, resume]);
 
   // All hooks above this line — safe to bail out now.
   if (!station) return null;
