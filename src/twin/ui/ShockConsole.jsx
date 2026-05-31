@@ -38,17 +38,14 @@ export default function ShockConsole() {
     <div
       data-testid="shock-console"
       style={{
-        position: 'absolute',
-        bottom: 80,
-        left: 16,
+        position: 'relative',
+        width: '100%',
+        boxSizing: 'border-box',
         background: 'rgba(12,19,34,0.9)',
         backdropFilter: 'blur(8px)',
         border: `1px solid ${unreadCount > 0 ? '#dc2626' : '#1e3a5f'}`,
         borderRadius: 8,
         color: '#cbd5e1',
-        zIndex: 100,
-        minWidth: 260,
-        maxWidth: 400,
       }}
     >
       {/* Header */}

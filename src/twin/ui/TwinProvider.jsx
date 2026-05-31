@@ -17,7 +17,7 @@ export function useTwinContext() {
   return ctx;
 }
 
-export function TwinProvider({ config, seed = 0, setConfig = null, children }) {
+export function TwinProvider({ config, seed = 0, setSeed = null, setConfig = null, children }) {
   const twinHook = useTwin(config, { seed });
   const rafRef = useRef(null);
   const lastTimeRef = useRef(null);
@@ -43,7 +43,7 @@ export function TwinProvider({ config, seed = 0, setConfig = null, children }) {
   }, [twinHook.advanceFrame]);
 
   return (
-    <TwinContext.Provider value={{ config, twinHook, setConfig }}>
+    <TwinContext.Provider value={{ config, twinHook, setConfig, seed, setSeed }}>
       {children}
     </TwinContext.Provider>
   );
