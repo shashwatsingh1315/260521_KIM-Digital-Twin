@@ -4,7 +4,7 @@
 // replace the whole config (clean engine re-init). Pools are dedicated — one
 // pool serves at most one carrier segment (enforced by the validator).
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTwinContext } from './TwinProvider.jsx';
 import { makeCarrierPool, CARRIER_KIND } from '../network/carrierPool.js';
 import { makeFactoryConfig } from '../network/factoryConfig.js';
@@ -102,6 +102,15 @@ export default function CarrierPoolPanel({ onClose }) {
     setErrors([]);
     resume();
   }, [drafts, buildCandidate, setConfig, resume]);
+
+  // Cleanup: if the form unmounts while in EDITING mode, resume the twin.
+  useEffect(() => {
+    return () => {
+      if (mode === EDITING) {
+        resume();
+      }
+    };
+  }, [mode, resume]);
 
   const editing = mode === EDITING;
   const rows = editing ? drafts : pools.map(toDraft);

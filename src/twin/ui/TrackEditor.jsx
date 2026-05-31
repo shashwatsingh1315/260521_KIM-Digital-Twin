@@ -6,7 +6,7 @@
 // properties, and correctness is enforced by validateFactoryConfig before a
 // change is applied. Structural edits replace the whole config (clean re-init).
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTwinContext } from './TwinProvider.jsx';
 import { makeTrackSegment, TRANSPORT_MODE } from '../network/trackSegment.js';
 import { makeFactoryConfig } from '../network/factoryConfig.js';
@@ -108,6 +108,15 @@ export default function TrackEditor({ onClose }) {
     setErrors([]);
     resume();
   }, [drafts, buildCandidate, setConfig, resume]);
+
+  // Cleanup: if the form unmounts while in EDITING mode, resume the twin.
+  useEffect(() => {
+    return () => {
+      if (mode === EDITING) {
+        resume();
+      }
+    };
+  }, [mode, resume]);
 
   const editing = mode === EDITING;
 
