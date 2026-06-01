@@ -7,7 +7,7 @@
 // and the simulation controls along the bottom. Structural edits replace the
 // whole config via setConfig (clean engine re-init); the seed re-inits too.
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { TwinProvider } from './TwinProvider.jsx';
 import TwinCanvas from './TwinCanvas.jsx';
 import SimControls from './SimControls.jsx';
@@ -21,8 +21,12 @@ import CarrierPoolPanel from './CarrierPoolPanel.jsx';
 import ConfigPanel from './ConfigPanel.jsx';
 import { T, Button } from './kit.jsx';
 import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { toDraft, buildConfig } from './configDraft.js';
 
-function Toolbar({ showConfig, onToggleConfig, openEditor, onToggleEditor }) {
+const SAVE_LABEL = { saving: '● Saving…', saved: '✓ Saved', error: '✕ Save failed' };
+const SAVE_COLOR = { saving: T.textFaint, saved: T.cyan, error: '#ef4444' };
+
+function Toolbar({ showConfig, onToggleConfig, openEditor, onToggleEditor, saveStatus }) {
   return (
     <div
       data-testid="twin-toolbar"
@@ -32,6 +36,11 @@ function Toolbar({ showConfig, onToggleConfig, openEditor, onToggleEditor }) {
         <div style={{ width: 9, height: 9, borderRadius: '50%', background: T.cyan, boxShadow: `0 0 8px ${T.cyan}` }} />
         <span style={{ fontSize: 13, fontWeight: 700, fontFamily: T.mono, color: T.text, letterSpacing: 0.5 }}>Factory Twin</span>
       </div>
+      {saveStatus && (
+        <span style={{ fontSize: 11, color: SAVE_COLOR[saveStatus], fontFamily: T.mono }}>
+          {SAVE_LABEL[saveStatus]}
+        </span>
+      )}
       <Button testid="toggle-config" variant={showConfig ? 'violet' : 'default'} onClick={onToggleConfig}>
         ⚙ Configuration
       </Button>
@@ -48,6 +57,44 @@ export default function TwinApp() {
   const [selectedStationId, setSelectedStationId] = useState(null);
   const [openEditor, setOpenEditor] = useState(null); // 'track' | 'carrier' | null
   const [showConfig, setShowConfig] = useState(true);
+  const [saveStatus, setSaveStatus] = useState(null); // 'saving' | 'saved' | 'error' | null
+  const loadedFromDb = useRef(false);
+
+  // Load saved config from Neon on first mount.
+  useEffect(() => {
+    fetch('/api/config')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        try {
+          // Run through draft round-trip to normalise any plain-JSON fields.
+          const normalised = buildConfig(toDraft(data));
+          setConfig(normalised);
+        } catch {
+          // Corrupted saved config — ignore, keep fixture default.
+        }
+      })
+      .catch(() => {})
+      .finally(() => { loadedFromDb.current = true; });
+  }, []);
+
+  // Auto-save whenever config changes (debounced 600 ms).
+  // Skip the very first render (uses the in-memory fixture default).
+  useEffect(() => {
+    if (!loadedFromDb.current) return;
+    setSaveStatus('saving');
+    const timer = setTimeout(() => {
+      fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+      })
+        .then((r) => setSaveStatus(r.ok ? 'saved' : 'error'))
+        .catch(() => setSaveStatus('error'))
+        .finally(() => setTimeout(() => setSaveStatus(null), 2000));
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [config]);
 
   const handleFixtureChange = (key) => {
     setFixtureKey(key);
@@ -74,6 +121,7 @@ export default function TwinApp() {
           onToggleConfig={() => setShowConfig((s) => !s)}
           openEditor={openEditor}
           onToggleEditor={toggleEditor}
+          saveStatus={saveStatus}
         />
 
         {/* Scenario switcher (top-center) */}
