@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 
-export const KMP_BOUNDS = { x: -16, z: 0, w: 38, d: 10, floors: 4, floorH: 5 };
-export const WH_BOUNDS  = { x: 22,  z: 1.5, w: 28, d: 12, h: 25 };
+export const KMP_BOUNDS = { x: -25.75, z: -72, w: 33.5, d: 200, floors: 4, floorH: 5 };
+export const WH_BOUNDS  = { x: 38.25,  z: 0.1, w: 58.5, d: 55.8, h: 25 };
 
 // ─── Shared material descriptors ──────────────────────────────────────────
 const concreteCol  = { color: '#cfd5df', roughness: 0.88, metalness: 0.05 };
 const trimCol      = { color: '#5b6678', roughness: 0.55, metalness: 0.4 };
 const slabEdgeCol  = { color: '#9ba5b4', roughness: 0.8, metalness: 0.1 };
 const roofCol      = { color: '#2b3344', roughness: 0.7, metalness: 0.45 };
+const epoxyCol     = { color: '#334155', roughness: 0.15, metalness: 0.5 }; // Premium polished industrial floor
 const glassCol     = {
   color: '#7fb1d6',
   roughness: 0.15,
@@ -137,6 +138,11 @@ function Building({ bounds }) {
       {slabYs.map(y => (
         <FloorEdge key={`edge-${y}`} cx={cx} cz={cz} w={w} d={d} y={y} />
       ))}
+      {/* Premium Polished Epoxy Floor Slab */}
+      <mesh position={[cx, -0.05, cz]} receiveShadow castShadow>
+        <boxGeometry args={[w + 0.4, 0.1, d + 0.4]} />
+        <meshStandardMaterial {...epoxyCol} />
+      </mesh>
       {glass.map(p => (
         <GlassPanel key={p.key} pos={p.pos} size={p.size} rot={p.rot} />
       ))}

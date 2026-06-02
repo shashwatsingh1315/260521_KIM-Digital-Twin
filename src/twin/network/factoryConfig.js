@@ -28,6 +28,7 @@ export function makeFactoryConfig({
   carrierPools = [],
   shifts = [],
   orders = [],
+  layout_overrides = {},
 }) {
   invariant(Array.isArray(materials), 'factoryConfig.materials must be an array');
   invariant(Array.isArray(processes), 'factoryConfig.processes must be an array');
@@ -134,5 +135,6 @@ export function makeFactoryConfig({
     carrierPools: Object.freeze([...carrierPools]),
     shifts: Object.freeze([...shifts]),
     orders: Object.freeze([...orders]),
+    layout_overrides: Object.freeze({...(layout_overrides || {})}),
   });
 }

@@ -12,17 +12,34 @@ import LocationNode from '../../scene/LocationNode.jsx';
 import TrackSegmentLines from './TrackSegmentLines.jsx';
 import UnitStream from './UnitStream.jsx';
 import CarrierAgents from './CarrierAgents.jsx';
+import BuildingShells from '../../scene/BuildingShells.jsx';
+import SetDressing from '../../scene/SetDressing.jsx';
 import { computeTwinLayout } from './twinLayout.js';
 import { useTwinContext } from './TwinProvider.jsx';
 
 // Adapter: converts a Twin Station to the shape LocationNode expects.
 function toLocShape(station) {
+  let zone = station.name;
+  let type = 'machine';
+
+  if (zone.includes('SMT')) zone = 'SMT';
+  else if (zone.includes('FCT')) zone = 'FCT';
+  else if (zone.includes('1P')) zone = '1P Assembly';
+  else if (zone.includes('SFG')) zone = 'SFG Packing';
+  else if (zone.includes('VC')) zone = 'VC';
+  else if (zone.includes('Pack')) zone = 'Packaging';
+  else if (zone.includes('IQC') || zone.includes('FAT')) {
+    type = 'inspection_area';
+  } else if (zone.includes('ASRS')) {
+    type = 'ASRS';
+  }
+
   return {
     location_id: station.id,
     name: station.name,
-    location_type: 'machine',
-    zone: station.name,
-    floor: 'GF',
+    location_type: type,
+    zone: zone,
+    floor: 'GF', // We use layout_overrides for Y position now
   };
 }
 
@@ -34,12 +51,14 @@ function SceneContent({ onSelectStation, selectedStationId }) {
   // can read it each frame without triggering re-renders.
   engineStateRef.current = twinHook._engineState();
 
-  const layout = useMemo(() => computeTwinLayout(config), [config]);
+  const layout = useMemo(() => computeTwinLayout(config, config.layout_overrides || {}), [config]);
   const metrics = twinHook.metrics;
 
   return (
     <>
       <TwinAtmosphere />
+      <BuildingShells />
+      <SetDressing />
 
       {/* Ground grid */}
       <Grid

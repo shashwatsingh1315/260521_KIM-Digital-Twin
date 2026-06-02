@@ -229,7 +229,7 @@ export function TRSSMesh({ fillRatio = 0, familyMat, dimmed }) {
 
 export function Assembly1PMesh({ fillRatio = 0, familyMat, dimmed }) {
   return (
-    <group>
+    <group scale={[0.5, 0.5, 0.5]}>
       <Box pos={[0, 1.0, 0]} size={[1.7, 2.0, 1.3]} mat={familyMat} dimmed={dimmed} />
       <Box pos={[0.95, 0.55, 0]} size={[0.3, 0.5, 0.6]} mat={MAT.machineTrim} dimmed={dimmed} />
       <Box pos={[0, 2.06, 0]} size={[1.3, 0.08, 0.9]} mat={MAT.machineTrim} dimmed={dimmed} />
@@ -602,27 +602,46 @@ export function ASRSMesh({ fillRatio = 0, familyMat, dimmed }) {
   const levelH = 1.55;
   const baseH = 0.15;
   const totalH = baseH + levels * levelH;
+  
+  // Architectural Dimensions: 32.901m (W) x 50.609m (D)
+  // We divide by the global 1.6x scale factor applied in LocationNode.
+  const targetX = 32.901 / 1.6;
+  const targetZ = 50.609 / 1.6;
   const beaconCol = fillStateColor(fillRatio);
+
   return (
     <group>
       {/* Concrete base pad */}
-      <Box pos={[0, baseH / 2, 0]} size={[2.2, baseH, 2.4]} mat={MAT.concrete} dimmed={dimmed} />
-      {/* Vertical posts */}
-      {[[-0.85, -1.0], [0.85, -1.0], [-0.85, 1.0], [0.85, 1.0]].map(([x, z], i) => (
+      <Box pos={[0, baseH / 2, 0]} size={[targetX, baseH, targetZ]} mat={MAT.concrete} dimmed={dimmed} />
+
+      {/* Vertical posts at corners */}
+      {[
+        [-targetX / 2 + 0.5, -targetZ / 2 + 0.5], 
+        [targetX / 2 - 0.5, -targetZ / 2 + 0.5], 
+        [-targetX / 2 + 0.5, targetZ / 2 - 0.5], 
+        [targetX / 2 - 0.5, targetZ / 2 - 0.5]
+      ].map(([x, z], i) => (
         <Cyl key={i} pos={[x, baseH + (levels * levelH) / 2, z]}
-             r={0.07} h={levels * levelH} mat={MAT.machineTrim} dimmed={dimmed} />
+             r={0.15} h={levels * levelH} mat={MAT.machineTrim} dimmed={dimmed} />
       ))}
+
+      {/* Massive Procedural Bins */}
       {Array.from({ length: levels }).map((_, i) => {
         const y = baseH + i * levelH + levelH / 2;
         const levelFull = (i + 1) / levels <= fillRatio + 0.001;
+        const binW = targetX / 3 - 0.6;
+        const binD = targetZ - 1.2;
+        const spacingX = targetX / 3;
         return (
           <group key={i}>
-            <Box pos={[0, y - levelH / 2 + 0.04, 0]} size={[1.8, 0.06, 2.0]} mat={familyMat} dimmed={dimmed} />
-            {[-0.6, 0, 0.6].map((cx, j) => (
+            {/* Shelf base */}
+            <Box pos={[0, y - levelH / 2 + 0.04, 0]} size={[targetX - 0.4, 0.06, targetZ - 0.4]} mat={familyMat} dimmed={dimmed} />
+            {/* 3 rows of bins */}
+            {[-spacingX, 0, spacingX].map((cx, j) => (
               <Box
                 key={j}
                 pos={[cx, y - 0.15, 0]}
-                size={[0.45, levelH - 0.3, 1.6]}
+                size={[binW, levelH - 0.3, binD]}
                 mat={levelFull ? MAT.binFull : MAT.binEmpty}
                 dimmed={dimmed}
               />

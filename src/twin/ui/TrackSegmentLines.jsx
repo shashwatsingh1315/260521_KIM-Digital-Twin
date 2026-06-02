@@ -6,6 +6,7 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { fillStateColor } from '../../materials/factoryMaterials.js';
+import { orthogonalPath } from './twinLayout.js';
 
 function segmentOccupancy(flowState, segId, capacity) {
   if (!flowState) return 0;
@@ -18,27 +19,29 @@ function SegmentLine({ segment, fromPos, toPos, occupancy }) {
   const color = fillStateColor(occupancy);
   const isCarrier = segment.transport?.class === 'carrier';
 
-  const points = useMemo(() => [
-    new THREE.Vector3(fromPos.x, fromPos.y + 0.05, fromPos.z),
-    new THREE.Vector3(toPos.x,   toPos.y   + 0.05, toPos.z),
-  ], [fromPos, toPos]);
+  const points = useMemo(() => {
+    const raw = orthogonalPath(fromPos, toPos);
+    return raw.map(p => new THREE.Vector3(p.x, p.y + 0.05, p.z));
+  }, [fromPos, toPos]);
 
   // Carrier tube geometry — computed unconditionally (Rules of Hooks); only
   // mounted in the carrier branch below.
   const tubeGeom = useMemo(() => {
-    const mid = {
-      x: (fromPos.x + toPos.x) / 2,
-      y: fromPos.y + 1.5,
-      z: (fromPos.z + toPos.z) / 2,
-    };
-    const pts = [
-      new THREE.Vector3(fromPos.x, fromPos.y + 1.5, fromPos.z),
-      new THREE.Vector3(mid.x, mid.y + 0.5, mid.z),
-      new THREE.Vector3(toPos.x, toPos.y + 1.5, toPos.z),
-    ];
-    const curve = new THREE.CatmullRomCurve3(pts);
-    return new THREE.TubeGeometry(curve, 12, 0.08, 6, false);
-  }, [fromPos, toPos]);
+    const curvePts = points.map(p => new THREE.Vector3(p.x, p.y + 1.45, p.z));
+    // Use chordal tension to prevent wild overshoots on 90 degree corners
+    const curve = new THREE.CatmullRomCurve3(curvePts, false, 'chordal', 0.2);
+    return new THREE.TubeGeometry(curve, curvePts.length * 4, 0.08, 6, false);
+  }, [points]);
+
+  const posArray = useMemo(() => {
+    const arr = new Float32Array(points.length * 3);
+    for (let i = 0; i < points.length; i++) {
+      arr[i * 3] = points[i].x;
+      arr[i * 3 + 1] = points[i].y;
+      arr[i * 3 + 2] = points[i].z;
+    }
+    return arr;
+  }, [points]);
 
   if (isCarrier) {
     return (
@@ -53,11 +56,8 @@ function SegmentLine({ segment, fromPos, toPos, occupancy }) {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={2}
-          array={new Float32Array([
-            points[0].x, points[0].y, points[0].z,
-            points[1].x, points[1].y, points[1].z,
-          ])}
+          count={points.length}
+          array={posArray}
           itemSize={3}
         />
       </bufferGeometry>

@@ -168,7 +168,7 @@ export function computeTwinLayout(nodes, edges, overrides = {}) {
       const over = overrides[id] || {};
       layout[id] = {
         x: over.x ?? d * LANE_WIDTH,
-        y: 0,
+        y: over.y ?? 0,
         z: over.z ?? (i - Math.floor(ids.length / 2)) * LANE_DEPTH,
       };
     }

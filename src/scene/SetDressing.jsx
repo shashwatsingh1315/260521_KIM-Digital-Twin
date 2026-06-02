@@ -229,17 +229,7 @@ export default function SetDressing() {
         ]}
       />
 
-      {/* ── Overhead pipes per floor (KMP only — WH ceiling height varies) ── */}
-      {[0, 1, 2, 3].map((i) => (
-        <CeilingPipes
-          key={`kmp-pipes-${i}`}
-          cx={KMP_BOUNDS.x}
-          cz={KMP_BOUNDS.z}
-          w={KMP_BOUNDS.w}
-          d={KMP_BOUNDS.d}
-          ceilingY={(i + 1) * FLOOR_H - 0.1}
-        />
-      ))}
+      {/* ── Overhead pipes disabled per user request ── */}
 
       {/* ── Cable trays running between column lines on the GF ── */}
       {[KMP_BOUNDS.x - KMP_BOUNDS.w / 2 + 0.5, KMP_BOUNDS.x + KMP_BOUNDS.w / 2 - 0.5].map((_, i) => null)}

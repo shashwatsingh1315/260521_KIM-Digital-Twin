@@ -54,6 +54,54 @@ export function computeTwinLayout(config, overrides = {}) {
   return new Map(Object.entries(layout));
 }
 
+export function orthogonalPath(from, to) {
+  const pts = [ { x: from.x, y: from.y, z: from.z } ];
+  
+  if (Math.abs(from.y - to.y) > 0.01) {
+    // Elevator: go vertical first
+    pts.push({ x: from.x, y: to.y, z: from.z });
+  }
+
+  // Same floor: Manhattan routing (X then Z)
+  if (Math.abs(from.x - to.x) > 0.01 && Math.abs(from.z - to.z) > 0.01) {
+    pts.push({ x: to.x, y: to.y, z: from.z });
+  }
+
+  pts.push({ x: to.x, y: to.y, z: to.z });
+  return pts;
+}
+
+export function interpolateOrthogonal(pts, t) {
+  let totalLen = 0;
+  const segs = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p1 = pts[i];
+    const p2 = pts[i+1];
+    const len = Math.hypot(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+    segs.push({ p1, p2, len });
+    totalLen += len;
+  }
+  
+  if (totalLen === 0) return { ...pts[0] };
+
+  const targetDist = Math.max(0, Math.min(1, t)) * totalLen;
+  let accumulated = 0;
+
+  for (let i = 0; i < segs.length; i++) {
+    const seg = segs[i];
+    if (accumulated + seg.len >= targetDist || i === segs.length - 1) {
+      const segT = seg.len > 0 ? (targetDist - accumulated) / seg.len : 0;
+      return {
+        x: seg.p1.x + (seg.p2.x - seg.p1.x) * segT,
+        y: seg.p1.y + (seg.p2.y - seg.p1.y) * segT,
+        z: seg.p1.z + (seg.p2.z - seg.p1.z) * segT,
+      };
+    }
+    accumulated += seg.len;
+  }
+  return { ...pts[pts.length - 1] };
+}
+
 /**
  * Compute 3D positions of all in-flight units at a given time.
  * @param {object} flowState
@@ -70,18 +118,12 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
   const stationMap = new Map(config.stations.map((s) => [s.node_id, s]));
 
   // Helper: interpolate position along a segment path.
-  function positionOnSegment(fromNodeId, toNodeId, t) {
-    const from = nodePositions.get(fromNodeId);
-    const to = nodePositions.get(toNodeId);
+  function positionOnSegment(fromId, toId, t) {
+    const from = nodePositions.get(fromId);
+    const to = nodePositions.get(toId);
     if (!from || !to) return { x: 0, y: 0, z: 0 };
-
-    // Clamp t to [0, 1] for safety
-    const clamped = Math.max(0, Math.min(1, t));
-    return {
-      x: from.x + (to.x - from.x) * clamped,
-      y: from.y + (to.y - from.y) * clamped,
-      z: from.z + (to.z - from.z) * clamped,
-    };
+    const pts = orthogonalPath(from, to);
+    return interpolateOrthogonal(pts, t);
   }
 
   // Units in transit on segments
