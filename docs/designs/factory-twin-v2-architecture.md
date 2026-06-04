@@ -1,16 +1,21 @@
 ---
-status: DRAFT
+status: CURRENT
+implemented: phases 0–C (engine, carrier physics, deadlock, aggregator) — 200+ tests green
+ui_phase: D (TwinCanvas, SimControls, WipHeatmap, HeadcountPanel, ShockConsole, ProcessForm) in progress
+deferred: TrackEditor, CarrierPoolPanel, ForkPanel, SchemaMatrixPanel (Phase E)
 ---
 # Factory Digital Twin v2 — First-Principles Architecture
 
 Generated from a design conversation on 2026-05-28.
-Branch: claude/relaxed-allen-nqZWs
 
 This document supersedes the rendering-centric design in
 `factory-pull-digital-twin.md`. That document described *how to draw* a fixed
 factory; this one defines *what the factory is* as a configurable, simulatable
 domain model. The 3D rendering work remains valid as the UI layer on top of
 this model.
+
+> For a navigable code map, see [ARCHITECTURE.md](../ARCHITECTURE.md). For
+> translating factory floor data into config code, see [factory-config-guide.md](../factory-config-guide.md).
 
 ---
 

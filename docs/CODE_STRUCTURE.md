@@ -4,6 +4,41 @@ Annotated file tree. Start here when navigating the codebase cold.
 
 ---
 
+## Architectural Layers
+
+The codebase is split into three strict layers. The import rule is one-way: lower layers never import upper ones. `layerPurity.test.js` enforces this for the engine.
+
+```mermaid
+flowchart TD
+    subgraph UI ["UI Layer (src/twin/ui/)"]
+        direction LR
+        A["TwinProvider / useTwin\nRAF loop · context"]
+        B["TwinCanvas\nThree.js 3D scene"]
+        C["SimControls · WipHeatmap\nHeadcountPanel · ShockConsole · ProcessForm"]
+    end
+
+    subgraph Engine ["Engine Layer (src/twin/engine/)"]
+        direction LR
+        D["engine.js — initState · step · runTwin"]
+        E["flow · taktScheduler · processApply\nreleaseGovernor · carriers · aggregator\ndeadlock · derive · validator"]
+        F["mode/ — snapshot · twin · fork"]
+    end
+
+    subgraph Domain ["Domain + Network Layer (src/twin/domain/ + network/)"]
+        direction LR
+        G["Value types: Material · Order · Unit\nProcess · Shift · SchemaMatrix"]
+        H["Network: TrackNode · TrackSegment\nStation · ExitNode · CarrierPool · FactoryConfig"]
+    end
+
+    UI --> Engine
+    Engine --> Domain
+    UI -.->|"read-only via index.js"| Domain
+```
+
+**Rule:** `src/twin/engine/` imports only `domain/`, `network/`, and `util/`. It never imports React, DOM, or any UI module.
+
+---
+
 ## Root
 
 ```
@@ -27,7 +62,7 @@ src/index.css           Global styles (~12 KB)
 
 ### `src/twin/` — Deterministic Engine (actively developed)
 
-This is the heart of the application. Phases 0–8 of the implementation plan are complete here.
+This is the heart of the application. Engine phases 0–C are complete (200+ tests green); UI Phase D is in progress.
 
 ```
 src/twin/ui/

@@ -4,6 +4,17 @@ A real-time 3D visualization and physics simulation of the M800 smart meter manu
 
 The simulation is a genuine discrete-event physics engine — not just a visualisation. It calculates exact takt times, conveyor backpressure, carrier round-trips, shift-gated staffing, and deadlock conditions. Invalid factory configurations are rejected at startup.
 
+### What the engine models
+
+- **Pull discipline** — units are admitted only when the bottleneck can accept them (WIP cap enforced)
+- **Physical routing** — material moves like trains on track; segments have capacity; full segments block upstream flow
+- **Takt scheduling** — each process at each station has a takt time; parallel slots run concurrently
+- **Carrier transport** — AGVs/forklifts/people do FIFO pickup, traverse loaded, return empty; shift-gated for people
+- **Assembly (N→1)** — fungible component kits are consumed; a new product unit is born at the station
+- **Deadlock detection** — circular-wait graph detects kitting stalls, buffer lock-ups, carrier hold loops
+- **What-if forking** — freeze any simulation moment and branch it independently with a different seed
+- **Pause-and-apply** — stop mid-run, edit takt times or process definitions, resume without data loss
+
 ---
 
 ## Quick Start
@@ -71,15 +82,26 @@ The app has two modes served from the same build:
 
 ---
 
+## Where to start
+
+| Goal | Start here |
+|------|-----------|
+| **Understand the system at a glance** | This README → [ARCHITECTURE.md](docs/ARCHITECTURE.md) |
+| **Model a new factory in code** | [factory-config-guide.md](docs/factory-config-guide.md) — walks through data collection → code, with examples |
+| **Navigate the codebase cold** | [CODE_STRUCTURE.md](docs/CODE_STRUCTURE.md) — annotated file tree |
+| **Run or add tests** | [TESTING.md](docs/TESTING.md) |
+| **Understand design decisions** | [factory-twin-v2-architecture.md](docs/designs/factory-twin-v2-architecture.md) — authoritative design doc (domain model, 23 resolved decisions) |
+| **Upgrade 3D machine models** | [3d_upgrade_guide.md](3d_upgrade_guide.md) |
+
 ## Documentation
 
 | Document | What it covers |
 |----------|---------------|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Engine design, data flow, key modules |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Engine design, data flow, unit lifecycle, WIP cap, formulas, deadlock, fork mode |
 | [docs/CODE_STRUCTURE.md](docs/CODE_STRUCTURE.md) | Annotated file tree |
 | [docs/TESTING.md](docs/TESTING.md) | How to run and extend the test suite |
 | [docs/factory-config-guide.md](docs/factory-config-guide.md) | How to model a real factory (data collection → code) |
-| [docs/designs/factory-twin-v2-architecture.md](docs/designs/factory-twin-v2-architecture.md) | Full authoritative design doc (834 lines) |
+| [docs/designs/factory-twin-v2-architecture.md](docs/designs/factory-twin-v2-architecture.md) | Full authoritative design doc (domain model, 23 resolved decisions) |
 | [3d_upgrade_guide.md](3d_upgrade_guide.md) | How to upgrade grey-box machine models to detailed 3D |
 
 ---
