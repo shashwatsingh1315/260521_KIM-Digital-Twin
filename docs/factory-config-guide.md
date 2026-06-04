@@ -117,9 +117,16 @@ const orderBat = makeOrder({
 ```
 
 ### 6. The 3D Visuals (`layout_overrides`)
-The physics engine runs completely in math and logic. To make it look beautiful for executives, we provide 3D X, Y, Z coordinates. 
-*   **X and Z** control the layout on the ground.
-*   **Y** controls the floor (e.g., `y: 10` puts the machine on the second floor).
+
+The physics engine runs completely in math and logic. `layout_overrides` adds 3D coordinates so the renderer knows where to place each node.
+
+**Coordinate system:**
+
+| Axis | Role | Convention |
+|------|------|-----------|
+| `x` | East–west position (meters) | Negative = west (KMP Plant); positive = east (WH ASRS) |
+| `z` | North–south position (meters) | Negative = north; positive = south |
+| `y` | Building floor | `0` = ground floor; `10` = second floor |
 
 ```javascript
 return makeFactoryConfig({
@@ -128,12 +135,15 @@ return makeFactoryConfig({
   segments: [...],
   orders: [...],
   layout_overrides: {
-    n_supplier: { x: -44, y: 0, z: -10 },
-    n_1p:       { x: -4,  y: 10, z: 0 }, // Placed on the 2nd Floor
+    n_supplier: { x: -50, y: 0,  z: -60 }, // outside KMP, ground floor
+    n_smt:      { x: -25, y: 0,  z: -5  }, // inside KMP, ground floor
+    n_sfg_pack: { x: -15, y: 10, z:  10 }, // KMP east edge, second floor
+    n_asrs:     { x:  35, y: 0,  z:   0 }, // WH ASRS centre, ground floor
   },
 });
 ```
-*Note: Ensure the `name` field in your `makeStation` uses recognizable keywords (like `'SMT'`, `'Pack'`, `'1P'`) so the 3D renderer knows which high-quality industrial model to draw!*
+
+If a node has no entry in `layout_overrides`, the renderer falls back to an auto-layout algorithm based on the DAG topology.
 
 ### 7. Node ↔ Station Binding (V2 requirement)
 
@@ -148,4 +158,58 @@ const stSmt = makeStation({ id: 'st_smt', node_id: 'n_smt', ... });
 const nSmt = makeTrackNode({ id: 'n_smt', type: NODE_TYPE.JUNCTION, ... });
 ```
 
+### 8. Node Type Reference
+
+Every node in the network has a `type` from `NODE_TYPE`:
+
+| `NODE_TYPE` | Role | Used as |
+|-------------|------|---------|
+| `INTAKE` | Entry point — segments from here are the intake segments used by the release governor | Start of the first segment that units travel from |
+| `JUNCTION` | Diverge or converge point — no processing happens here | Connecting segments; routing at diverge is material-type based |
+| `BUFFER` | Named hold point without station processing | Intermediate wait points on long conveyor runs |
+| `STATION_INPUT` | Input port of a workstation | Must be referenced by exactly one `makeStation` |
+
+Exit nodes are a separate type created with `makeExitNode`:
+
+| `EXIT_KIND` | Role |
+|-------------|------|
+| `ship` | Good output — unit counted toward `order.units_completed` |
+| `scrap` | QC failure — unit counted in `order.scrap`; order reports shortfall if short |
+
 See `linearLine.js` for a complete working example with all nodes, segments, stations, and orders wired together correctly.
+
+---
+
+## Part 3: M800 Value Stream Reference
+
+The M800 linear line (`src/twin/fixtures/linearLine.js`) is the canonical factory configuration. It models the complete value stream from supplier gate to customer dispatch across KMP Plant and Warehouse ASRS.
+
+### Material States
+
+| ID | Description | Created by |
+|----|-------------|-----------|
+| `M_RAW` | Raw PCB / component from supplier | Supplier intake |
+| `M_BATTERY` | Battery from separate intake | Battery intake |
+| `M_PCBA` | Soldered PCB assembly | SMT + Wave |
+| `M_SFG` | Semi-finished goods (assembled meter unit) | 1P Assembly |
+| `M_FG` | Finished goods (value-created, packaged) | NIC+SIM+Seal |
+
+### Value Stream
+
+| Station | Process | Kind | Takt (s) | In → Out material | Slots | Ops/slot | Site |
+|---------|---------|------|----------|-------------------|-------|----------|------|
+| KMP IQC | GRN + IQC | inspect | 900 | M_RAW → M_RAW | 1 | 1 | KMP |
+| SMT Line | SMT + Wave | transform | 60 | M_RAW → M_PCBA | 1 | 2 | KMP |
+| FCT Bench | Intelligent FCT | inspect | 10 | M_PCBA → M_PCBA | 1 | 1 | KMP |
+| 1P Assembly | 1P Assembly | assembly | 16.6 | M_PCBA + M_BATTERY → M_SFG | 18 | 2 | KMP 2F |
+| SFG Pack | SFG Pack | transform | 15 | M_SFG → M_SFG | 1 | 2 | KMP 2F |
+| ASRS | WIP Storage | transform | 2 | M_SFG → M_SFG | 10 | 0 (auto) | WH |
+| WH VC Assembly | NIC+SIM+Seal | transform | 22.5 | M_SFG → M_FG | 1 | 1 | WH 2F |
+| WH Auto Pack | Screen+Laser+Pack | transform | 49 | M_FG → M_FG | 1 | 1 | WH |
+| FAT Lab | PDI + FAT | inspect | 600 | M_FG → M_FG | 1 | 1 | WH |
+| Customer | — | ship exit | — | — | — | — | — |
+| Scrap Bin | — | scrap exit | — | — | — | — | — |
+
+**Bottleneck:** FAT Lab at takt = 600 s (6 units/hour with 1 slot) is the theoretical bottleneck. IQC at 900 s has a higher takt but the same 1-slot throughput rate.
+
+**Assembly note:** Batteries travel a dedicated bypass segment from their intake directly to 1P Assembly, skipping IQC and SMT entirely. The 1P station waits until both an M_PCBA and an M_BATTERY are in its buffer before starting a slot.
