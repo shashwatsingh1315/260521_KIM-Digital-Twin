@@ -1,8 +1,10 @@
-# 🗄️ Neon Relational Database Migration & Code Plan
+# Neon Relational Database Migration & Code Plan
 
-We have successfully migrated and initialized the Neon database with the complete **relational schema** matching the application's physical structure, operating assets, processes, materials, controls, and runtime entities. 
+> **[PROPOSAL — NOT IMPLEMENTED]** The database schema described below has been designed and the DDL executed on a Neon instance, but the application code still reads from hardcoded JS (`src/data/m800_model.js`) and the in-memory twin engine. The API and React integration described in §2 has not been built yet.
 
-All tables are now fully defined and seeded with the baseline data from `src/data/m800_model.js`.
+We have designed and initialized the Neon database with the complete **relational schema** matching the application's physical structure, operating assets, processes, materials, controls, and runtime entities. 
+
+All tables are defined and seeded with the baseline data from `src/data/m800_model.js`.
 
 ---
 
