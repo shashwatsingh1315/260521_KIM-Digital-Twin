@@ -1,5 +1,7 @@
 # Business & Technical Guide: Building a Digital Twin Factory
 
+> **Note for engineers:** This guide covers the domain model used by the deterministic twin engine. For the full architecture, engine design, and binding decisions see [`docs/designs/factory-twin-v2-architecture.md`](designs/factory-twin-v2-architecture.md). For a complete working example of the schema below, see [`src/twin/fixtures/linearLine.js`](../src/twin/fixtures/linearLine.js).
+
 This guide is designed for both **Business Analysts** (who need to know what data to collect from the factory floor) and **Engineers** (who need to translate that data into code). 
 
 Our V2 Digital Twin is a **strict physics simulation**. It doesn't just draw pretty pictures; it mathematically calculates exact travel times, conveyor bottlenecks, operator shifts, and machine cycle times. If a real-world factory design is physically impossible (like a conveyor belt with no exit), the system will intentionally refuse to run.
@@ -132,3 +134,18 @@ return makeFactoryConfig({
 });
 ```
 *Note: Ensure the `name` field in your `makeStation` uses recognizable keywords (like `'SMT'`, `'Pack'`, `'1P'`) so the 3D renderer knows which high-quality industrial model to draw!*
+
+### 7. Node ↔ Station Binding (V2 requirement)
+
+Every `makeStation` must reference a `node_id` that exists in the node list, and that node's type must be `NODE_TYPE.STATION_INPUT`. The engine validates this at startup and will throw if the binding is missing or mismatched.
+
+```javascript
+// ✓ correct — node type matches its role
+const nSmt = makeTrackNode({ id: 'n_smt', type: NODE_TYPE.STATION_INPUT, name: 'SMT Line' });
+const stSmt = makeStation({ id: 'st_smt', node_id: 'n_smt', ... });
+
+// ✗ wrong — node type must be STATION_INPUT for a station to bind to it
+const nSmt = makeTrackNode({ id: 'n_smt', type: NODE_TYPE.JUNCTION, ... });
+```
+
+See `linearLine.js` for a complete working example with all nodes, segments, stations, and orders wired together correctly.
