@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { makeSchedulerState, nextEventTime, dueCompletions, startSlot, freeSlot, freeSlotCount } from './taktScheduler.js';
-import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { makeLinearLineFixture } from '../fixtures/simpleLine.js';
 
 describe('taktScheduler', () => {
   test('all idle initially → nextEventTime is Infinity', () => {

@@ -11,7 +11,7 @@ import {
   peopleRequired,
   amrFleet,
 } from './derive.js';
-import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { makeLinearLineFixture } from '../fixtures/simpleLine.js';
 import { makeAssemblyLineFixture } from '../fixtures/assemblyLine.js';
 import { makeMaterial } from '../domain/material.js';
 import { makeProcess, KIND } from '../domain/process.js';
@@ -34,6 +34,14 @@ describe('effectiveSlots', () => {
   test('returns all slots when operators sufficient', () => {
     const eff = effectiveSlots(2, 1, 5);
     expect(eff).toBe(2);
+  });
+
+  test('defaults to nominal full staffing (not zero) when operators unspecified', () => {
+    // Regression: the default used to be assignedOperators = parallel_slots, which
+    // zeroed out any process needing >1 operator per slot (e.g. 1 slot × 2 ops).
+    expect(effectiveSlots(1, 2)).toBe(1);
+    expect(effectiveSlots(18, 2)).toBe(18);
+    expect(effectiveSlots(3, 3)).toBe(3);
   });
 });
 

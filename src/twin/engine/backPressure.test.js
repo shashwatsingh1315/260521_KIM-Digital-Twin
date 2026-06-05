@@ -6,7 +6,7 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { resetIds } from '../util/ids.js';
 import { runTwin } from './engine.js';
-import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { makeLinearLineFixture } from '../fixtures/simpleLine.js';
 import { makeMaterial } from '../domain/material.js';
 import { makeProcess, KIND } from '../domain/process.js';
 import { makeOrder } from '../domain/order.js';

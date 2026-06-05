@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { resetIds } from '../util/ids.js';
 import { makeFlowState, launchOnSegment, nextArrivalTime, applyArrivals } from './flow.js';
-import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { makeLinearLineFixture } from '../fixtures/simpleLine.js';
 import { makeUnit } from '../domain/unit.js';
 
 beforeEach(() => resetIds(0));

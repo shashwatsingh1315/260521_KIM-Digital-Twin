@@ -4,7 +4,7 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { resetIds } from '../util/ids.js';
 import { runTwin } from './engine.js';
-import { makeLinearLineFixture, CONVEYOR_SPEED_M_PER_MIN } from '../fixtures/linearLine.js';
+import { makeLinearLineFixture, CONVEYOR_SPEED_M_PER_MIN } from '../fixtures/simpleLine.js';
 import { makeAssemblyLineFixture } from '../fixtures/assemblyLine.js';
 
 beforeEach(() => resetIds(0));

@@ -18,9 +18,38 @@ function configHash(cfg) {
   return `${cfg.stations.length}_${cfg.segments.length}`;
 }
 
+// Explicit recency order (most-recently-used last). localStorage key iteration
+// order is implementation-defined, so we track recency ourselves rather than
+// trusting `localStorage.key(0)` to be the oldest entry.
+const ORDER_KEY = OVERRIDE_PREFIX + 'meta_order';
+
+function readOrder() {
+  try {
+    const o = JSON.parse(localStorage.getItem(ORDER_KEY) || '[]');
+    return Array.isArray(o) ? o : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeOrder(order) {
+  try {
+    localStorage.setItem(ORDER_KEY, JSON.stringify(order));
+  } catch { /* ignore */ }
+}
+
+function touch(hash) {
+  const order = readOrder().filter((h) => h !== hash);
+  order.push(hash);
+  writeOrder(order);
+}
+
 export function loadTwinLayoutOverrides(hash) {
   try {
-    return JSON.parse(localStorage.getItem(OVERRIDE_PREFIX + hash) || '{}');
+    const raw = localStorage.getItem(OVERRIDE_PREFIX + hash);
+    if (raw === null) return {};
+    touch(hash); // reading marks it as recently used
+    return JSON.parse(raw);
   } catch {
     return {};
   }
@@ -28,17 +57,17 @@ export function loadTwinLayoutOverrides(hash) {
 
 export function saveTwinLayoutOverrides(hash, overrides) {
   try {
-    // Evict LRU if we exceed max saved layouts
-    const keys = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k.startsWith(OVERRIDE_PREFIX)) keys.push(k);
-    }
-    if (keys.length >= MAX_SAVED_LAYOUTS) {
-      // Remove the first (oldest) one
-      localStorage.removeItem(keys[0]);
+    // Move this hash to most-recently-used. Overwriting an existing hash must
+    // not grow the count (and so must not evict an unrelated layout).
+    const order = readOrder().filter((h) => h !== hash);
+    order.push(hash);
+    // Evict least-recently-used entries until within budget.
+    while (order.length > MAX_SAVED_LAYOUTS) {
+      const evicted = order.shift();
+      localStorage.removeItem(OVERRIDE_PREFIX + evicted);
     }
     localStorage.setItem(OVERRIDE_PREFIX + hash, JSON.stringify(overrides));
+    writeOrder(order);
   } catch { /* ignore */ }
 }
 
@@ -198,7 +227,7 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
 
   // Carrier-transported units
   for (const [poolId, entry] of carrierState.pools) {
-    const { seg, carriers } = entry;
+    const { seg, carriers, pool } = entry;
     if (!seg) continue;
 
     for (const carrier of carriers) {
@@ -209,7 +238,7 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
 
       if (carrier.state === 'loaded') {
         // In transit: lerp from seg.from to seg.to based on drop_at timing
-        const loadTime = carrier.drop_at - (seg.length_m / carrier.speed_loaded) * 60;
+        const loadTime = carrier.drop_at - (seg.length_m / pool.speed_loaded_m_per_min) * 60;
         const dropTime = carrier.drop_at;
         const traverseTime = dropTime - loadTime;
         const t = Math.min(1, (now - loadTime) / traverseTime);

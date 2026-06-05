@@ -92,13 +92,15 @@ export function sparklinePoints(values, width, height) {
   if (values.length === 1) return `0,${height / 2} ${width},${height / 2}`;
   const min = Math.min(...values);
   const max = Math.max(...values);
+  const flat = max === min;
   const span = max - min || 1;
   const pad = 1;
   const h = height - pad * 2;
   return values
     .map((v, i) => {
       const x = (i / (values.length - 1)) * width;
-      const y = pad + h - ((v - min) / span) * h;
+      // A flat series has no meaningful amplitude — render along the vertical middle.
+      const y = flat ? height / 2 : pad + h - ((v - min) / span) * h;
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(' ');

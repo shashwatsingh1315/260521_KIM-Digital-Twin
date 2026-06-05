@@ -7,11 +7,17 @@
  * Effective slots for a station process given assigned operators.
  * If operators_per_slot === 0 (fully automated), use all parallel_slots.
  * Otherwise, effective = min(parallel_slots, floor(operators / operators_per_slot)).
+ *
+ * When the caller does not specify how many operators are assigned, the nominal
+ * (fully-staffed) capacity is assumed: enough operators to run every slot, i.e.
+ * `parallel_slots × operators_per_slot`. (Defaulting to `parallel_slots` was a
+ * bug — it under-staffs any process needing >1 operator per slot, yielding 0
+ * effective slots whenever operators_per_slot > parallel_slots.)
  */
 export function effectiveSlots(
   parallelSlots,
   operatorsPerSlot,
-  assignedOperators = parallelSlots,
+  assignedOperators = parallelSlots * operatorsPerSlot,
 ) {
   if (operatorsPerSlot === 0) {
     return parallelSlots;

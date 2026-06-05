@@ -342,7 +342,7 @@ export function step(state) {
   startEligible(state, events, t);
 
   // 6. Flush held / output buffers.
-  tryFlushHeld(flowState, config);
+  tryFlushHeld(flowState, config, t);
   tryFlushCarrierHeld(carrierState, flowState, config, t);
   drainOutputBuffers(flowState, config, t);
   drainCarrierOutputBuffers(state);

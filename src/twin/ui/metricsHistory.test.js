@@ -104,4 +104,11 @@ describe('metricsHistory — sparklinePoints', () => {
     expect(pts[0].startsWith('0.0,')).toBe(true);
     expect(pts[1].startsWith('100.0,')).toBe(true);
   });
+  test('a flat multi-point series renders along the vertical middle', () => {
+    // Regression: a constant series used to render along the bottom edge.
+    const pts = sparklinePoints([5, 5, 5], 100, 20).split(' ');
+    for (const p of pts) {
+      expect(p.endsWith(',10.0')).toBe(true); // height/2
+    }
+  });
 });

@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { resetIds } from '../util/ids.js';
 import { tryAdmit, derivedWipCap } from './releaseGovernor.js';
-import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { makeLinearLineFixture } from '../fixtures/simpleLine.js';
 import { makeOrder } from '../domain/order.js';
 
 beforeEach(() => resetIds(0));

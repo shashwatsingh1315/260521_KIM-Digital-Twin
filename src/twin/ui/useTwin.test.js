@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { resetIds } from '../util/ids.js';
 import { useTwin } from './useTwin.js';
-import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { makeLinearLineFixture } from '../fixtures/simpleLine.js';
 import { snapshot } from '../engine/mode/snapshot.js';
 import { initState } from '../engine/engine.js';
 

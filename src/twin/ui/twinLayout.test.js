@@ -6,7 +6,7 @@ import {
   saveTwinLayoutOverrides,
   unitPositions,
 } from './twinLayout.js';
-import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { makeLinearLineFixture } from '../fixtures/simpleLine.js';
 import { initState, step } from '../engine/engine.js';
 
 beforeEach(() => {
@@ -184,6 +184,22 @@ describe('twinLayout', () => {
     // The last entry (hash_10) should exist
     const last = loadTwinLayoutOverrides('hash_10');
     expect(last).toEqual({ node: { x: 100, z: 0 } });
+  });
+
+  test('re-saving an existing hash at capacity does not evict an unrelated layout', () => {
+    // Regression: overwriting an existing key used to trigger an eviction even
+    // though the entry count did not grow, discarding an innocent bystander.
+    for (let i = 0; i < 10; i++) {
+      saveTwinLayoutOverrides(`h_${i}`, { node: { x: i, z: 0 } });
+    }
+    // Overwrite an existing key (count stays at 10) — nothing should be evicted.
+    saveTwinLayoutOverrides('h_5', { node: { x: 999, z: 0 } });
+
+    for (let i = 0; i < 10; i++) {
+      const v = loadTwinLayoutOverrides(`h_${i}`);
+      expect(v).not.toEqual({}); // every original layout still present
+    }
+    expect(loadTwinLayoutOverrides('h_5')).toEqual({ node: { x: 999, z: 0 } });
   });
 
   test('unitPositions handles empty flowState gracefully', () => {

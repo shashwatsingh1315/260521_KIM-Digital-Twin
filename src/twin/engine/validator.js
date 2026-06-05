@@ -138,10 +138,13 @@ function checkDeadEnds(config) {
     }
   }
 
-  // Check if any station is unreachable.
+  // Check if any flow-bearing station is unreachable from a ship exit.
+  // Stations with no processes are visual-only (no flow) and are skipped.
+  // We key off the station's actual node_id rather than a `${id}_input`
+  // naming convention, which hand-authored configs do not follow.
   for (const station of config.stations) {
-    const entryNode = config.nodes.find((n) => n.id === `${station.id}_input`);
-    if (entryNode && !reachable.has(entryNode.id)) {
+    if (!station.processes || station.processes.length === 0) continue;
+    if (!reachable.has(station.node_id)) {
       return `Station "${station.id}" is unreachable from any ship exit`;
     }
   }

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { makeLinearLineFixture } from './linearLine.js';
+import { makeLinearLineFixture } from './simpleLine.js';
 import { makeAssemblyLineFixture } from './assemblyLine.js';
 
 describe('linearLine fixture', () => {

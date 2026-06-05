@@ -96,13 +96,14 @@ export function makeLinearLineFixture() {
 
   // Aggregate distances/times from m800 paths
   const segSupJunc = makeSeg('seg_sup_junc', 'n_supplier', 'n_junction', 30, 5);
-  const segBatJunc = makeSeg('seg_bat_junc', 'n_battery_sup', 'n_junction', 30, 5);
+  // Batteries run on their own line straight to 1P assembly — they never enter the
+  // KMP electronics line (IQC/SMT/FCT only process the meter core, not batteries).
+  const segBatBypass = makeSeg('seg_bat_bypass', 'n_battery_sup', 'n_1p', 120, 24);
   // Shared artery with tiny capacity (5) to show backpressure!
   const segMainArtery = makeTrackSegment({
     id: 'seg_main_artery', from_node_id: 'n_junction', to_node_id: 'n_iqc', length_m: 1000, capacity: 5,
     transport: { class: 'passive', mode: TRANSPORT_MODE.CONVEYOR, speed_m_per_min: 1000 * 60 / 17 },
   });
-  const segBatBypass = makeSeg('seg_bat_bypass', 'n_iqc', 'n_1p', 60, 10); // Batteries bypass SMT directly to 1P
 
   const segIqcSmt = makeSeg('seg_iqc_smt', 'n_iqc', 'n_smt', 50, 15); // Lifts + E-Store + VRC + Trolley to SMT
   const segSmtFct = makeSeg('seg_smt_fct', 'n_smt', 'n_fct', 5, 1);
@@ -116,7 +117,11 @@ export function makeLinearLineFixture() {
   const segScrap = makeSeg('seg_scrap', 'n_fat', 'n_scrap', 1, 1);
 
   // --- STATIONS ---
-  const stIqc = makeStation({ id: 'st_iqc', name: 'KMP IQC', node_id: 'n_iqc', processes: [{ process_id: 'proc_iqc', automation_level: 0, parallel_slots: 1, takt_seconds: 900, operators_per_slot: 1 }] });
+  // IQC is the slow line bottleneck (900s), so it sets the pull WIP cap. Give it
+  // a large input buffer so the cap admits both the meter-core order and the
+  // battery component order concurrently — otherwise the 1P assembly starves
+  // (all WIP fills with PCBAs and no batteries are ever admitted to kit with).
+  const stIqc = makeStation({ id: 'st_iqc', name: 'KMP IQC', node_id: 'n_iqc', entry_buffer_capacity: 50, processes: [{ process_id: 'proc_iqc', automation_level: 0, parallel_slots: 1, takt_seconds: 900, operators_per_slot: 1 }] });
   const stSmt = makeStation({ id: 'st_smt', name: 'SMT Line', node_id: 'n_smt', processes: [{ process_id: 'proc_smt', automation_level: 1, parallel_slots: 1, takt_seconds: 60, operators_per_slot: 2 }] });
   const stFct = makeStation({ id: 'st_fct', name: 'FCT Bench', node_id: 'n_fct', processes: [{ process_id: 'proc_fct', automation_level: 0, parallel_slots: 1, takt_seconds: 10, operators_per_slot: 1 }] });
   const st1p = makeStation({ id: 'st_1p', name: '1P Assembly', node_id: 'n_1p', entry_buffer_capacity: 50, processes: [{ process_id: 'proc_1p', automation_level: 0, parallel_slots: 18, takt_seconds: 16.6, operators_per_slot: 2 }] });
@@ -182,7 +187,7 @@ export function makeLinearLineFixture() {
     materials: [rawMat, batteryMat, pcba, sfg, fg],
     processes: [procIqc, procSmt, procFct, proc1p, procSfgPack, procAsrs, procVc, procPack, procFat],
     stations: stations,
-    segments: [segSupJunc, segBatJunc, segMainArtery, segBatBypass, segIqcSmt, segSmtFct, segFct1p, seg1pSfg, segSfgAsrs, segAsrsVc, segVcPack, segPackFat, segFatCust, segScrap],
+    segments: [segSupJunc, segMainArtery, segBatBypass, segIqcSmt, segSmtFct, segFct1p, seg1pSfg, segSfgAsrs, segAsrsVc, segVcPack, segPackFat, segFatCust, segScrap],
     nodes: nodes,
     exits: [nCustomer, nScrap],
     carrierPools: [],
