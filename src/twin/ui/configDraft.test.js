@@ -32,7 +32,22 @@ describe('configDraft — round trip', () => {
       expect(rebuilt.orders.length).toBe(config.orders.length);
       expect(rebuilt.carrierPools.length).toBe(config.carrierPools.length);
     });
+
+    test(`${name}: rebuilt config preserves measured coordinates`, () => {
+      const config = make();
+      const rebuilt = buildConfig(toDraft(config));
+      expect(rebuilt.layout_overrides).toEqual(config.layout_overrides);
+    });
   }
+});
+
+describe('configDraft — coordinate edits', () => {
+  test('editing a node coordinate survives rebuild', () => {
+    const draft = toDraft(makeLinearLineFixture());
+    draft.layout_overrides.n_iqc = { x: 99, y: 1, z: -7 };
+    const rebuilt = buildConfig(draft);
+    expect(rebuilt.layout_overrides.n_iqc).toEqual({ x: 99, y: 1, z: -7 });
+  });
 });
 
 describe('configDraft — edits', () => {

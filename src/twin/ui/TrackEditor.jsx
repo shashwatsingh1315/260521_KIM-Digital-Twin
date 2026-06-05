@@ -1,16 +1,22 @@
-// TrackEditor.jsx — author the transport network (nodes + segments).
+// TrackEditor.jsx — author the transport network (node placement + segments).
 //
 // Junction routing is material-type based and implicit (derived from
 // next_process + station capabilities + graph reachability), so there is no
-// "routing rule" field to edit — the editor edits node/segment topology and
-// properties, and correctness is enforced by validateFactoryConfig before a
-// change is applied. Structural edits replace the whole config (clean re-init).
+// "routing rule" field to edit — the editor edits node coordinates + segment
+// topology/properties, and correctness is enforced by validateFactoryConfig
+// before a change is applied. Structural edits replace the whole config (clean
+// re-init).
+//
+// Node coordinates are real-world metres (x = width, y = floor height,
+// z = depth) so a layout can be placed exactly against an engineering drawing;
+// they are carried as config.layout_overrides and survive the round-trip.
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useTwinContext } from './TwinProvider.jsx';
 import { makeTrackSegment, TRANSPORT_MODE } from '../network/trackSegment.js';
 import { makeFactoryConfig } from '../network/factoryConfig.js';
 import { validateFactoryConfig } from '../engine/validator.js';
+import { computeTwinLayout } from './twinLayout.js';
 
 const IDLE = 'idle';
 const EDITING = 'editing';
@@ -50,24 +56,38 @@ export default function TrackEditor({ onClose }) {
 
   const [mode, setMode] = useState(IDLE);
   const [drafts, setDrafts] = useState(null);
+  const [coords, setCoords] = useState(null);   // { nodeId: {x,y,z} } pinned overrides
   const [errors, setErrors] = useState([]);
+
+  // Computed fallback positions so the inputs show meaningful numbers even for
+  // nodes that have no explicit override yet.
+  const computed = useMemo(
+    () => computeTwinLayout(config, config.layout_overrides || {}),
+    [config],
+  );
+  const posOf = useCallback(
+    (id, src) => src?.[id] ?? config.layout_overrides?.[id] ?? computed.get(id) ?? { x: 0, y: 0, z: 0 },
+    [config.layout_overrides, computed],
+  );
 
   const handleEdit = useCallback(() => {
     pause();
     setDrafts(config.segments.map(toDraft));
+    setCoords({ ...(config.layout_overrides || {}) });
     setErrors([]);
     setMode(EDITING);
-  }, [pause, config.segments]);
+  }, [pause, config.segments, config.layout_overrides]);
 
   const handleCancel = useCallback(() => {
     setMode(IDLE);
     setDrafts(null);
+    setCoords(null);
     setErrors([]);
     resume();
   }, [resume]);
 
-  // Build a candidate config from the current drafts, validating as we go.
-  const buildCandidate = useCallback((nextDrafts) => {
+  // Build a candidate config from the current drafts + coordinates, validating.
+  const buildCandidate = useCallback((nextDrafts, nextCoords) => {
     try {
       const segments = nextDrafts.map(rebuildSegment);
       const candidate = makeFactoryConfig({
@@ -80,6 +100,7 @@ export default function TrackEditor({ onClose }) {
         carrierPools: config.carrierPools,
         shifts: config.shifts,
         orders: config.orders,
+        layout_overrides: { ...(config.layout_overrides || {}), ...(nextCoords || {}) },
       });
       const v = validateFactoryConfig(candidate);
       return { candidate, errors: v.errors };
@@ -91,13 +112,23 @@ export default function TrackEditor({ onClose }) {
   const updateDraft = useCallback((idx, patch) => {
     setDrafts((prev) => {
       const next = prev.map((d, i) => (i === idx ? { ...d, ...patch } : d));
-      setErrors(buildCandidate(next).errors);
+      setErrors(buildCandidate(next, coords).errors);
       return next;
     });
-  }, [buildCandidate]);
+  }, [buildCandidate, coords]);
+
+  const updateCoord = useCallback((nodeId, axis, value) => {
+    setCoords((prev) => {
+      const base = posOf(nodeId, prev);
+      const n = Number(value);
+      const next = { ...prev, [nodeId]: { x: base.x, y: base.y, z: base.z, [axis]: Number.isFinite(n) ? n : 0 } };
+      setErrors(buildCandidate(drafts, next).errors);
+      return next;
+    });
+  }, [buildCandidate, drafts, posOf]);
 
   const handleApply = useCallback(() => {
-    const { candidate, errors: errs } = buildCandidate(drafts);
+    const { candidate, errors: errs } = buildCandidate(drafts, coords);
     if (errs.length || !candidate) {
       setErrors(errs.length ? errs : ['Invalid network configuration']);
       return;
@@ -105,9 +136,10 @@ export default function TrackEditor({ onClose }) {
     setConfig(candidate);   // full engine re-init with the new network
     setMode(IDLE);
     setDrafts(null);
+    setCoords(null);
     setErrors([]);
     resume();
-  }, [drafts, buildCandidate, setConfig, resume]);
+  }, [drafts, coords, buildCandidate, setConfig, resume]);
 
   // Cleanup: if the form unmounts while in EDITING mode, resume the twin.
   useEffect(() => {
@@ -128,7 +160,7 @@ export default function TrackEditor({ onClose }) {
         top: 64,
         left: '50%',
         transform: 'translateX(-50%)',
-        width: 340,
+        width: 360,
         maxHeight: '70vh',
         overflowY: 'auto',
         background: 'rgba(12,19,34,0.94)',
@@ -140,7 +172,7 @@ export default function TrackEditor({ onClose }) {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', borderBottom: '1px solid #1e293b' }}>
-        <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: '#94a3b8' }}>Network editor</span>
+        <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: '#94a3b8' }}>Network &amp; layout editor</span>
         <button onClick={onClose} style={closeBtn}>×</button>
       </div>
 
@@ -149,18 +181,30 @@ export default function TrackEditor({ onClose }) {
       )}
 
       <div style={{ padding: '10px 12px' }}>
-        {/* Nodes (read-only topology) */}
-        <div style={sectionLabel}>Nodes ({config.nodes.length})</div>
-        <div style={{ fontSize: 11, fontFamily: 'monospace', color: '#64748b', marginBottom: 10, lineHeight: 1.5 }}>
-          {config.nodes.map((n) => (
-            <span key={n.id} data-testid={`node-row-${n.id}`} style={{ marginRight: 8 }}>
-              {n.id}<span style={{ color: '#475569' }}>:{n.type}</span>
-            </span>
-          ))}
-        </div>
+        {/* Nodes — coordinates in metres (x / y / z) */}
+        <div style={sectionLabel}>Node positions — metres ({config.nodes.length})</div>
+        {config.nodes.map((n) => {
+          const p = posOf(n.id, coords);
+          return (
+            <div
+              key={n.id}
+              data-testid={`node-row-${n.id}`}
+              style={{ border: '1px solid #1e293b', borderRadius: 6, padding: '6px 8px', marginBottom: 6 }}
+            >
+              <div style={{ fontSize: 11, fontFamily: 'monospace', color: '#94a3b8', marginBottom: 4 }}>
+                {n.id}<span style={{ color: '#475569' }}> · {n.type}</span>
+              </div>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <Field label="x" testid={`node-x-${n.id}`} value={p.x} disabled={!editing} onChange={(v) => updateCoord(n.id, 'x', v)} />
+                <Field label="y" testid={`node-y-${n.id}`} value={p.y} disabled={!editing} onChange={(v) => updateCoord(n.id, 'y', v)} />
+                <Field label="z" testid={`node-z-${n.id}`} value={p.z} disabled={!editing} onChange={(v) => updateCoord(n.id, 'z', v)} />
+              </div>
+            </div>
+          );
+        })}
 
         {/* Segments */}
-        <div style={sectionLabel}>Segments ({config.segments.length})</div>
+        <div style={{ ...sectionLabel, marginTop: 10 }}>Segments ({config.segments.length})</div>
         {(editing ? drafts : config.segments.map(toDraft)).map((d, idx) => (
           <div
             key={d.id}
@@ -226,7 +270,7 @@ export default function TrackEditor({ onClose }) {
 
 function Field({ label, testid, value, disabled, onChange }) {
   return (
-    <label style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <label style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 1 }}>
       <span style={{ fontSize: 10, color: '#64748b' }}>{label}</span>
       <input
         data-testid={testid}
@@ -234,7 +278,7 @@ function Field({ label, testid, value, disabled, onChange }) {
         value={value}
         disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
-        style={{ ...inputStyle, width: 60, opacity: disabled ? 0.6 : 1 }}
+        style={{ ...inputStyle, width: '100%', opacity: disabled ? 0.6 : 1 }}
       />
     </label>
   );

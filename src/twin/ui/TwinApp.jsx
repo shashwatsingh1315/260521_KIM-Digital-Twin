@@ -19,6 +19,8 @@ import FixtureSelector from './FixtureSelector.jsx';
 import TrackEditor from './TrackEditor.jsx';
 import CarrierPoolPanel from './CarrierPoolPanel.jsx';
 import ConfigPanel from './ConfigPanel.jsx';
+import MetricsDashboard from './MetricsDashboard.jsx';
+import ImportExportMenu from './ImportExportMenu.jsx';
 import { T, Button } from './kit.jsx';
 import { makeLinearLineFixture } from '../fixtures/linearLine.js';
 import { toDraft, buildConfig } from './configDraft.js';
@@ -46,6 +48,7 @@ function Toolbar({ showConfig, onToggleConfig, openEditor, onToggleEditor, saveS
       </Button>
       <Button testid="open-track-editor" variant={openEditor === 'track' ? 'violet' : 'default'} onClick={() => onToggleEditor('track')}>Network</Button>
       <Button testid="open-carrier-panel" variant={openEditor === 'carrier' ? 'violet' : 'default'} onClick={() => onToggleEditor('carrier')}>Carriers</Button>
+      <ImportExportMenu />
     </div>
   );
 }
@@ -135,6 +138,7 @@ export default function TwinApp() {
           data-testid="metrics-rail"
           style={{ position: 'absolute', top: 56, right: 12, width: 244, display: 'flex', flexDirection: 'column', gap: 10, zIndex: 100, maxHeight: 'calc(100vh - 140px)', overflowY: 'auto' }}
         >
+          <MetricsDashboard />
           <HeadcountPanel />
           <WipHeatmap />
           <ShockConsole />
