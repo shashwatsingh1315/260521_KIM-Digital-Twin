@@ -150,6 +150,21 @@ export default function ConfigPanel({ open, onClose, initialTab }) {
   const addItem = useCallback((key, item) => mutate((d) => ({ ...d, [key]: [...d[key], item] })), [mutate]);
   const removeItem = useCallback((key, idx) => mutate((d) => ({ ...d, [key]: d[key].filter((_, i) => i !== idx) })), [mutate]);
 
+  // Set one axis (metres) of a node's measured coordinate. Absent nodes fall
+  // back to auto-layout; setting any axis pins all three so the position is
+  // explicit and survives every round-trip.
+  const setCoord = useCallback((nodeId, axis, value) => mutate((d) => {
+    const cur = d.layout_overrides?.[nodeId] ?? { x: 0, y: 0, z: 0 };
+    const n = Number(value);
+    return {
+      ...d,
+      layout_overrides: {
+        ...(d.layout_overrides ?? {}),
+        [nodeId]: { x: cur.x ?? 0, y: cur.y ?? 0, z: cur.z ?? 0, [axis]: Number.isFinite(n) ? n : 0 },
+      },
+    };
+  }), [mutate]);
+
   const apply = useCallback(() => {
     if (errors.length || !candidate) return;
     if (setSeed && draft.seed !== seed) setSeed(draft.seed);
@@ -191,7 +206,7 @@ export default function ConfigPanel({ open, onClose, initialTab }) {
         {tab === 'materials' && <MaterialsTab draft={draft} procOptions={procOptions} patch={patchItem} add={addItem} remove={removeItem} setList={setList} />}
         {tab === 'processes' && <ProcessesTab draft={draft} matOptions={matOptions} patch={patchItem} add={addItem} remove={removeItem} setList={setList} />}
         {tab === 'stations' && <StationsTab draft={draft} procOptions={procOptions} nodeOptions={draft.nodes.map((n) => n.id)} patch={patchItem} add={addItem} remove={removeItem} mutate={mutate} />}
-        {tab === 'network' && <NetworkTab draft={draft} nodeOptions={nodeOptions} poolOptions={poolOptions} patch={patchItem} add={addItem} remove={removeItem} />}
+        {tab === 'network' && <NetworkTab draft={draft} nodeOptions={nodeOptions} poolOptions={poolOptions} patch={patchItem} add={addItem} remove={removeItem} setCoord={setCoord} />}
         {tab === 'carriers' && <CarriersTab draft={draft} patch={patchItem} add={addItem} remove={removeItem} />}
         {tab === 'shifts' && <ShiftsTab draft={draft} patch={patchItem} add={addItem} remove={removeItem} setList={setList} />}
         {tab === 'sim' && <SimTab draft={draft} mutate={mutate} />}
@@ -358,19 +373,30 @@ function StationsTab({ draft, procOptions, nodeOptions, patch, add, remove, muta
   );
 }
 
-function NetworkTab({ draft, nodeOptions, poolOptions, patch, add, remove }) {
+function NetworkTab({ draft, nodeOptions, poolOptions, patch, add, remove, setCoord }) {
   return (
     <div>
       <SectionTitle>Nodes</SectionTitle>
-      {draft.nodes.map((n, i) => (
+      {draft.nodes.map((n, i) => {
+        const c = draft.layout_overrides?.[n.id] ?? {};
+        return (
         <EntityCard key={i} testid={`node-card-${n.id || i}`} title={n.id || '(new node)'} badge={<Badge color={T.textDim} bg="rgba(148,163,184,0.12)">{n.type}</Badge>} onRemove={() => remove('nodes', i)}>
           <Grid2>
             <Field label="id"><TextInput value={n.id} onChange={(v) => patch('nodes', i, { id: v })} /></Field>
             <Field label="type"><Select value={n.type} onChange={(v) => patch('nodes', i, { type: v })} options={NODE_TYPES} /></Field>
           </Grid2>
           <Field label="name" style={{ marginTop: 8 }}><TextInput value={n.name} onChange={(v) => patch('nodes', i, { name: v })} /></Field>
+          <Field label="position (metres, from floor plan)" style={{ marginTop: 8 }}>
+            <Grid2 cols={3}>
+              <NumberInput testid={`node-x-${n.id}`} value={c.x ?? ''} step={0.1} onChange={(v) => setCoord(n.id, 'x', v)} />
+              <NumberInput testid={`node-y-${n.id}`} value={c.y ?? ''} step={0.1} onChange={(v) => setCoord(n.id, 'y', v)} />
+              <NumberInput testid={`node-z-${n.id}`} value={c.z ?? ''} step={0.1} onChange={(v) => setCoord(n.id, 'z', v)} />
+            </Grid2>
+            <span style={{ fontSize: 10, color: T.textFaint, marginTop: 2 }}>x = width · y = floor height · z = depth. Blank = auto-placed.</span>
+          </Field>
         </EntityCard>
-      ))}
+        );
+      })}
       <AddBtn testid="add-node" onClick={() => add('nodes', { id: `node_${draft.nodes.length + 1}`, type: 'junction', name: '' })}>+ Add node</AddBtn>
 
       <SectionTitle>Segments</SectionTitle>

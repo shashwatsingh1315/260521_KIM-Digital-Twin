@@ -14,4 +14,10 @@ export { default as FixtureSelector } from './FixtureSelector.jsx';
 export { default as TrackEditor } from './TrackEditor.jsx';
 export { default as CarrierPoolPanel } from './CarrierPoolPanel.jsx';
 export { default as ConfigPanel } from './ConfigPanel.jsx';
+export { default as MetricsDashboard } from './MetricsDashboard.jsx';
+export { default as ImportExportMenu } from './ImportExportMenu.jsx';
 export { toDraft, buildConfig, buildAndValidate } from './configDraft.js';
+export {
+  exportConfigJSON, importConfigJSON, exportCoordinatesCSV,
+  parseCoordinatesCSV, importCoordinatesCSV,
+} from './configIO.js';

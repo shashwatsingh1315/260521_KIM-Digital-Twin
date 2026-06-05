@@ -111,3 +111,26 @@ describe('makeSchemaMatrix', () => {
     expect(() => makeSchemaMatrix({ process_id: 'p', rows: [{ system: 'Oracle' }] })).toThrow(/must be one of/);
   });
 });
+
+describe('process schema_impact', () => {
+  test('makeProcess carries schema_impact through', () => {
+    const sm = makeSchemaMatrix({ process_id: 'proc_seal', rows: [{ system: 'MES', create: ['Seal_Number'] }] });
+    const proc = makeProcess({ id: 'proc_seal', name: 'Seal', kind: KIND.SEAL, adds_enrichments: ['seal'], schema_impact: sm });
+    expect(proc.schema_impact).toBe(sm);
+    expect(proc.schema_impact.rows[0].create).toEqual(['Seal_Number']);
+  });
+
+  test('defaults to null when omitted', () => {
+    const proc = makeProcess({ id: 'proc_smt', name: 'SMT', kind: KIND.TRANSFORM, output_material: 'M_PCBA' });
+    expect(proc.schema_impact).toBe(null);
+  });
+
+  test('can be added by reconstructing an existing process (UI apply path)', () => {
+    const before = makeProcess({ id: 'proc_smt', name: 'SMT', kind: KIND.TRANSFORM, output_material: 'M_PCBA' });
+    const sm = makeSchemaMatrix({ process_id: 'proc_smt', rows: [{ system: 'WMS', update: ['Stock_Status'] }] });
+    const after = makeProcess({ ...before, schema_impact: sm });
+    expect(after.schema_impact).toBe(sm);
+    expect(after.output_material).toBe('M_PCBA'); // kind-specific fields preserved
+    expect(after.kind).toBe(KIND.TRANSFORM);
+  });
+});
