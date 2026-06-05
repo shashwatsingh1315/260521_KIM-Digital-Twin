@@ -87,6 +87,18 @@ export function useTwin(config, opts = {}) {
 
     // Compute metrics once per frame from the now-current state.
     const m = liveMetrics(config, state.flowState, state.carrierState);
+    // Enrich with run-state the analytics dashboard needs: WIP in system and a
+    // lightweight per-order progress snapshot (counters live on engine state).
+    m.simTime = state.clock.now();
+    m.unitsInSystem = state.govState.wipCount;
+    m.orders = state.orders.map((o) => ({
+      id: o.id,
+      quantity: o.quantity,
+      units_created: o.units_created,
+      units_completed: o.units_completed,
+      scrap: o.scrap,
+      status: o.status,
+    }));
     setSimTime(state.clock.now());
     setMetrics(m);
     if (newShocks.length) setShocks((prev) => [...prev, ...newShocks]);

@@ -92,6 +92,13 @@ export function toDraft(config) {
       process_sequence: [...(o.process_sequence ?? [])],
       arrival_time: o.arrival_time ?? 0,
     })),
+    // Measured node coordinates (metres), keyed by node id. Carried through the
+    // draft so engineering-drawing positions survive edits, import, and reload.
+    layout_overrides: Object.fromEntries(
+      Object.entries(config.layout_overrides ?? {}).map(([id, p]) => [
+        id, { x: p?.x ?? 0, y: p?.y ?? 0, z: p?.z ?? 0 },
+      ]),
+    ),
   };
 }
 
@@ -199,7 +206,10 @@ export function buildConfig(draft) {
       arrival_time: num(o.arrival_time, 0),
     }));
 
-  return makeFactoryConfig({ materials, processes, stations, segments, nodes, exits, carrierPools, shifts, orders });
+  return makeFactoryConfig({
+    materials, processes, stations, segments, nodes, exits, carrierPools, shifts, orders,
+    layout_overrides: draft.layout_overrides ?? {},
+  });
 }
 
 // ---- combined build + validate; never throws ----

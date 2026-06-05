@@ -135,6 +135,29 @@ export function makeFactoryConfig({
     carrierPools: Object.freeze([...carrierPools]),
     shifts: Object.freeze([...shifts]),
     orders: Object.freeze([...orders]),
-    layout_overrides: Object.freeze({...(layout_overrides || {})}),
+    layout_overrides: normalizeLayoutOverrides(layout_overrides),
   });
+}
+
+// Normalize manual coordinate overrides to frozen { x, y, z } in meters.
+//
+// Coordinates are real-world measured positions (metres) keyed by node id, so
+// that a layout traced from an engineering drawing survives every config
+// round-trip (draft edit, JSON import, DB load). Non-finite or partial entries
+// are coerced to finite numbers (missing axes default to 0) and silently
+// dropped if they carry no usable value, keeping the map clean.
+export function normalizeLayoutOverrides(overrides) {
+  const out = {};
+  for (const [nodeId, raw] of Object.entries(overrides || {})) {
+    if (!raw || typeof raw !== 'object') continue;
+    const x = Number(raw.x);
+    const y = Number(raw.y);
+    const z = Number(raw.z);
+    out[nodeId] = Object.freeze({
+      x: Number.isFinite(x) ? x : 0,
+      y: Number.isFinite(y) ? y : 0,
+      z: Number.isFinite(z) ? z : 0,
+    });
+  }
+  return Object.freeze(out);
 }
