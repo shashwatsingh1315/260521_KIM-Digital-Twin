@@ -19,6 +19,7 @@ import FixtureSelector from './FixtureSelector.jsx';
 import TrackEditor from './TrackEditor.jsx';
 import CarrierPoolPanel from './CarrierPoolPanel.jsx';
 import ConfigPanel from './ConfigPanel.jsx';
+import FactoryWizard from './wizard/FactoryWizard.jsx';
 import MetricsDashboard from './MetricsDashboard.jsx';
 import ImportExportMenu from './ImportExportMenu.jsx';
 import { T, Button } from './kit.jsx';
@@ -28,7 +29,7 @@ import { toDraft, buildConfig } from './configDraft.js';
 const SAVE_LABEL = { saving: '● Saving…', saved: '✓ Saved', error: '✕ Save failed' };
 const SAVE_COLOR = { saving: T.textFaint, saved: T.cyan, error: '#ef4444' };
 
-function Toolbar({ showConfig, onToggleConfig, openEditor, onToggleEditor, saveStatus }) {
+function Toolbar({ showConfig, onToggleConfig, openEditor, onToggleEditor, onOpenWizard, saveStatus }) {
   return (
     <div
       data-testid="twin-toolbar"
@@ -43,6 +44,9 @@ function Toolbar({ showConfig, onToggleConfig, openEditor, onToggleEditor, saveS
           {SAVE_LABEL[saveStatus]}
         </span>
       )}
+      <Button testid="open-wizard" variant="default" onClick={onOpenWizard}>
+        ✦ Wizard
+      </Button>
       <Button testid="toggle-config" variant={showConfig ? 'violet' : 'default'} onClick={onToggleConfig}>
         ⚙ Configuration
       </Button>
@@ -60,6 +64,8 @@ export default function TwinApp() {
   const [selectedStationId, setSelectedStationId] = useState(null);
   const [openEditor, setOpenEditor] = useState(null); // 'track' | 'carrier' | null
   const [showConfig, setShowConfig] = useState(true);
+  const [showWizard, setShowWizard] = useState(false);
+  const [configTab, setConfigTab] = useState(null); // deep-link target for ConfigPanel
   const [saveStatus, setSaveStatus] = useState(null); // 'saving' | 'saved' | 'error' | null
   const loadedFromDb = useRef(false);
 
@@ -124,6 +130,7 @@ export default function TwinApp() {
           onToggleConfig={() => setShowConfig((s) => !s)}
           openEditor={openEditor}
           onToggleEditor={toggleEditor}
+          onOpenWizard={() => setShowWizard(true)}
           saveStatus={saveStatus}
         />
 
@@ -131,7 +138,7 @@ export default function TwinApp() {
         <FixtureSelector value={fixtureKey} onChange={handleFixtureChange} />
 
         {/* Left configuration dock */}
-        <ConfigPanel open={showConfig} onClose={() => setShowConfig(false)} />
+        <ConfigPanel open={showConfig} onClose={() => setShowConfig(false)} initialTab={configTab} />
 
         {/* Right metrics rail */}
         <div
@@ -156,6 +163,14 @@ export default function TwinApp() {
           <ProcessForm
             selectedStationId={selectedStationId}
             onClose={() => setSelectedStationId(null)}
+          />
+        )}
+
+        {/* Guided builder (modal overlay) */}
+        {showWizard && (
+          <FactoryWizard
+            onClose={() => setShowWizard(false)}
+            onOpenNetwork={() => { setConfigTab('network'); setShowConfig(true); }}
           />
         )}
       </TwinProvider>

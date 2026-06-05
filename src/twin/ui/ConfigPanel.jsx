@@ -115,11 +115,13 @@ function AddBtn({ onClick, children, testid }) {
 
 // ── the panel ─────────────────────────────────────────────────────────────
 
-export default function ConfigPanel({ open, onClose }) {
+export default function ConfigPanel({ open, onClose, initialTab }) {
   const { config, twinHook, setConfig, seed = 0, setSeed } = useTwinContext();
   const { pause, resume } = twinHook;
 
-  const [tab, setTab] = useState('orders');
+  const [tab, setTab] = useState(initialTab ?? 'orders');
+  // Follow an external deep-link request (e.g. the wizard routing to Network).
+  useEffect(() => { if (initialTab) setTab(initialTab); }, [initialTab]);
   const [draft, setDraft] = useState(() => ({ ...toDraft(config), seed }));
   const [dirty, setDirty] = useState(false);
   const dirtyRef = useRef(false);
