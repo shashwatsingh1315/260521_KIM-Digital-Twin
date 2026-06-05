@@ -29,15 +29,44 @@ export function makeLinearLineFixture() {
 
   // --- PROCESSES ---
   // Takt times strictly derived from m800_model.js process definitions
-  const procIqc = makeProcess({ id: 'proc_iqc', name: 'GRN + IQC', kind: KIND.INSPECT, pass_rate: 1.0 }); // 900s
+  const procIqc = makeProcess({
+    id: 'proc_iqc', name: 'GRN + IQC', kind: KIND.INSPECT, pass_rate: 1.0, // 900s
+    schema_impact: makeSchemaMatrix({
+      process_id: 'proc_iqc',
+      rows: [
+        { system: 'SAP', create: ['GRN_Number'], read: ['PO_Reference', 'Material_Code'] },
+        { system: 'MES', read: ['Inspection_Plan'], create: ['IQC_Result'] },
+        { system: 'WMS', update: ['Stock_Status'] },
+      ],
+    }),
+  });
   const procSmt = makeProcess({ id: 'proc_smt', name: 'SMT + Wave', kind: KIND.TRANSFORM, output_material: 'M_PCBA' }); // 60s
   const procFct = makeProcess({ id: 'proc_fct', name: 'Intelligent FCT', kind: KIND.INSPECT, pass_rate: 1.0 }); // 10s
   const proc1p = makeProcess({ id: 'proc_1p', name: '1P Assembly', kind: KIND.ASSEMBLY, output_material: 'M_SFG', bom: { 'M_PCBA': 1, 'M_BATTERY': 1 } }); // 16.6s
   const procSfgPack = makeProcess({ id: 'proc_sfg_pack', name: 'SFG Pack', kind: KIND.TRANSFORM, output_material: 'M_SFG' }); // 15s
   const procAsrs = makeProcess({ id: 'proc_asrs', name: 'WIP Storage', kind: KIND.TRANSFORM, output_material: 'M_SFG' }); // ASRS storage
-  const procVc = makeProcess({ id: 'proc_vc', name: 'NIC+SIM+Seal', kind: KIND.TRANSFORM, output_material: 'M_FG' }); // 22.5s
+  const procVc = makeProcess({
+    id: 'proc_vc', name: 'NIC+SIM+Seal', kind: KIND.TRANSFORM, output_material: 'M_FG', // 22.5s
+    schema_impact: makeSchemaMatrix({
+      process_id: 'proc_vc',
+      rows: [
+        { system: 'MES', create: ['Seal_Number', 'SIM_ID'], read: ['PCB_Number'], update: ['Status'] },
+        { system: 'Noviga', create: ['Network_Profile'] },
+      ],
+    }),
+  });
   const procPack = makeProcess({ id: 'proc_pack', name: 'Screen+Laser+Pack', kind: KIND.TRANSFORM, output_material: 'M_FG' }); // 30s+19s = 49s
-  const procFat = makeProcess({ id: 'proc_fat', name: 'PDI + FAT', kind: KIND.INSPECT, pass_rate: 1.0 }); // 600s
+  const procFat = makeProcess({
+    id: 'proc_fat', name: 'PDI + FAT', kind: KIND.INSPECT, pass_rate: 1.0, // 600s
+    schema_impact: makeSchemaMatrix({
+      process_id: 'proc_fat',
+      rows: [
+        { system: 'SAP', update: ['Order_Status'] },
+        { system: 'MES', create: ['FAT_Result'], update: ['Status'] },
+        { system: 'Noviga', read: ['Device_Config'] },
+      ],
+    }),
+  });
 
   // --- NODES ---
   const nSupplier = makeTrackNode({ id: 'n_supplier', type: NODE_TYPE.INTAKE, name: 'Supplier Gate' });
