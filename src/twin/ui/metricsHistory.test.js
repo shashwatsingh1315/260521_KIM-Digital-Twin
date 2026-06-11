@@ -105,3 +105,59 @@ describe('metricsHistory — sparklinePoints', () => {
     expect(pts[1].startsWith('100.0,')).toBe(true);
   });
 });
+
+describe('metricsHistory — fmtClock', () => {
+  test('formats hh:mm:ss', async () => {
+    const { fmtClock } = await import('./metricsHistory.js');
+    expect(fmtClock(0)).toBe('00:00:00');
+    expect(fmtClock(3661)).toBe('01:01:01');
+    expect(fmtClock(59.9)).toBe('00:00:59');
+  });
+});
+
+describe('metricsHistory — trendDelta', () => {
+  test('null with too little history', async () => {
+    const { trendDelta } = await import('./metricsHistory.js');
+    expect(trendDelta([], 60)).toBeNull();
+    expect(trendDelta([{ t: 0, wip: 1 }, { t: 5, wip: 2 }], 60)).toBeNull();
+  });
+
+  test('positive when recent window averages higher', async () => {
+    const { trendDelta } = await import('./metricsHistory.js');
+    // prior window (t 0..50): wip 2; recent window (t 60..110): wip 4 → +1.0
+    const h = [];
+    for (let t = 0; t <= 50; t += 10) h.push({ t, wip: 2 });
+    for (let t = 60; t <= 110; t += 10) h.push({ t, wip: 4 });
+    const d = trendDelta(h, 50, (s) => s.wip);
+    expect(d).toBeGreaterThan(0.9);
+    expect(d).toBeLessThan(1.1);
+  });
+
+  test('zero for a flat series', async () => {
+    const { trendDelta } = await import('./metricsHistory.js');
+    const h = [];
+    for (let t = 0; t <= 120; t += 10) h.push({ t, wip: 3 });
+    expect(trendDelta(h, 50, (s) => s.wip)).toBe(0);
+  });
+});
+
+describe('metricsHistory — sparklineAreaPath / seriesMinMax', () => {
+  test('empty series → empty path', async () => {
+    const { sparklineAreaPath } = await import('./metricsHistory.js');
+    expect(sparklineAreaPath([], 100, 20)).toBe('');
+  });
+
+  test('closed path starts and ends on the baseline', async () => {
+    const { sparklineAreaPath } = await import('./metricsHistory.js');
+    const p = sparklineAreaPath([0, 5, 10], 100, 20);
+    expect(p.startsWith('M0.0,20')).toBe(true);
+    expect(p.endsWith('Z')).toBe(true);
+    expect(p).toContain('L100.0,20');
+  });
+
+  test('seriesMinMax finds extremes', async () => {
+    const { seriesMinMax } = await import('./metricsHistory.js');
+    expect(seriesMinMax([3, -1, 7])).toEqual({ min: -1, max: 7 });
+    expect(seriesMinMax([])).toEqual({ min: 0, max: 0 });
+  });
+});

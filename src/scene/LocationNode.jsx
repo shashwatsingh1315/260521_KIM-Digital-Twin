@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Html, useGLTF } from '@react-three/drei';
 import { buffer_capacity } from '../data/m800_model.js';
 import { modelPath } from './ModelRegistry.js';
@@ -110,8 +110,21 @@ function SelectRing() {
   );
 }
 
+// ─── Hover highlight ring ────────────────────────────────────────────────────
+function HoverRing() {
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
+      <ringGeometry args={[1.6, 2.1, 32]} />
+      <meshBasicMaterial color="#3b82f6" transparent opacity={0.4} />
+    </mesh>
+  );
+}
+
 // ─── LocationNode ─────────────────────────────────────────────────────────────
-export default function LocationNode({ loc, pos, simState, onSelect, isSelected, dimmed, fillRatio }) {
+// onHoverChange is optional and additive (the legacy FactoryTwin route does
+// not pass it): fires true/false as the pointer enters/leaves the node.
+export default function LocationNode({ loc, pos, simState, onSelect, isSelected, dimmed, fillRatio, onHoverChange }) {
+  const [hovered, setHovered] = useState(false);
   if (!pos) return null;
   const glbPath = modelPath(loc);
   const fallback = <ProcMesh loc={loc} simState={simState} dimmed={dimmed} fillRatio={fillRatio} />;
@@ -128,10 +141,11 @@ export default function LocationNode({ loc, pos, simState, onSelect, isSelected,
       position={[pos.x, pos.y, pos.z]}
       rotation={[0, yRot, 0]}
       onClick={handleClick}
-      onPointerEnter={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
-      onPointerLeave={() => { document.body.style.cursor = 'default'; }}
+      onPointerEnter={(e) => { e.stopPropagation(); setHovered(true); onHoverChange?.(true); document.body.style.cursor = 'pointer'; }}
+      onPointerLeave={() => { setHovered(false); onHoverChange?.(false); document.body.style.cursor = 'default'; }}
     >
       {isSelected && <SelectRing />}
+      {hovered && !isSelected && <HoverRing />}
 
       {glbPath ? (
         <ModelBoundary fallback={fallback}>

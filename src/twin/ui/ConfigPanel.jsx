@@ -10,58 +10,76 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useTwinContext } from './TwinProvider.jsx';
 import {
   T, Panel, Field, TextInput, NumberInput, Select, Button, IconButton,
-  Badge, Tabs, SectionTitle, EntityCard, Grid2,
+  Badge, SectionTitle, EntityCard, Grid2,
+  SearchInput, ConfirmDialog, EmptyState,
+  Stepper, SliderInput, SegmentedControl, WeekdayPicker, ChipList,
 } from './kit.jsx';
 import {
   toDraft, buildAndValidate, PROCESS_KINDS, NODE_TYPES, EXIT_KINDS,
   CARRIER_KINDS, TRANSPORT_MODES,
 } from './configDraft.js';
 
-const TABS = [
-  { key: 'orders', label: 'Orders' },
-  { key: 'materials', label: 'Materials' },
-  { key: 'processes', label: 'Processes' },
-  { key: 'stations', label: 'Stations' },
-  { key: 'network', label: 'Network' },
-  { key: 'carriers', label: 'Carriers' },
-  { key: 'shifts', label: 'Shifts' },
-  { key: 'sim', label: 'Simulation' },
+// Tabs grouped by concern. Every tab button stays mounted (e2e clicks them
+// directly) — the grouping is visual, not navigational.
+const GROUPS = [
+  { label: 'Demand', tabs: [{ key: 'orders', label: 'Orders' }, { key: 'materials', label: 'Materials' }] },
+  { label: 'Production', tabs: [{ key: 'processes', label: 'Processes' }, { key: 'stations', label: 'Stations' }] },
+  { label: 'Logistics', tabs: [{ key: 'network', label: 'Network' }, { key: 'carriers', label: 'Carriers' }] },
+  { label: 'Operations', tabs: [{ key: 'shifts', label: 'Shifts' }, { key: 'sim', label: 'Simulation' }] },
 ];
 
-const WEEKDAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+// ── grouped tab nav ──────────────────────────────────────────────────────
 
-// ── small composite inputs ───────────────────────────────────────────────
-
-function Chips({ values, options, onChange, addLabel = '+ add', testid }) {
-  const remaining = options ? options.filter((o) => !values.includes(o)) : [];
+function GroupedTabs({ active, onChange }) {
   return (
-    <div data-testid={testid} style={{ display: 'flex', flexWrap: 'wrap', gap: 4, alignItems: 'center' }}>
-      {values.map((v, i) => (
-        <span key={`${v}-${i}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: T.raised, border: `1px solid ${T.borderSoft}`, borderRadius: 4, padding: '1px 4px 1px 7px', fontSize: 11, fontFamily: T.mono, color: T.textDim }}>
-          {v}
-          <IconButton onClick={() => onChange(values.filter((_, j) => j !== i))} title="remove">✕</IconButton>
-        </span>
+    <div role="tablist" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, padding: '8px 10px', borderBottom: `1px solid ${T.borderSoft}` }}>
+      {GROUPS.map((g) => (
+        <div key={g.label} style={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 0 }}>
+          <span style={{ fontSize: 8, fontWeight: 700, letterSpacing: 0.8, textTransform: 'uppercase', color: T.textFaint, fontFamily: T.display, paddingLeft: 2 }}>
+            {g.label}
+          </span>
+          {g.tabs.map((t) => {
+            const on = active === t.key;
+            return (
+              <button
+                key={t.key}
+                role="tab"
+                aria-selected={on}
+                data-testid={`config-tab-${t.key}`}
+                onClick={() => onChange(t.key)}
+                style={{
+                  padding: '4px 6px',
+                  borderRadius: 5,
+                  border: `1px solid ${on ? T.accent : 'transparent'}`,
+                  background: on ? T.accentDeep : 'transparent',
+                  color: on ? '#dbeafe' : T.textFaint,
+                  cursor: 'pointer',
+                  fontSize: 11,
+                  fontFamily: T.sans,
+                  fontWeight: 600,
+                  textAlign: 'left',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  outline: 'none',
+                  transition: `background ${T.transition}, color ${T.transition}`,
+                }}
+                onMouseEnter={(e) => { if (!on) e.currentTarget.style.color = T.textDim; }}
+                onMouseLeave={(e) => { if (!on) e.currentTarget.style.color = T.textFaint; }}
+                onFocus={(e) => { e.target.style.boxShadow = `0 0 0 2px ${T.accent}`; }}
+                onBlur={(e) => { e.target.style.boxShadow = 'none'; }}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
       ))}
-      {options ? (
-        remaining.length > 0 && (
-          <Select
-            value=""
-            onChange={(val) => val && onChange([...values, val])}
-            options={[{ value: '', label: addLabel }, ...remaining]}
-            style={{ width: 'auto', padding: '2px 6px' }}
-          />
-        )
-      ) : (
-        <button
-          onClick={() => onChange([...values, ''])}
-          style={{ background: 'none', border: `1px dashed ${T.borderSoft}`, color: T.textFaint, borderRadius: 4, fontSize: 11, cursor: 'pointer', padding: '1px 7px' }}
-        >
-          {addLabel}
-        </button>
-      )}
     </div>
   );
 }
+
+// ── small composite inputs ───────────────────────────────────────────────
 
 function FreeChips({ values, onChange }) {
   return (
@@ -106,10 +124,52 @@ function AddBtn({ onClick, children, testid }) {
     <button
       data-testid={testid}
       onClick={onClick}
-      style={{ width: '100%', background: 'rgba(59,130,246,0.08)', border: `1px dashed ${T.border}`, color: T.cyan, borderRadius: 6, fontSize: 12, fontFamily: T.mono, cursor: 'pointer', padding: '7px', marginTop: 4 }}
+      style={{ width: '100%', background: 'rgba(59,130,246,0.08)', border: `1px dashed ${T.border}`, color: T.cyan, borderRadius: 6, fontSize: 12, fontFamily: T.sans, fontWeight: 600, cursor: 'pointer', padding: '7px', marginTop: 4, transition: `background ${T.transition}` }}
+      onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(59,130,246,0.16)'; }}
+      onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(59,130,246,0.08)'; }}
     >
       {children}
     </button>
+  );
+}
+
+// Staffing as a per-station table with steppers — every station is listed so
+// coverage gaps are visible; zero rows are dropped on write to keep the draft
+// shape `{ station_id: count }` unchanged.
+function StaffingEditor({ staffing, stations, onChange }) {
+  const set = (id, v) => {
+    const n = Math.max(0, parseInt(v, 10) || 0);
+    const next = { ...staffing };
+    if (n === 0) delete next[id];
+    else next[id] = n;
+    onChange(next);
+  };
+  const total = stations.reduce((sum, st) => sum + (parseInt(staffing?.[st.id], 10) || 0), 0);
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      {stations.length === 0 && (
+        <span style={{ fontSize: 11, color: T.textFaint, fontStyle: 'italic' }}>No stations defined yet.</span>
+      )}
+      {stations.map((st) => (
+        <div key={st.id} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ flex: 1, fontSize: 11, fontFamily: T.mono, color: T.textDim, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {st.id}
+          </span>
+          <Stepper
+            value={staffing?.[st.id] ?? 0}
+            min={0}
+            onChange={(v) => set(st.id, v)}
+            style={{ width: 96, flexShrink: 0 }}
+          />
+        </div>
+      ))}
+      {stations.length > 0 && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: `1px solid ${T.borderSoft}`, paddingTop: 4, marginTop: 2 }}>
+          <span style={{ fontSize: 10, color: T.textFaint, fontFamily: T.sans }}>Total people</span>
+          <span style={{ fontSize: 11, fontFamily: T.mono, fontWeight: 700, color: T.text }}>{total}</span>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -179,6 +239,9 @@ export default function ConfigPanel({ open, onClose, initialTab }) {
     resume();
   }, [config, seed]);
 
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+
   if (!open) return null;
 
   const procOptions = draft.processes.map((p) => p.id).filter(Boolean);
@@ -193,7 +256,7 @@ export default function ConfigPanel({ open, onClose, initialTab }) {
       style={{ position: 'absolute', top: 12, left: 12, bottom: 12, width: 380, zIndex: 250, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
       right={<IconButton onClick={onClose} testid="config-close" title="Close">✕</IconButton>}
     >
-      <Tabs tabs={TABS} active={tab} onChange={setTab} />
+      <GroupedTabs active={tab} onChange={setTab} />
 
       {dirty && (
         <div data-testid="config-dirty-banner" style={{ background: T.violetDeep, color: '#ddd6fe', padding: '4px 12px', fontSize: 11, textAlign: 'center' }}>
@@ -228,10 +291,18 @@ export default function ConfigPanel({ open, onClose, initialTab }) {
           <div style={{ fontSize: 11, color: T.green, marginBottom: 6 }}>✓ Configuration valid</div>
         )}
         <div style={{ display: 'flex', gap: 6 }}>
-          <Button testid="config-apply" variant="primary" disabled={errors.length > 0 || !dirty} onClick={apply} style={{ flex: 1 }}>Apply</Button>
-          <Button testid="config-reset" variant="ghost" disabled={!dirty} onClick={reset} style={{ flex: 1 }}>Reset</Button>
+          <Button testid="config-apply" variant="primary" disabled={errors.length > 0 || !dirty} onClick={() => apply()} style={{ flex: 1 }}>Apply</Button>
+          <Button testid="config-reset" variant="ghost" disabled={!dirty} onClick={() => setShowResetConfirm(true)} style={{ flex: 1 }}>Reset</Button>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={showResetConfirm}
+        title="Reset changes?"
+        message="All unsaved edits will be discarded and the simulation will resume."
+        onConfirm={() => { reset(); setShowResetConfirm(false); }}
+        onCancel={() => setShowResetConfirm(false)}
+      />
     </Panel>
   );
 }
@@ -239,19 +310,26 @@ export default function ConfigPanel({ open, onClose, initialTab }) {
 // ── tabs ────────────────────────────────────────────────────────────────
 
 function OrdersTab({ draft, matOptions, procOptions, patch, add, remove, setList }) {
+  const [filter, setFilter] = useState('');
+  const lf = filter.toLowerCase();
+  const filtered = draft.orders.map((o, i) => ({ o, i })).filter(({ o }) =>
+    !lf || (o.id ?? '').toLowerCase().includes(lf) || (o.material_type ?? '').toLowerCase().includes(lf)
+  );
   return (
     <div>
       <SectionTitle>Production orders</SectionTitle>
-      {draft.orders.map((o, i) => (
-        <EntityCard key={i} testid={`order-card-${o.id || i}`} title={o.id || '(new order)'} onRemove={() => remove('orders', i)}>
+      <SearchInput value={filter} onChange={setFilter} placeholder="Filter orders…" />
+      {filtered.length === 0 && <EmptyState icon="📦" message="No orders yet" hint="Add your first production order to get started." />}
+      {filtered.map(({ o, i }) => (
+        <EntityCard key={i} testid={`order-card-${o.id || i}`} title={o.id || '(new order)'} onRemove={() => remove('orders', i)} onDuplicate={() => add('orders', { ...o, id: `${o.id}_copy` })}>
           <Grid2>
-            <Field label="id"><TextInput testid={`order-id-${i}`} value={o.id} onChange={(v) => patch('orders', i, { id: v })} /></Field>
-            <Field label="material"><Select value={o.material_type} onChange={(v) => patch('orders', i, { material_type: v })} options={['', ...matOptions]} /></Field>
-            <Field label="quantity"><NumberInput testid={`order-qty-${i}`} value={o.quantity} min={1} onChange={(v) => patch('orders', i, { quantity: v })} /></Field>
-            <Field label="arrival (s)"><NumberInput value={o.arrival_time} min={0} onChange={(v) => patch('orders', i, { arrival_time: v })} /></Field>
+            <Field label="id" required><TextInput testid={`order-id-${i}`} value={o.id} onChange={(v) => patch('orders', i, { id: v })} /></Field>
+            <Field label="material" required><Select value={o.material_type} onChange={(v) => patch('orders', i, { material_type: v })} options={['', ...matOptions]} /></Field>
+            <Field label="quantity" required><Stepper testid={`order-qty-${i}`} value={o.quantity} min={1} unit="pcs" onChange={(v) => patch('orders', i, { quantity: v })} /></Field>
+            <Field label="arrival"><Stepper value={o.arrival_time} min={0} step={10} unit="s" onChange={(v) => patch('orders', i, { arrival_time: v })} /></Field>
           </Grid2>
           <Field label="process sequence" style={{ marginTop: 8 }}>
-            <Chips values={o.process_sequence} options={procOptions} onChange={(v) => patch('orders', i, { process_sequence: v })} addLabel="+ step" />
+            <ChipList values={o.process_sequence} options={procOptions} onChange={(v) => patch('orders', i, { process_sequence: v })} addLabel="+ step" />
           </Field>
         </EntityCard>
       ))}
@@ -261,14 +339,21 @@ function OrdersTab({ draft, matOptions, procOptions, patch, add, remove, setList
 }
 
 function MaterialsTab({ draft, procOptions, patch, add, remove }) {
+  const [filter, setFilter] = useState('');
+  const lf = filter.toLowerCase();
+  const filtered = draft.materials.map((m, i) => ({ m, i })).filter(({ m }) =>
+    !lf || (m.id ?? '').toLowerCase().includes(lf)
+  );
   return (
     <div>
       <SectionTitle>Materials</SectionTitle>
-      {draft.materials.map((m, i) => (
-        <EntityCard key={i} testid={`material-card-${m.id || i}`} title={m.id || '(new material)'} onRemove={() => remove('materials', i)}>
-          <Field label="id"><TextInput testid={`material-id-${i}`} value={m.id} onChange={(v) => patch('materials', i, { id: v })} /></Field>
+      <SearchInput value={filter} onChange={setFilter} placeholder="Filter materials…" />
+      {filtered.length === 0 && <EmptyState icon="🧱" message="No materials defined" hint="Define the materials your factory will process." />}
+      {filtered.map(({ m, i }) => (
+        <EntityCard key={i} testid={`material-card-${m.id || i}`} title={m.id || '(new material)'} onRemove={() => remove('materials', i)} onDuplicate={() => add('materials', { ...m, id: `${m.id}_copy`, allowed_processes: [...m.allowed_processes], properties: { ...m.properties } })}>
+          <Field label="id" required><TextInput testid={`material-id-${i}`} value={m.id} onChange={(v) => patch('materials', i, { id: v })} /></Field>
           <Field label="allowed processes" style={{ marginTop: 8 }}>
-            <Chips values={m.allowed_processes} options={procOptions} onChange={(v) => patch('materials', i, { allowed_processes: v })} addLabel="+ proc" />
+            <ChipList values={m.allowed_processes} options={procOptions} onChange={(v) => patch('materials', i, { allowed_processes: v })} addLabel="+ proc" />
           </Field>
           <Field label="properties" style={{ marginTop: 8 }}>
             <KVEditor obj={m.properties} onChange={(v) => patch('materials', i, { properties: v })} keyLabel="prop" valLabel="val" />
@@ -281,16 +366,23 @@ function MaterialsTab({ draft, procOptions, patch, add, remove }) {
 }
 
 function ProcessesTab({ draft, matOptions, patch, add, remove }) {
+  const [filter, setFilter] = useState('');
+  const lf = filter.toLowerCase();
+  const filtered = draft.processes.map((p, i) => ({ p, i })).filter(({ p }) =>
+    !lf || (p.id ?? '').toLowerCase().includes(lf) || (p.name ?? '').toLowerCase().includes(lf) || (p.kind ?? '').toLowerCase().includes(lf)
+  );
   return (
     <div>
       <SectionTitle>Processes</SectionTitle>
-      {draft.processes.map((p, i) => (
-        <EntityCard key={i} testid={`process-card-${p.id || i}`} title={p.id || '(new process)'} badge={<Badge>{p.kind}</Badge>} onRemove={() => remove('processes', i)}>
+      <SearchInput value={filter} onChange={setFilter} placeholder="Filter processes…" />
+      {filtered.length === 0 && <EmptyState icon="⚙" message="No processes defined" hint="Add the manufacturing processes for your production line." />}
+      {filtered.map(({ p, i }) => (
+        <EntityCard key={i} testid={`process-card-${p.id || i}`} title={p.id || '(new process)'} badge={<Badge>{p.kind}</Badge>} onRemove={() => remove('processes', i)} onDuplicate={() => add('processes', { ...p, id: `${p.id}_copy`, bom: { ...p.bom }, adds_enrichments: [...p.adds_enrichments] })}>
           <Grid2>
-            <Field label="id"><TextInput testid={`process-id-${i}`} value={p.id} onChange={(v) => patch('processes', i, { id: v })} /></Field>
+            <Field label="id" required><TextInput testid={`process-id-${i}`} value={p.id} onChange={(v) => patch('processes', i, { id: v })} /></Field>
             <Field label="name"><TextInput value={p.name} onChange={(v) => patch('processes', i, { name: v })} /></Field>
           </Grid2>
-          <Field label="kind" style={{ marginTop: 8 }}>
+          <Field label="kind" required style={{ marginTop: 8 }}>
             <Select testid={`process-kind-${i}`} value={p.kind} onChange={(v) => patch('processes', i, { kind: v })} options={PROCESS_KINDS} />
           </Field>
           {/* kind-specific fields */}
@@ -305,18 +397,18 @@ function ProcessesTab({ draft, matOptions, patch, add, remove }) {
             </Field>
           )}
           {p.kind === 'inspect' && (
-            <Field label="pass rate (0–1)" style={{ marginTop: 8 }}>
-              <NumberInput testid={`process-passrate-${i}`} value={p.pass_rate} min={0} max={1} step={0.01} onChange={(v) => patch('processes', i, { pass_rate: v })} />
+            <Field label="pass rate" style={{ marginTop: 8 }}>
+              <SliderInput testid={`process-passrate-${i}`} value={p.pass_rate} min={0} max={1} step={0.01} format={(n) => `${Math.round(n * 100)}%`} onChange={(v) => patch('processes', i, { pass_rate: v })} />
             </Field>
           )}
           {p.kind === 'hold' && (
             <Grid2 style={{ marginTop: 8 }}>
-              <Field label="dwell (s)"><NumberInput value={p.dwell_seconds} min={1} onChange={(v) => patch('processes', i, { dwell_seconds: v })} /></Field>
-              <Field label="slots"><NumberInput value={p.slots} min={1} onChange={(v) => patch('processes', i, { slots: v })} /></Field>
+              <Field label="dwell"><Stepper value={p.dwell_seconds} min={1} step={5} unit="s" onChange={(v) => patch('processes', i, { dwell_seconds: v })} /></Field>
+              <Field label="slots"><Stepper value={p.slots} min={1} onChange={(v) => patch('processes', i, { slots: v })} /></Field>
             </Grid2>
           )}
           {p.kind === 'store' && (
-            <Field label="slots" style={{ marginTop: 8 }}><NumberInput value={p.slots} min={1} onChange={(v) => patch('processes', i, { slots: v })} /></Field>
+            <Field label="slots" style={{ marginTop: 8 }}><Stepper value={p.slots} min={1} onChange={(v) => patch('processes', i, { slots: v })} /></Field>
           )}
           {(p.kind === 'label' || p.kind === 'seal') && (
             <Field label="adds enrichments" style={{ marginTop: 8 }}><FreeChips values={p.adds_enrichments} onChange={(v) => patch('processes', i, { adds_enrichments: v })} /></Field>
@@ -329,6 +421,11 @@ function ProcessesTab({ draft, matOptions, patch, add, remove }) {
 }
 
 function StationsTab({ draft, procOptions, nodeOptions, patch, add, remove, mutate }) {
+  const [filter, setFilter] = useState('');
+  const lf = filter.toLowerCase();
+  const filtered = draft.stations.map((s, i) => ({ s, i })).filter(({ s }) =>
+    !lf || (s.id ?? '').toLowerCase().includes(lf) || (s.name ?? '').toLowerCase().includes(lf)
+  );
   const patchProc = (si, pi, p) => mutate((d) => ({
     ...d,
     stations: d.stations.map((s, i) => i !== si ? s : { ...s, processes: s.processes.map((sp, j) => j === pi ? { ...sp, ...p } : sp) }),
@@ -342,13 +439,15 @@ function StationsTab({ draft, procOptions, nodeOptions, patch, add, remove, muta
   return (
     <div>
       <SectionTitle>Stations</SectionTitle>
-      {draft.stations.map((s, i) => (
-        <EntityCard key={i} testid={`station-card-${s.id || i}`} title={s.id || '(new station)'} onRemove={() => remove('stations', i)}>
+      <SearchInput value={filter} onChange={setFilter} placeholder="Filter stations…" />
+      {filtered.length === 0 && <EmptyState icon="🏭" message="No stations configured" hint="Stations house processes and form your production line." />}
+      {filtered.map(({ s, i }) => (
+        <EntityCard key={i} testid={`station-card-${s.id || i}`} title={s.id || '(new station)'} onRemove={() => remove('stations', i)} onDuplicate={() => add('stations', { ...s, id: `${s.id}_copy`, processes: s.processes.map((sp) => ({ ...sp })) })}>
           <Grid2>
-            <Field label="id"><TextInput value={s.id} onChange={(v) => patch('stations', i, { id: v })} /></Field>
+            <Field label="id" required><TextInput value={s.id} onChange={(v) => patch('stations', i, { id: v })} /></Field>
             <Field label="name"><TextInput value={s.name} onChange={(v) => patch('stations', i, { name: v })} /></Field>
-            <Field label="node"><Select value={s.node_id} onChange={(v) => patch('stations', i, { node_id: v })} options={['', ...nodeOptions]} /></Field>
-            <Field label="buffer cap"><NumberInput value={s.entry_buffer_capacity} min={1} onChange={(v) => patch('stations', i, { entry_buffer_capacity: v })} /></Field>
+            <Field label="node" required><Select value={s.node_id} onChange={(v) => patch('stations', i, { node_id: v })} options={['', ...nodeOptions]} /></Field>
+            <Field label="buffer cap"><Stepper value={s.entry_buffer_capacity} min={1} unit="pcs" onChange={(v) => patch('stations', i, { entry_buffer_capacity: v })} /></Field>
           </Grid2>
           <SectionTitle>Processes at this station</SectionTitle>
           {s.processes.map((sp, pi) => (
@@ -358,10 +457,10 @@ function StationsTab({ draft, procOptions, nodeOptions, patch, add, remove, muta
                 <IconButton onClick={() => removeProc(i, pi)} title="remove">✕</IconButton>
               </div>
               <Grid2>
-                <Field label="takt (s)"><NumberInput value={sp.takt_seconds} min={1} onChange={(v) => patchProc(i, pi, { takt_seconds: v })} /></Field>
-                <Field label="slots"><NumberInput value={sp.parallel_slots} min={1} onChange={(v) => patchProc(i, pi, { parallel_slots: v })} /></Field>
-                <Field label="ops/slot"><NumberInput value={sp.operators_per_slot} min={0} step={0.5} onChange={(v) => patchProc(i, pi, { operators_per_slot: v })} /></Field>
-                <Field label="automation (0–1)"><NumberInput value={sp.automation_level} min={0} max={1} step={0.1} onChange={(v) => patchProc(i, pi, { automation_level: v })} /></Field>
+                <Field label="takt"><Stepper value={sp.takt_seconds} min={1} unit="s" onChange={(v) => patchProc(i, pi, { takt_seconds: v })} /></Field>
+                <Field label="slots"><Stepper value={sp.parallel_slots} min={1} onChange={(v) => patchProc(i, pi, { parallel_slots: v })} /></Field>
+                <Field label="ops/slot"><Stepper value={sp.operators_per_slot} min={0} step={0.5} onChange={(v) => patchProc(i, pi, { operators_per_slot: v })} /></Field>
+                <Field label="automation"><SliderInput value={sp.automation_level} min={0} max={1} step={0.05} format={(n) => `${Math.round(n * 100)}%`} onChange={(v) => patchProc(i, pi, { automation_level: v })} /></Field>
               </Grid2>
             </div>
           ))}
@@ -383,9 +482,11 @@ function NetworkTab({ draft, nodeOptions, poolOptions, patch, add, remove, setCo
         <EntityCard key={i} testid={`node-card-${n.id || i}`} title={n.id || '(new node)'} badge={<Badge color={T.textDim} bg="rgba(148,163,184,0.12)">{n.type}</Badge>} onRemove={() => remove('nodes', i)}>
           <Grid2>
             <Field label="id"><TextInput value={n.id} onChange={(v) => patch('nodes', i, { id: v })} /></Field>
-            <Field label="type"><Select value={n.type} onChange={(v) => patch('nodes', i, { type: v })} options={NODE_TYPES} /></Field>
+            <Field label="name"><TextInput value={n.name} onChange={(v) => patch('nodes', i, { name: v })} /></Field>
           </Grid2>
-          <Field label="name" style={{ marginTop: 8 }}><TextInput value={n.name} onChange={(v) => patch('nodes', i, { name: v })} /></Field>
+          <Field label="type" style={{ marginTop: 8 }}>
+            <SegmentedControl value={n.type} onChange={(v) => patch('nodes', i, { type: v })} options={NODE_TYPES} />
+          </Field>
           <Field label="position (metres, from floor plan)" style={{ marginTop: 8 }}>
             <Grid2 cols={3}>
               <NumberInput testid={`node-x-${n.id}`} value={c.x ?? ''} step={0.1} onChange={(v) => setCoord(n.id, 'x', v)} />
@@ -403,17 +504,17 @@ function NetworkTab({ draft, nodeOptions, poolOptions, patch, add, remove, setCo
       {draft.segments.map((sg, i) => (
         <EntityCard key={i} testid={`segment-card-${sg.id || i}`} title={`${sg.id || '(new)'}`} badge={<Badge>{sg.class}</Badge>} onRemove={() => remove('segments', i)}>
           <Grid2>
-            <Field label="id"><TextInput value={sg.id} onChange={(v) => patch('segments', i, { id: v })} /></Field>
-            <Field label="class"><Select value={sg.class} onChange={(v) => patch('segments', i, { class: v })} options={['passive', 'carrier']} /></Field>
-            <Field label="from"><Select value={sg.from_node_id} onChange={(v) => patch('segments', i, { from_node_id: v })} options={['', ...nodeOptions]} /></Field>
-            <Field label="to"><Select value={sg.to_node_id} onChange={(v) => patch('segments', i, { to_node_id: v })} options={['', ...nodeOptions]} /></Field>
-            <Field label="length (m)"><NumberInput value={sg.length_m} min={0.1} step={0.5} onChange={(v) => patch('segments', i, { length_m: v })} /></Field>
-            <Field label="capacity"><NumberInput value={sg.capacity} min={1} onChange={(v) => patch('segments', i, { capacity: v })} /></Field>
+            <Field label="id" required><TextInput value={sg.id} onChange={(v) => patch('segments', i, { id: v })} /></Field>
+            <Field label="class"><SegmentedControl value={sg.class} onChange={(v) => patch('segments', i, { class: v })} options={['passive', 'carrier']} /></Field>
+            <Field label="from" required><Select value={sg.from_node_id} onChange={(v) => patch('segments', i, { from_node_id: v })} options={['', ...nodeOptions]} /></Field>
+            <Field label="to" required><Select value={sg.to_node_id} onChange={(v) => patch('segments', i, { to_node_id: v })} options={['', ...nodeOptions]} /></Field>
+            <Field label="length"><Stepper value={sg.length_m} min={0.1} step={0.5} unit="m" onChange={(v) => patch('segments', i, { length_m: v })} /></Field>
+            <Field label="capacity"><Stepper value={sg.capacity} min={1} unit="pcs" onChange={(v) => patch('segments', i, { capacity: v })} /></Field>
           </Grid2>
           {sg.class === 'passive' ? (
             <Grid2 style={{ marginTop: 8 }}>
-              <Field label="mode"><Select value={sg.mode} onChange={(v) => patch('segments', i, { mode: v })} options={TRANSPORT_MODES} /></Field>
-              <Field label="speed (m/min)"><NumberInput value={sg.speed_m_per_min} min={1} onChange={(v) => patch('segments', i, { speed_m_per_min: v })} /></Field>
+              <Field label="mode"><SegmentedControl value={sg.mode} onChange={(v) => patch('segments', i, { mode: v })} options={TRANSPORT_MODES} /></Field>
+              <Field label="speed"><Stepper value={sg.speed_m_per_min} min={1} step={5} unit="m/min" onChange={(v) => patch('segments', i, { speed_m_per_min: v })} /></Field>
             </Grid2>
           ) : (
             <Field label="carrier pool" style={{ marginTop: 8 }}><Select value={sg.pool_id} onChange={(v) => patch('segments', i, { pool_id: v })} options={['', ...poolOptions]} /></Field>
@@ -427,7 +528,7 @@ function NetworkTab({ draft, nodeOptions, poolOptions, patch, add, remove, setCo
         <EntityCard key={i} testid={`exit-card-${e.id || i}`} title={e.id || '(new exit)'} badge={<Badge color={e.kind === 'scrap' ? T.red : T.green} bg="rgba(16,185,129,0.1)">{e.kind}</Badge>} onRemove={() => remove('exits', i)}>
           <Grid2>
             <Field label="id"><TextInput value={e.id} onChange={(v) => patch('exits', i, { id: v })} /></Field>
-            <Field label="kind"><Select value={e.kind} onChange={(v) => patch('exits', i, { kind: v })} options={EXIT_KINDS} /></Field>
+            <Field label="kind"><SegmentedControl value={e.kind} onChange={(v) => patch('exits', i, { kind: v })} options={EXIT_KINDS} /></Field>
           </Grid2>
           <Field label="name" style={{ marginTop: 8 }}><TextInput value={e.name} onChange={(v) => patch('exits', i, { name: v })} /></Field>
         </EntityCard>
@@ -446,14 +547,16 @@ function CarriersTab({ draft, patch, add, remove }) {
       )}
       {draft.carrierPools.map((p, i) => (
         <EntityCard key={i} testid={`pool-card-${p.id || i}`} title={p.id || '(new pool)'} badge={<Badge color={T.violet} bg="rgba(124,58,237,0.12)">{p.carrier_kind}</Badge>} onRemove={() => remove('carrierPools', i)}>
-          <Grid2>
+          <Field label="kind">
+            <SegmentedControl value={p.carrier_kind} onChange={(v) => patch('carrierPools', i, { carrier_kind: v })} options={CARRIER_KINDS} />
+          </Field>
+          <Grid2 style={{ marginTop: 8 }}>
             <Field label="id"><TextInput value={p.id} onChange={(v) => patch('carrierPools', i, { id: v })} /></Field>
-            <Field label="kind"><Select value={p.carrier_kind} onChange={(v) => patch('carrierPools', i, { carrier_kind: v })} options={CARRIER_KINDS} /></Field>
-            <Field label="count"><NumberInput value={p.count} min={1} onChange={(v) => patch('carrierPools', i, { count: v })} /></Field>
-            <Field label="units/trip"><NumberInput value={p.units_per_trip} min={1} onChange={(v) => patch('carrierPools', i, { units_per_trip: v })} /></Field>
-            <Field label="loaded m/min"><NumberInput value={p.speed_loaded_m_per_min} min={1} onChange={(v) => patch('carrierPools', i, { speed_loaded_m_per_min: v })} /></Field>
-            <Field label="empty m/min"><NumberInput value={p.speed_empty_m_per_min} min={1} onChange={(v) => patch('carrierPools', i, { speed_empty_m_per_min: v })} /></Field>
-            <Field label="load/unload (s)"><NumberInput value={p.load_unload_seconds} min={0} onChange={(v) => patch('carrierPools', i, { load_unload_seconds: v })} /></Field>
+            <Field label="count"><Stepper value={p.count} min={1} onChange={(v) => patch('carrierPools', i, { count: v })} /></Field>
+            <Field label="units/trip"><Stepper value={p.units_per_trip} min={1} unit="pcs" onChange={(v) => patch('carrierPools', i, { units_per_trip: v })} /></Field>
+            <Field label="load/unload"><Stepper value={p.load_unload_seconds} min={0} step={5} unit="s" onChange={(v) => patch('carrierPools', i, { load_unload_seconds: v })} /></Field>
+            <Field label="loaded speed"><Stepper value={p.speed_loaded_m_per_min} min={1} step={5} unit="m/min" onChange={(v) => patch('carrierPools', i, { speed_loaded_m_per_min: v })} /></Field>
+            <Field label="empty speed"><Stepper value={p.speed_empty_m_per_min} min={1} step={5} unit="m/min" onChange={(v) => patch('carrierPools', i, { speed_empty_m_per_min: v })} /></Field>
           </Grid2>
         </EntityCard>
       ))}
@@ -469,16 +572,27 @@ function ShiftsTab({ draft, patch, add, remove }) {
       {draft.shifts.map((s, i) => (
         <EntityCard key={i} testid={`shift-card-${s.id || i}`} title={s.id || '(new shift)'} onRemove={() => remove('shifts', i)}>
           <Grid2>
-            <Field label="id"><TextInput value={s.id} onChange={(v) => patch('shifts', i, { id: v })} /></Field>
+            <Field label="id" required><TextInput value={s.id} onChange={(v) => patch('shifts', i, { id: v })} /></Field>
             <Field label="name"><TextInput value={s.name} onChange={(v) => patch('shifts', i, { name: v })} /></Field>
-            <Field label="start (HH:MM)"><TextInput value={s.start_time} onChange={(v) => patch('shifts', i, { start_time: v })} /></Field>
-            <Field label="duration (h)"><NumberInput value={s.duration_hours} min={1} max={24} step={0.5} onChange={(v) => patch('shifts', i, { duration_hours: v })} /></Field>
+            <Field label="start" required>
+              <input
+                type="time"
+                value={s.start_time ?? ''}
+                onChange={(e) => patch('shifts', i, { start_time: e.target.value })}
+                style={{
+                  background: T.surfaceSolid, border: '1px solid #334155', borderRadius: T.radiusSm,
+                  color: T.text, padding: '4px 8px', fontSize: 12, fontFamily: T.mono,
+                  width: '100%', boxSizing: 'border-box', outline: 'none', colorScheme: 'dark',
+                }}
+              />
+            </Field>
+            <Field label="duration"><Stepper value={s.duration_hours} min={1} max={24} step={0.5} unit="hrs" onChange={(v) => patch('shifts', i, { duration_hours: v })} /></Field>
           </Grid2>
           <Field label="days" style={{ marginTop: 8 }}>
-            <Chips values={s.days} options={WEEKDAYS} onChange={(v) => patch('shifts', i, { days: v })} addLabel="+ day" />
+            <WeekdayPicker value={s.days ?? []} onChange={(v) => patch('shifts', i, { days: v })} />
           </Field>
-          <Field label="staffing (station → people)" style={{ marginTop: 8 }}>
-            <KVEditor obj={s.staffing} onChange={(v) => patch('shifts', i, { staffing: v })} keyOptions={draft.stations.map((st) => st.id)} keyLabel="station" valLabel="people" />
+          <Field label="staffing (people per station)" style={{ marginTop: 8 }}>
+            <StaffingEditor staffing={s.staffing} stations={draft.stations} onChange={(v) => patch('shifts', i, { staffing: v })} />
           </Field>
         </EntityCard>
       ))}

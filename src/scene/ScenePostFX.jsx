@@ -26,22 +26,22 @@ export default function ScenePostFX({ isMobile = false }) {
   return (
     <EffectComposer disableNormalPass={false} multisampling={0}>
       <N8AO
-        aoRadius={0.35}
+        aoRadius={0.5}
         intensity={1.4}
         distanceFalloff={0.8}
         halfRes
         color="#0a1020"
       />
       <Bloom
-        intensity={0.95}
-        luminanceThreshold={0.6}
+        intensity={1.0}
+        luminanceThreshold={0.45}
         luminanceSmoothing={0.22}
         mipmapBlur
         radius={0.75}
       />
       <Vignette
         offset={0.42}
-        darkness={0.58}
+        darkness={0.4}
       />
       <SMAA />
     </EffectComposer>

@@ -138,6 +138,20 @@ function Building({ bounds }) {
       {slabYs.map(y => (
         <FloorEdge key={`edge-${y}`} cx={cx} cz={cz} w={w} d={d} y={y} />
       ))}
+      {/* Translucent floor slabs at each upper storey */}
+      {slabYs.map(y => (
+        <mesh key={`slab-${y}`} position={[cx, y, cz]} receiveShadow>
+          <boxGeometry args={[w, 0.12, d]} />
+          <meshStandardMaterial
+            color="#1e293b"
+            roughness={0.3}
+            metalness={0.15}
+            transparent
+            opacity={0.18}
+            depthWrite={false}
+          />
+        </mesh>
+      ))}
       {/* Premium Polished Epoxy Floor Slab */}
       <mesh position={[cx, -0.05, cz]} receiveShadow castShadow>
         <boxGeometry args={[w + 0.4, 0.1, d + 0.4]} />
@@ -147,6 +161,39 @@ function Building({ bounds }) {
         <GlassPanel key={p.key} pos={p.pos} size={p.size} rot={p.rot} />
       ))}
       <Roof cx={cx} cz={cz} w={w} d={d} y={totalH + 0.2} />
+    </group>
+  );
+}
+
+// Elevated ramp/bridge connecting KMP SF to WH SF at 2nd floor.
+function SkyBridge({ y = 10, z = 18, xStart = -9, xEnd = 9, width = 5 }) {
+  const length = xEnd - xStart;
+  const cx = (xStart + xEnd) / 2;
+  return (
+    <group>
+      {/* Walkway slab */}
+      <mesh position={[cx, y, z]} castShadow receiveShadow>
+        <boxGeometry args={[length, 0.3, width]} />
+        <meshStandardMaterial {...slabEdgeCol} />
+      </mesh>
+      {/* Epoxy floor surface */}
+      <mesh position={[cx, y + 0.16, z]} receiveShadow>
+        <boxGeometry args={[length - 0.2, 0.02, width - 0.4]} />
+        <meshStandardMaterial {...epoxyCol} />
+      </mesh>
+      {/* Side railings */}
+      <mesh position={[cx, y + 0.65, z + width / 2]} castShadow>
+        <boxGeometry args={[length, 1.0, 0.12]} />
+        <meshStandardMaterial {...trimCol} />
+      </mesh>
+      <mesh position={[cx, y + 0.65, z - width / 2]} castShadow>
+        <boxGeometry args={[length, 1.0, 0.12]} />
+        <meshStandardMaterial {...trimCol} />
+      </mesh>
+      {/* Support columns under the bridge */}
+      {[-0.35, 0.35].map((frac, i) => (
+        <Column key={`br-col-${i}`} x={cx + frac * length} y={0} z={z} h={y} w={0.4} />
+      ))}
     </group>
   );
 }
@@ -167,6 +214,7 @@ export default function BuildingShells() {
       <SiteGround />
       <Building bounds={KMP_BOUNDS} />
       <Building bounds={{ ...WH_BOUNDS, floors: 5, floorH: WH_BOUNDS.h / 5 }} />
+      <SkyBridge />
     </group>
   );
 }

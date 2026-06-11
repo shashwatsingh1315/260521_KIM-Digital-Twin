@@ -12,6 +12,7 @@ import { useTwinContext } from './TwinProvider.jsx';
 import { makeSchemaMatrix, SYSTEMS } from '../domain/schemaMatrix.js';
 import { makeProcess } from '../domain/process.js';
 import { makeFactoryConfig } from '../network/factoryConfig.js';
+import { T } from './kit.jsx';
 
 const OPS = ['create', 'read', 'update', 'delete'];
 
@@ -64,7 +65,7 @@ function MatrixTable({ matrix }) {
   return (
     <table
       data-testid={`schema-table-${matrix.process_id}`}
-      style={{ borderCollapse: 'collapse', width: '100%', fontSize: 11, fontFamily: 'monospace', marginTop: 4 }}
+      style={{ borderCollapse: 'collapse', width: '100%', fontSize: 11, fontFamily: T.mono, marginTop: 4 }}
     >
       <thead>
         <tr style={{ color: '#64748b' }}>
@@ -95,7 +96,7 @@ function EditTable({ procId, draft, onChange }) {
   return (
     <table
       data-testid={`schema-edit-table-${procId}`}
-      style={{ borderCollapse: 'collapse', width: '100%', fontSize: 11, fontFamily: 'monospace', marginTop: 4 }}
+      style={{ borderCollapse: 'collapse', width: '100%', fontSize: 11, fontFamily: T.mono, marginTop: 4 }}
     >
       <thead>
         <tr style={{ color: '#64748b' }}>
@@ -286,7 +287,7 @@ const btnStyle = {
   border: 'none',
   cursor: 'pointer',
   fontSize: 11,
-  fontFamily: 'monospace',
+  fontFamily: T.mono,
 };
 const editInputStyle = {
   background: '#0f172a',
@@ -295,7 +296,7 @@ const editInputStyle = {
   color: '#e2e8f0',
   padding: '2px 4px',
   fontSize: 11,
-  fontFamily: 'monospace',
+  fontFamily: T.mono,
   width: 70,
   boxSizing: 'border-box',
 };

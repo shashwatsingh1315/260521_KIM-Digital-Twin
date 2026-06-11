@@ -14,10 +14,11 @@ export const MAT = {
   concrete:     { color: '#3a4254' },
 
   // ── Family tones (4 values for process families) ────────────────────────
-  familyProduction: { color: '#22d3ee' },
-  familyLogistics:  { color: '#fbbf24' },
-  familyStorage:    { color: '#a78bfa' },
-  familyInspect:    { color: '#e879f9' },
+  // Keep in sync with T.family in src/twin/ui/kit.jsx (the 2D UI palette).
+  familyProduction: { color: '#22d3ee', emissive: '#0e7490', emissiveIntensity: 0.15 },
+  familyLogistics:  { color: '#fbbf24', emissive: '#92400e', emissiveIntensity: 0.15 },
+  familyStorage:    { color: '#a78bfa', emissive: '#5b21b6', emissiveIntensity: 0.15 },
+  familyInspect:    { color: '#e879f9', emissive: '#86198f', emissiveIntensity: 0.15 },
 
   // ── State signals (only used to communicate live data) ──────────────────
   // Buffer fill ratio uses these via dynamic color, not direct mat ref.

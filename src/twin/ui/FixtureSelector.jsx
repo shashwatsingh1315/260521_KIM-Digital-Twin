@@ -8,14 +8,15 @@
 // poorly with the continuously-rendering R3F canvas under headless automation.
 
 import { useTwinContext } from './TwinProvider.jsx';
+import { T, Tooltip } from './kit.jsx';
 import { makeLinearLineFixture } from '../fixtures/linearLine.js';
 import { makeAssemblyLineFixture } from '../fixtures/assemblyLine.js';
 import { makeCarrierLineFixture } from '../fixtures/carrierLine.js';
 
 const FIXTURES = {
-  linearLine: { label: 'Linear line', make: makeLinearLineFixture },
-  assemblyLine: { label: 'Assembly + QC', make: makeAssemblyLineFixture },
-  carrierLine: { label: 'Carrier (AMR)', make: makeCarrierLineFixture },
+  linearLine: { label: 'Linear line', make: makeLinearLineFixture, tip: 'Single production line with inspection stations' },
+  assemblyLine: { label: 'Assembly + QC', make: makeAssemblyLineFixture, tip: 'Multi-branch assembly with quality control' },
+  carrierLine: { label: 'Carrier (AMR)', make: makeCarrierLineFixture, tip: 'AMR-based carrier transport between stations' },
 };
 
 export default function FixtureSelector({ value, onChange }) {
@@ -39,38 +40,44 @@ export default function FixtureSelector({ value, onChange }) {
         display: 'flex',
         alignItems: 'center',
         gap: 6,
-        background: 'rgba(12,19,34,0.85)',
+        background: T.surface,
         backdropFilter: 'blur(8px)',
-        border: '1px solid #1e3a5f',
-        borderRadius: 8,
+        border: `1px solid ${T.border}`,
+        borderRadius: T.radius,
         padding: '6px 10px',
-        color: '#cbd5e1',
-        zIndex: 100,
+        color: T.textDim,
+        zIndex: T.z.rail,
       }}
     >
-      <span style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', letterSpacing: 1, marginRight: 2 }}>
+      <span style={{ fontSize: 10, color: T.textFaint, textTransform: 'uppercase', letterSpacing: 1, marginRight: 2, fontFamily: T.display, fontWeight: 700 }}>
         Scenario
       </span>
-      {Object.entries(FIXTURES).map(([key, { label }]) => {
+      {Object.entries(FIXTURES).map(([key, { label, tip }]) => {
         const active = value === key;
         return (
-          <button
-            key={key}
-            data-testid={`fixture-${key}`}
-            onClick={() => select(key)}
-            style={{
-              padding: '3px 10px',
-              borderRadius: 4,
-              border: `1px solid ${active ? '#3b82f6' : 'transparent'}`,
-              background: active ? '#1e40af' : '#1e293b',
-              color: active ? '#93c5fd' : '#64748b',
-              cursor: 'pointer',
-              fontSize: 12,
-              fontFamily: 'monospace',
-            }}
-          >
-            {label}
-          </button>
+          <Tooltip key={key} text={tip}>
+            <button
+              data-testid={`fixture-${key}`}
+              onClick={() => select(key)}
+              title={tip}
+              style={{
+                padding: '3px 10px',
+                borderRadius: 4,
+                border: `1px solid ${active ? T.accent : 'transparent'}`,
+                background: active ? T.accentDeep : T.borderSoft,
+                color: active ? '#93c5fd' : T.textFaint,
+                cursor: 'pointer',
+                fontSize: 12,
+                fontFamily: T.sans,
+                fontWeight: 600,
+                transition: `background ${T.transition}, color ${T.transition}`,
+              }}
+              onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = T.textDim; }}
+              onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = T.textFaint; }}
+            >
+              {label}
+            </button>
+          </Tooltip>
         );
       })}
     </div>

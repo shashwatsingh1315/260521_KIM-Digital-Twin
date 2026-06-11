@@ -581,46 +581,106 @@ export function makeLinearLineFixture() {
 
   // ── 3D Layout Overrides ────────────────────────────────────────────────────
   // KMP is on the left (negative X), WH on the right (positive X).
-  // Y = floor level (0 = GF, 10 = SF/2F).
+  // Y = floor level (0 = GF, 5 = FF, 10 = SF/2F, 15 = 3F).
+  //
+  //   KMP Building (x: -42.5 to -9)          gap        WH Building (x: 9 to 67.5)
+  //   ┌─────────────────────────────┐  ┌───bridge───┐  ┌──────────────────────────┐
+  //   │ GF(y=0):                    │  │  (y=10)    │  │ GF(y=0):                 │
+  //   │   z=-60 Supplier Gate       │  │            │  │   x=26 ASRS (left half)  │
+  //   │   z=-50 Junction            │  │            │  │   x=48 Screen ×3         │
+  //   │   z=-35 IQC                 │  │            │  │   x=54 Enclosure         │
+  //   │   z=-18 SMT ×5             │  │            │  │   x=60 Pack ×5           │
+  //   │   z=-5  FCT ×5             │  │            │  │                          │
+  //   │                             │  │            │  │ FF(y=5): VC Line A ×3    │
+  //   │ SF(y=10):                   │  │            │  │ SF(y=10): VC Line B ×3   │
+  //   │   z=2   TRSS ×5 (A-Block)  │──┤  z≈18      │  │                          │
+  //   │   z=8-16 1P ×18 (B-Block)  │  │            │  │                          │
+  //   │   z=22  SFG Pack ×4        │──┘            │  │                          │
+  //   │                             │               │  │                          │
+  //   │ 3F(y=15):                   │               │  │                          │
+  //   │   z=10  FAT Lab             │               │  │                          │
+  //   └─────────────────────────────┘               └──┘──────────────────────────┘
+  //
+  // ASRS mesh is 32.9×50.6 scene units (after 1.6x scale). Centered at x=26
+  // keeps it inside WH walls (extends x=9.55..42.45 vs WH x=9..67.5).
+  //
+  // Material flow: KMP GF → lift → KMP SF (sub-assy) → ramp/bridge → WH GF
+  //   ASRS → lift → WH FF/SF (VC) → lift → WH GF (packaging) →
+  //   FG ASRS → ramp → KMP 3F FAT → dispatch
+
   const overrides = {
-    // Intakes (outside the plants, west edge)
-    n_supplier:       { x: -55, y: 0,  z: -60 },
-    n_trss_intake:    { x: -55, y: 10, z: 20 },
-    n_plastic_intake: { x: -55, y: 10, z: 30 },
-    n_nic_intake:     { x: 50,  y: 0,  z: -30 },
+    // ── Intakes ──────────────────────────────────────────────────────────────
+    n_supplier:       { x: -50, y: 0,  z: -60 },    // Outside KMP south gate
+    n_trss_intake:    { x: 5,   y: 10, z: 18 },     // SF bridge area (WH→KMP ramp)
+    n_plastic_intake: { x: 5,   y: 10, z: 20 },     // SF bridge area
+    n_nic_intake:     { x: 48,  y: 0,  z: 20 },     // WH stores (near VC lift)
 
-    // KMP GF (A-Block)
-    n_junction:       { x: -40, y: 0,  z: -50 },
-    n_iqc:            { x: -35, y: 0,  z: -20 },
-    n_smt:            { x: -30, y: 0,  z: -5 },
-    n_fct:            { x: -25, y: 0,  z: -5 },
+    // ── KMP GF (A-Block) — Electronics Inbound ──────────────────────────────
+    n_junction:       { x: -26, y: 0,  z: -50 },
+    n_iqc:            { x: -26, y: 0,  z: -35 },
 
-    // KMP SF A-Block (TRSS)
-    n_trss:           { x: -30, y: 10, z: 15 },
+    // ── WH GF — ASRS (left half of warehouse) ──────────────────────────────
+    // ASRS at x=26 → extends x=[9.55, 42.45] — fully inside WH (x=9..67.5)
+    n_asrs:           { x: 26,  y: 0,  z: 0 },
 
-    // KMP SF B-Block (1P + SFG Pack)
-    n_sfg_pack:       { x: -10, y: 10, z: 10 },
+    // ── WH GF — Packaging (right half of warehouse) ─────────────────────────
+    n_enclosure:      { x: 54,  y: 0,  z: 0 },
 
-    // WH
-    n_asrs:           { x: 34.6, y: 0,  z: 0.1 },
-    n_vc:             { x: 50,   y: 10, z: -10 },
-    n_screen:         { x: 55,   y: 0,  z: -5 },
-    n_enclosure:      { x: 58,   y: 0,  z: -5 },
-    n_pack:           { x: 61,   y: 0,  z: 0 },
+    // ── KMP 3F — FAT Lab ────────────────────────────────────────────────────
+    n_fat:            { x: -26, y: 15, z: 10 },
 
-    // KMP 3F (FAT Lab)
-    n_fat:            { x: -25,  y: 20, z: 15 },
-
-    // Exits
-    n_customer:       { x: 75,   y: 0,  z: 15 },
-    n_scrap:          { x: -55,  y: 0,  z: 0 },
+    // ── Exits ────────────────────────────────────────────────────────────────
+    n_customer:       { x: 72,  y: 0,  z: 0 },      // Outside WH east dock
+    n_scrap:          { x: -50, y: 0,  z: -35 },
   };
+
+  // ── 5 visual SMT Lines (KMP GF A-Block, spread across building width) ───
+  for (let i = 1; i <= 5; i++) {
+    const pos = { x: -38 + (i - 1) * 6, y: 0, z: -18 };
+    if (i === 1) {
+      overrides['n_smt'] = pos;
+    } else {
+      const sId = `st_smt_${i}`;
+      const nId = `n_smt_${i}`;
+      nodes.push(makeTrackNode({ id: nId, type: NODE_TYPE.STATION_INPUT, name: 'SMT Line' }));
+      stations.push(makeStation({ id: sId, name: 'SMT Line', node_id: nId, processes: [] }));
+      overrides[nId] = pos;
+    }
+  }
+
+  // ── 5 visual FCT Benches (KMP GF A-Block, aligned with SMT above) ───────
+  for (let i = 1; i <= 5; i++) {
+    const pos = { x: -38 + (i - 1) * 6, y: 0, z: -5 };
+    if (i === 1) {
+      overrides['n_fct'] = pos;
+    } else {
+      const sId = `st_fct_${i}`;
+      const nId = `n_fct_${i}`;
+      nodes.push(makeTrackNode({ id: nId, type: NODE_TYPE.STATION_INPUT, name: 'FCT Bench' }));
+      stations.push(makeStation({ id: sId, name: 'FCT Bench', node_id: nId, processes: [] }));
+      overrides[nId] = pos;
+    }
+  }
+
+  // ── 5 visual TRSS Assembly stations (KMP SF A-Block) ─────────────────────
+  for (let i = 1; i <= 5; i++) {
+    const pos = { x: -38 + (i - 1) * 4, y: 10, z: 2 };
+    if (i === 1) {
+      overrides['n_trss'] = pos;
+    } else {
+      const sId = `st_trss_${i}`;
+      const nId = `n_trss_${i}`;
+      nodes.push(makeTrackNode({ id: nId, type: NODE_TYPE.STATION_INPUT, name: 'TRSS Assembly' }));
+      stations.push(makeStation({ id: sId, name: 'TRSS Assembly', node_id: nId, processes: [] }));
+      overrides[nId] = pos;
+    }
+  }
 
   // ── 18 visual 1P Assembly stations in a 3×6 grid (KMP SF B-Block) ─────────
   for (let i = 1; i <= 18; i++) {
     const row = Math.floor((i - 1) / 6);
     const col = (i - 1) % 6;
-    const pos = { x: -25 + col * 1.5, y: 10, z: 10 + row * 1.5 };
+    const pos = { x: -40 + col * 5, y: 10, z: 8 + row * 4 };
 
     if (i === 1) {
       overrides['n_1p'] = pos;
@@ -629,6 +689,65 @@ export function makeLinearLineFixture() {
       const nId = `n_1p_${i}`;
       nodes.push(makeTrackNode({ id: nId, type: NODE_TYPE.STATION_INPUT, name: '1P Assembly' }));
       stations.push(makeStation({ id: sId, name: '1P Assembly', node_id: nId, processes: [] }));
+      overrides[nId] = pos;
+    }
+  }
+
+  // ── 4 visual SFG Packing stations (KMP SF B-Block, near bridge exit) ─────
+  for (let i = 1; i <= 4; i++) {
+    const pos = { x: -28 + (i - 1) * 4, y: 10, z: 22 };
+    if (i === 1) {
+      overrides['n_sfg_pack'] = pos;
+    } else {
+      const sId = `st_sfg_pack_${i}`;
+      const nId = `n_sfg_pack_${i}`;
+      nodes.push(makeTrackNode({ id: nId, type: NODE_TYPE.STATION_INPUT, name: 'SFG Packing' }));
+      stations.push(makeStation({ id: sId, name: 'SFG Packing', node_id: nId, processes: [] }));
+      overrides[nId] = pos;
+    }
+  }
+
+  // ── 6 visual VC Assembly stations (WH FF Line A + WH SF Line B) ──────────
+  // PDF: "2 lines (FF Line A + SF Line B), scaled to 6 total"
+  for (let i = 1; i <= 6; i++) {
+    const row = Math.floor((i - 1) / 3);  // 0 = FF Line A, 1 = SF Line B
+    const col = (i - 1) % 3;
+    const pos = { x: 50 + col * 5, y: 5 + row * 5, z: 15 };
+    if (i === 1) {
+      overrides['n_vc'] = pos;
+    } else {
+      const sId = `st_vc_${i}`;
+      const nId = `n_vc_${i}`;
+      nodes.push(makeTrackNode({ id: nId, type: NODE_TYPE.STATION_INPUT, name: 'VC Assembly' }));
+      stations.push(makeStation({ id: sId, name: 'VC Assembly', node_id: nId, processes: [] }));
+      overrides[nId] = pos;
+    }
+  }
+
+  // ── 3 visual Screening lines (WH GF) ─────────────────────────────────────
+  for (let i = 1; i <= 3; i++) {
+    const pos = { x: 48, y: 0, z: -2 + (i - 1) * 2 };
+    if (i === 1) {
+      overrides['n_screen'] = pos;
+    } else {
+      const sId = `st_screen_${i}`;
+      const nId = `n_screen_${i}`;
+      nodes.push(makeTrackNode({ id: nId, type: NODE_TYPE.STATION_INPUT, name: 'Screening' }));
+      stations.push(makeStation({ id: sId, name: 'Screening', node_id: nId, processes: [] }));
+      overrides[nId] = pos;
+    }
+  }
+
+  // ── 5 visual Carton Packing lines (WH GF) ────────────────────────────────
+  for (let i = 1; i <= 5; i++) {
+    const pos = { x: 60, y: 0, z: -4 + (i - 1) * 2 };
+    if (i === 1) {
+      overrides['n_pack'] = pos;
+    } else {
+      const sId = `st_pack_${i}`;
+      const nId = `n_pack_${i}`;
+      nodes.push(makeTrackNode({ id: nId, type: NODE_TYPE.STATION_INPUT, name: 'Carton Packing' }));
+      stations.push(makeStation({ id: sId, name: 'Carton Packing', node_id: nId, processes: [] }));
       overrides[nId] = pos;
     }
   }

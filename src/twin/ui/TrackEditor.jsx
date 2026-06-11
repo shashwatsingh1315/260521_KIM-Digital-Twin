@@ -17,6 +17,7 @@ import { makeTrackSegment, TRANSPORT_MODE } from '../network/trackSegment.js';
 import { makeFactoryConfig } from '../network/factoryConfig.js';
 import { validateFactoryConfig } from '../engine/validator.js';
 import { computeTwinLayout } from './twinLayout.js';
+import { T, useKeyboardShortcuts } from './kit.jsx';
 
 const IDLE = 'idle';
 const EDITING = 'editing';
@@ -141,6 +142,17 @@ export default function TrackEditor({ onClose }) {
     resume();
   }, [drafts, coords, buildCandidate, setConfig, resume]);
 
+  // Escape key handler
+  useKeyboardShortcuts([
+    {
+      key: 'Escape',
+      action: () => {
+        if (mode === EDITING) handleCancel();
+        else if (onClose) onClose();
+      },
+    },
+  ], [mode, handleCancel, onClose]);
+
   // Cleanup: if the form unmounts while in EDITING mode, resume the twin.
   useEffect(() => {
     return () => {
@@ -173,7 +185,7 @@ export default function TrackEditor({ onClose }) {
     >
       <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', borderBottom: '1px solid #1e293b' }}>
         <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: '#94a3b8' }}>Network &amp; layout editor</span>
-        <button onClick={onClose} style={closeBtn}>×</button>
+        <button onClick={onClose} title="Close network editor" aria-label="Close network editor" style={closeBtn}>×</button>
       </div>
 
       {editing && (
@@ -191,7 +203,7 @@ export default function TrackEditor({ onClose }) {
               data-testid={`node-row-${n.id}`}
               style={{ border: '1px solid #1e293b', borderRadius: 6, padding: '6px 8px', marginBottom: 6 }}
             >
-              <div style={{ fontSize: 11, fontFamily: 'monospace', color: '#94a3b8', marginBottom: 4 }}>
+              <div style={{ fontSize: 11, fontFamily: T.mono, color: '#94a3b8', marginBottom: 4 }}>
                 {n.id}<span style={{ color: '#475569' }}> · {n.type}</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
@@ -211,7 +223,7 @@ export default function TrackEditor({ onClose }) {
             data-testid={`segment-row-${d.id}`}
             style={{ border: '1px solid #1e293b', borderRadius: 6, padding: '6px 8px', marginBottom: 6 }}
           >
-            <div style={{ fontSize: 11, fontFamily: 'monospace', color: '#94a3b8', marginBottom: 4 }}>
+            <div style={{ fontSize: 11, fontFamily: T.mono, color: '#94a3b8', marginBottom: 4 }}>
               {d.id}: {d.from_node_id} → {d.to_node_id}
               <span style={{ color: '#475569' }}> · {d.class}</span>
             </div>
@@ -289,6 +301,6 @@ const bannerStyle = { background: '#4c1d95', color: '#ddd6fe', padding: '4px 12p
 const closeBtn = { background: 'none', border: 'none', color: '#475569', cursor: 'pointer', fontSize: 16 };
 const inputStyle = {
   background: '#0f172a', border: '1px solid #334155', borderRadius: 4,
-  color: '#e2e8f0', padding: '3px 6px', fontSize: 12, fontFamily: 'monospace', boxSizing: 'border-box',
+  color: '#e2e8f0', padding: '3px 6px', fontSize: 12, fontFamily: T.mono, boxSizing: 'border-box',
 };
-const btnStyle = { padding: '5px 12px', borderRadius: 4, border: 'none', cursor: 'pointer', fontSize: 12, fontFamily: 'monospace' };
+const btnStyle = { padding: '5px 12px', borderRadius: 4, border: 'none', cursor: 'pointer', fontSize: 12, fontFamily: T.mono };

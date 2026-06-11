@@ -83,6 +83,66 @@ export function formatDuration(seconds) {
 }
 
 /**
+ * hh:mm:ss clock readout for a sim-seconds timestamp. Shared by SimControls,
+ * ShockConsole and the event feed so every clock in the UI matches.
+ */
+export function fmtClock(seconds) {
+  const s = Math.max(0, Math.floor(seconds ?? 0));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+}
+
+/**
+ * Relative trend of a metric: the trailing `windowSeconds` window compared to
+ * the window immediately before it. Returns a signed fraction (+0.25 = up 25%)
+ * or null when there isn't enough history to compare.
+ * `pick` selects the value from a sample (defaults to `wip`).
+ */
+export function trendDelta(history, windowSeconds, pick = (s) => s.wip) {
+  if (!history || history.length < 3) return null;
+  const tEnd = history[history.length - 1].t;
+  const recent = [];
+  const prior = [];
+  for (const s of history) {
+    const age = tEnd - s.t;
+    if (age <= windowSeconds) recent.push(pick(s));
+    else if (age <= windowSeconds * 2) prior.push(pick(s));
+  }
+  if (recent.length === 0 || prior.length === 0) return null;
+  const avg = (a) => a.reduce((x, y) => x + y, 0) / a.length;
+  const before = avg(prior);
+  const after = avg(recent);
+  if (before === 0) return after === 0 ? 0 : null;
+  return (after - before) / Math.abs(before);
+}
+
+/**
+ * Closed SVG path for an area-filled sparkline (the region under the line).
+ * Same scaling rules as sparklinePoints; returns '' for an empty series.
+ */
+export function sparklineAreaPath(values, width, height) {
+  const pts = sparklinePoints(values, width, height);
+  if (!pts) return '';
+  const coords = pts.split(' ');
+  const first = coords[0].split(',');
+  const last = coords[coords.length - 1].split(',');
+  return `M${first[0]},${height} L${pts.replace(/ /g, ' L')} L${last[0]},${height} Z`;
+}
+
+/** Min/max of a series — axis hints for sparklines. */
+export function seriesMinMax(values) {
+  if (!values || values.length === 0) return { min: 0, max: 0 };
+  let min = Infinity, max = -Infinity;
+  for (const v of values) {
+    if (v < min) min = v;
+    if (v > max) max = v;
+  }
+  return { min, max };
+}
+
+/**
  * Build an SVG polyline `points` string for a sparkline of `values`.
  * Scales to [0,width] × [0,height] with a 1px top/bottom pad; a flat series
  * renders along the vertical middle.

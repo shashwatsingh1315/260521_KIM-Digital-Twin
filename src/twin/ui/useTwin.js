@@ -26,6 +26,21 @@ export function useTwin(config, opts = {}) {
   const [paused, setPaused] = useState(false);
   const [done, setDone] = useState(false);
 
+  // Live event feed: ring buffer of notable engine events (unit exits, scrap,
+  // shocks, order completions). Kept in a ref so the per-frame appends are
+  // cheap; eventsVersion bumps so consumers re-render.
+  const EVENT_FEED_CAP = 100;
+  const feedRef = useRef([]);
+  const prevOrderStatusRef = useRef(new Map());
+  const [eventsVersion, setEventsVersion] = useState(0);
+
+  const pushFeed = (items) => {
+    if (!items.length) return false;
+    const next = feedRef.current.concat(items);
+    feedRef.current = next.length > EVENT_FEED_CAP ? next.slice(next.length - EVENT_FEED_CAP) : next;
+    return true;
+  };
+
   // Initialize (or re-initialize on config identity change).
   useEffect(() => {
     const { state, events: e0 } = initState(config, opts);
@@ -33,6 +48,9 @@ export function useTwin(config, opts = {}) {
     setSimTime(state.clock.now());
     setDone(false);
     setShocks([]);
+    feedRef.current = [];
+    prevOrderStatusRef.current = new Map();
+    setEventsVersion((v) => v + 1);
 
     // Collect t=0 shocks from init events.
     const s0 = e0.filter((e) => e.type === 'shock_raised');
@@ -48,6 +66,11 @@ export function useTwin(config, opts = {}) {
     const MAX_STEPS_PER_FRAME = 500;
     let steps = 0;
     const newShocks = [];
+    // Feed accumulators for this frame. unit_exited bursts coalesce into one
+    // "+N completed" item (at 100× hundreds can land in a single frame).
+    let exitedCount = 0;
+    let exitedLast = null;
+    const frameFeed = [];
 
     // Pace the event-driven engine against the wall-clock budget: process every
     // event whose time is within [now, targetSim], then advance the clock
@@ -61,7 +84,9 @@ export function useTwin(config, opts = {}) {
       if (tNext === Infinity) {
         const result = step(state);
         for (const ev of result.events) {
-          if (ev.type === 'shock_raised') newShocks.push(ev);
+          if (ev.type === 'shock_raised') { newShocks.push(ev); frameFeed.push(ev); }
+          else if (ev.type === 'unit_exited') { exitedCount++; exitedLast = ev; }
+          else if (ev.type === 'scrapped') frameFeed.push(ev);
         }
         setDone(true);
         break;
@@ -77,7 +102,9 @@ export function useTwin(config, opts = {}) {
       const result = step(state);
       // step() mutates state in place and returns same ref.
       for (const ev of result.events) {
-        if (ev.type === 'shock_raised') newShocks.push(ev);
+        if (ev.type === 'shock_raised') { newShocks.push(ev); frameFeed.push(ev); }
+        else if (ev.type === 'unit_exited') { exitedCount++; exitedLast = ev; }
+        else if (ev.type === 'scrapped') frameFeed.push(ev);
       }
       if (result.done) {
         setDone(true);
@@ -102,6 +129,25 @@ export function useTwin(config, opts = {}) {
     setSimTime(state.clock.now());
     setMetrics(m);
     if (newShocks.length) setShocks((prev) => [...prev, ...newShocks]);
+
+    // Feed: coalesced exits, scraps/shocks, and order-status transitions.
+    if (exitedCount > 0) {
+      frameFeed.push({
+        type: 'units_completed',
+        timestamp: exitedLast.timestamp,
+        count: exitedCount,
+        unit_id: exitedCount === 1 ? exitedLast.unit_id : null,
+        material: exitedLast.material,
+      });
+    }
+    for (const o of m.orders) {
+      const prev = prevOrderStatusRef.current.get(o.id);
+      if (prev !== undefined && prev !== o.status && (o.status === 'completed' || o.status === 'short')) {
+        frameFeed.push({ type: 'order_' + o.status, timestamp: state.clock.now(), order_id: o.id });
+      }
+      prevOrderStatusRef.current.set(o.id, o.status);
+    }
+    if (pushFeed(frameFeed)) setEventsVersion((v) => v + 1);
   }, [config]);
 
   const pause = useCallback(() => {
@@ -152,6 +198,9 @@ export function useTwin(config, opts = {}) {
       pausedRef.current = false;
       setPaused(false);
       setShocks([]);
+      feedRef.current = [];
+      prevOrderStatusRef.current = new Map();
+      setEventsVersion((v) => v + 1);
     },
     [config]
   );
@@ -168,6 +217,8 @@ export function useTwin(config, opts = {}) {
     shocks,
     paused,
     done,
+    events: feedRef.current,
+    eventsVersion,
     _engineState: () => engineStateRef.current,
   };
 }

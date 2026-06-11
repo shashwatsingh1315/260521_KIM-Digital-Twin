@@ -6,9 +6,9 @@
 // All parsing/validation lives in configIO.js; this component only handles the
 // browser file plumbing and surfaces success/error status.
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { useTwinContext } from './TwinProvider.jsx';
-import { Button, T } from './kit.jsx';
+import { Button, T, ConfirmDialog } from './kit.jsx';
 import {
   exportConfigJSON, importConfigJSON,
   exportCoordinatesCSV, importCoordinatesCSV,
@@ -39,13 +39,28 @@ export default function ImportExportMenu() {
   const { config, setConfig } = useTwinContext();
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(null); // { kind:'ok'|'err', text }
+  const [confirmImport, setConfirmImport] = useState(null); // { type:'json'|'csv', file }
   const jsonInput = useRef(null);
   const csvInput = useRef(null);
+  const menuRef = useRef(null);
+  const containerRef = useRef(null);
 
   const flash = useCallback((kind, text) => {
     setStatus({ kind, text });
     setTimeout(() => setStatus(null), 4000);
   }, []);
+
+  // Close menu on click outside
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
 
   const onExportConfig = () => {
     download('factory-config.json', exportConfigJSON(config), 'application/json');
@@ -56,10 +71,7 @@ export default function ImportExportMenu() {
     setOpen(false);
   };
 
-  const onImportConfig = async (e) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
+  const processConfigImport = async (file) => {
     const { config: next, errors } = importConfigJSON(await readFile(file));
     if (next && errors.length === 0) {
       setConfig(next);
@@ -69,10 +81,7 @@ export default function ImportExportMenu() {
     }
   };
 
-  const onImportCoords = async (e) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
+  const processCoordsImport = async (file) => {
     const { config: next, errors, applied, unknown } = importCoordinatesCSV(await readFile(file), config);
     if (next && errors.length === 0) {
       setConfig(next);
@@ -83,8 +92,57 @@ export default function ImportExportMenu() {
     }
   };
 
+  const onImportConfig = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setConfirmImport({ type: 'json', file });
+  };
+
+  const onImportCoords = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setConfirmImport({ type: 'csv', file });
+  };
+
+  const handleConfirmImport = async () => {
+    if (!confirmImport) return;
+    const { type, file } = confirmImport;
+    setConfirmImport(null);
+    setOpen(false);
+    if (type === 'json') {
+      await processConfigImport(file);
+    } else {
+      await processCoordsImport(file);
+    }
+  };
+
+  const handleCancelImport = () => {
+    setConfirmImport(null);
+  };
+
+  // Drag-and-drop handlers
+  const onDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const onDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer?.files?.[0];
+    if (!file) return;
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (ext === 'json') {
+      setConfirmImport({ type: 'json', file });
+    } else if (ext === 'csv') {
+      setConfirmImport({ type: 'csv', file });
+    }
+  };
+
   return (
-    <div style={{ position: 'relative' }}>
+    <div ref={containerRef} style={{ position: 'relative' }}>
       <Button testid="open-io-menu" variant={open ? 'violet' : 'default'} onClick={() => setOpen((o) => !o)}>
         ⤓ Data
       </Button>
@@ -107,7 +165,10 @@ export default function ImportExportMenu() {
 
       {open && (
         <div
+          ref={menuRef}
           data-testid="io-menu"
+          onDragOver={onDragOver}
+          onDrop={onDrop}
           style={{
             position: 'absolute', top: '110%', left: 0, marginTop: 4, zIndex: 400,
             background: T.surface, backdropFilter: 'blur(10px)', border: `1px solid ${T.border}`,
@@ -124,8 +185,25 @@ export default function ImportExportMenu() {
           <div style={{ fontSize: 10, color: T.textFaint, marginTop: 4, lineHeight: 1.4 }}>
             Coordinates are metres (node_id,x,y,z) — trace them from the floor plan.
           </div>
+          <div style={{
+            fontSize: 10, color: T.textFaint, textAlign: 'center',
+            padding: '6px 4px', marginTop: 2,
+            border: `1px dashed ${T.borderSoft}`, borderRadius: 4,
+          }}>
+            or drag &amp; drop files here
+          </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!confirmImport}
+        title="Import configuration?"
+        message="This will replace the current factory configuration and restart the simulation. This cannot be undone."
+        confirmLabel="Import"
+        variant="danger"
+        onConfirm={handleConfirmImport}
+        onCancel={handleCancelImport}
+      />
 
       <input ref={jsonInput} type="file" accept=".json,application/json" data-testid="import-config-input" onChange={onImportConfig} style={{ display: 'none' }} />
       <input ref={csvInput} type="file" accept=".csv,text/csv" data-testid="import-coords-input" onChange={onImportCoords} style={{ display: 'none' }} />

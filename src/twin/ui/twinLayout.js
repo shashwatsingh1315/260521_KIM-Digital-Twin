@@ -103,18 +103,19 @@ export function interpolateOrthogonal(pts, t) {
 }
 
 /**
- * Compute 3D positions of all in-flight units at a given time.
+ * Render list of all in-flight units at a given time: full unit objects with
+ * their 3D positions. UnitStream consumes this directly so hover/tinting can
+ * resolve a raycast instanceId back to {unit.id, unit.order_id, unit.material}.
  * @param {object} flowState
  * @param {object} carrierState
  * @param {object} config     FactoryConfig
  * @param {Map} nodePositions  from computeTwinLayout
  * @param {number} now         current simulation time (seconds)
- * @returns {Map<unitId, {x,y,z}>}
+ * @returns {Array<{unit: object, x: number, y: number, z: number}>}
  */
-export function unitPositions(flowState, carrierState, config, nodePositions, now) {
-  const positions = new Map();
+export function unitRenderList(flowState, carrierState, config, nodePositions, now) {
+  const out = [];
   const segmentMap = new Map(config.segments.map((s) => [s.id, s]));
-  const nodeMap = new Map(config.nodes.map((n) => [n.id, n]));
   const stationMap = new Map(config.stations.map((s) => [s.node_id, s]));
 
   // Helper: interpolate position along a segment path.
@@ -139,8 +140,7 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
       const t = (now - launchTime) / travelSeconds;
       const pos = positionOnSegment(seg.from_node_id, seg.to_node_id, t);
       // Slightly above the ground to avoid z-fighting
-      pos.y += 0.2;
-      positions.set(unit.id, pos);
+      out.push({ unit, x: pos.x, y: pos.y + 0.2, z: pos.z });
     }
   }
 
@@ -153,7 +153,7 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
       const { unit } = entry;
       const toPos = nodePositions.get(seg.to_node_id);
       if (toPos) {
-        positions.set(unit.id, { x: toPos.x, y: toPos.y + 0.2, z: toPos.z });
+        out.push({ unit, x: toPos.x, y: toPos.y + 0.2, z: toPos.z });
       }
     }
   }
@@ -169,7 +169,8 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
     for (let i = 0; i < units.length; i++) {
       const unit = units[i];
       // Offset by slot index perpendicular to main flow (x-direction)
-      positions.set(unit.id, {
+      out.push({
+        unit,
         x: stationPos.x + (i - Math.floor(units.length / 2)) * 1.5,
         y: stationPos.y + 0.3,
         z: stationPos.z,
@@ -188,7 +189,8 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
     for (let i = 0; i < units.length; i++) {
       const unit = units[i];
       // Offset in the +z direction to distinguish from input buffer
-      positions.set(unit.id, {
+      out.push({
+        unit,
         x: stationPos.x,
         y: stationPos.y + 0.3,
         z: stationPos.z + 2 + (i - Math.floor(units.length / 2)) * 1.5,
@@ -197,7 +199,7 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
   }
 
   // Carrier-transported units
-  for (const [poolId, entry] of carrierState.pools) {
+  for (const [, entry] of carrierState.pools) {
     const { seg, carriers } = entry;
     if (!seg) continue;
 
@@ -214,13 +216,12 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
         const traverseTime = dropTime - loadTime;
         const t = Math.min(1, (now - loadTime) / traverseTime);
         const pos = positionOnSegment(seg.from_node_id, seg.to_node_id, t);
-        pos.y += 0.2;
-        positions.set(unit.id, pos);
+        out.push({ unit, x: pos.x, y: pos.y + 0.2, z: pos.z });
       } else if (carrier.state === 'held_at_dest') {
         // Waiting at destination for buffer to have space
         const toPos = nodePositions.get(seg.to_node_id);
         if (toPos) {
-          positions.set(unit.id, { x: toPos.x, y: toPos.y + 0.2, z: toPos.z });
+          out.push({ unit, x: toPos.x, y: toPos.y + 0.2, z: toPos.z });
         }
       } else if (carrier.state === 'returning') {
         // Empty return trip (no unit shown, but for completeness)
@@ -228,5 +229,19 @@ export function unitPositions(flowState, carrierState, config, nodePositions, no
     }
   }
 
+  return out;
+}
+
+/**
+ * Compute 3D positions of all in-flight units at a given time.
+ * Thin Map-building wrapper over unitRenderList (kept for the original API:
+ * later entries win on duplicate unit ids, matching the old behaviour).
+ * @returns {Map<unitId, {x,y,z}>}
+ */
+export function unitPositions(flowState, carrierState, config, nodePositions, now) {
+  const positions = new Map();
+  for (const e of unitRenderList(flowState, carrierState, config, nodePositions, now)) {
+    positions.set(e.unit.id, { x: e.x, y: e.y, z: e.z });
+  }
   return positions;
 }
