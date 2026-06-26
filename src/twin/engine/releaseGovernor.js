@@ -20,8 +20,13 @@ export function tryAdmit(govState, config, orders, now) {
 
   if (govState.wipCount >= cap) return null;
 
-  // Find the first arrived order that still needs units.
-  for (const order of orders) {
+  // Find the next arrived order that still needs units. Rotate the starting
+  // point so one large order cannot fill the entire WIP cap and starve
+  // component streams needed by downstream assembly.
+  const start = govState.nextOrderIndex ?? 0;
+  for (let offset = 0; offset < orders.length; offset++) {
+    const idx = (start + offset) % orders.length;
+    const order = orders[idx];
     if (order.arrival_time > now) continue;
     if (order.status === 'completed' || order.status === 'short') continue;
     if (order.units_created >= order.quantity) continue;
@@ -45,6 +50,7 @@ export function tryAdmit(govState, config, orders, now) {
     order.units_created++;
     if (order.status === 'pending') order.status = 'in_progress';
     govState.wipCount++;
+    govState.nextOrderIndex = (idx + 1) % orders.length;
 
     return unit;
   }

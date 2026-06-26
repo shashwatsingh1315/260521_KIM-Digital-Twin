@@ -74,6 +74,7 @@ export function applyArrivals(flowState, config, t) {
   const nodeToStation = new Map(config.stations.map((s) => [s.node_id, s]));
   const exitIds = new Set(config.exits.map((e) => e.id));
   const segMap = new Map(config.segments.map((s) => [s.id, s]));
+  const nodeToOutbound = outboundSegmentsByNode(config);
 
   const arrivals = [];
 
@@ -98,6 +99,17 @@ export function applyArrivals(flowState, config, t) {
             // Input buffer full — hold on segment (still counts toward occupancy)
             flowState.segmentHeld.get(segId).push({ unit });
           }
+        } else {
+          const forwarded = forwardThroughPassiveNode({
+            flowState,
+            nodeToOutbound,
+            nodeToStation,
+            exitIds,
+            nodeId: destId,
+            unit,
+            now: t,
+          });
+          if (!forwarded) flowState.segmentHeld.get(segId).push({ unit });
         }
       }
     }
@@ -111,9 +123,11 @@ export function applyArrivals(flowState, config, t) {
  * Called after startEligible frees buffer slots.
  * Returns list of {unit, stationId} that successfully entered their buffer.
  */
-export function tryFlushHeld(flowState, config) {
+export function tryFlushHeld(flowState, config, now = 0) {
   const nodeToStation = new Map(config.stations.map((s) => [s.node_id, s]));
+  const exitIds = new Set(config.exits.map((e) => e.id));
   const segMap = new Map(config.segments.map((s) => [s.id, s]));
+  const nodeToOutbound = outboundSegmentsByNode(config);
   const arrivals = [];
 
   for (const [segId, held] of flowState.segmentHeld.entries()) {
@@ -121,19 +135,51 @@ export function tryFlushHeld(flowState, config) {
     const seg = segMap.get(segId);
     if (!seg) continue;
     const destStation = nodeToStation.get(seg.to_node_id);
-    if (!destStation) continue;
 
-    const buf = flowState.stationBuffers.get(destStation.id);
     let i = 0;
-    while (i < held.length && buf.length < destStation.entry_buffer_capacity) {
-      buf.push(held[i].unit);
-      arrivals.push({ unit: held[i].unit, stationId: destStation.id });
-      i++;
+    if (destStation) {
+      const buf = flowState.stationBuffers.get(destStation.id);
+      while (i < held.length && buf.length < destStation.entry_buffer_capacity) {
+        buf.push(held[i].unit);
+        arrivals.push({ unit: held[i].unit, stationId: destStation.id });
+        i++;
+      }
+    } else {
+      while (i < held.length) {
+        const unit = held[i].unit;
+        const forwarded = forwardThroughPassiveNode({
+          flowState,
+          nodeToOutbound,
+          nodeToStation,
+          exitIds,
+          nodeId: seg.to_node_id,
+          unit,
+          now,
+        });
+        if (!forwarded) break;
+        i++;
+      }
     }
     if (i > 0) flowState.segmentHeld.set(segId, held.slice(i));
   }
 
   return arrivals;
+}
+
+function outboundSegmentsByNode(config) {
+  const nodeToOutbound = new Map();
+  for (const seg of config.segments) {
+    if (!nodeToOutbound.has(seg.from_node_id)) nodeToOutbound.set(seg.from_node_id, []);
+    nodeToOutbound.get(seg.from_node_id).push(seg);
+  }
+  return nodeToOutbound;
+}
+
+function forwardThroughPassiveNode({ flowState, nodeToOutbound, nodeToStation, exitIds, nodeId, unit, now }) {
+  const outSegs = nodeToOutbound.get(nodeId) || [];
+  const seg = chooseOutboundSegment(outSegs, unit, { nodeToStation, exitIds });
+  if (!seg || seg.transport.class !== 'passive') return false;
+  return launchOnSegment(flowState, seg, unit, now) !== null;
 }
 
 /**
@@ -181,12 +227,13 @@ export function drainOutputBuffers(flowState, config, now) {
  * Choose the outbound segment for a unit based on its next_process.
  */
 function chooseOutboundSegment(outSegs, unit, config) {
+  const nodeToStation = config.nodeToStation ?? new Map(config.stations.map((s) => [s.node_id, s]));
+  const exitIds = config.exitIds ?? new Set(config.exits.map((e) => e.id));
+
   if (!unit.next_process) {
-    const exitIds = new Set(config.exits.map((e) => e.id));
     return outSegs.find((s) => exitIds.has(s.to_node_id)) || outSegs[0];
   }
 
-  const nodeToStation = new Map(config.stations.map((s) => [s.node_id, s]));
   for (const seg of outSegs) {
     const destStation = nodeToStation.get(seg.to_node_id);
     if (destStation && destStation.processes.some((sp) => sp.process_id === unit.next_process)) {

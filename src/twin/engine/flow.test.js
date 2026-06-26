@@ -1,14 +1,14 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { resetIds } from '../util/ids.js';
 import { makeFlowState, launchOnSegment, nextArrivalTime, applyArrivals } from './flow.js';
-import { makeLinearLineFixture } from '../fixtures/linearLine.js';
+import { makeCarrierLineFixture } from '../fixtures/carrierLine.js';
 import { makeUnit } from '../domain/unit.js';
 
 beforeEach(() => resetIds(0));
 
 describe('flow', () => {
   test('travel time = length_m / (speed/60)', () => {
-    const cfg = makeLinearLineFixture();
+    const cfg = makeCarrierLineFixture();
     const flow = makeFlowState(cfg);
     const seg = cfg.segments.find((s) => s.id === 's_in_a'); // 10m @ 60m/min = 10s
     const unit = makeUnit({ material: 'BLANK', order_id: 'O', unit_number: 1, next_process: 'heat' });
@@ -18,7 +18,7 @@ describe('flow', () => {
   });
 
   test('applyArrivals routes to station buffer', () => {
-    const cfg = makeLinearLineFixture();
+    const cfg = makeCarrierLineFixture();
     const flow = makeFlowState(cfg);
     const seg = cfg.segments.find((s) => s.id === 's_in_a');
     const unit = makeUnit({ material: 'BLANK', order_id: 'O', unit_number: 1, next_process: 'heat' });
@@ -30,9 +30,9 @@ describe('flow', () => {
   });
 
   test('applyArrivals routes to exit node', () => {
-    const cfg = makeLinearLineFixture();
+    const cfg = makeCarrierLineFixture();
     const flow = makeFlowState(cfg);
-    const seg = cfg.segments.find((s) => s.id === 's_c_ship'); // to_node_id = 'ship'
+    const seg = cfg.segments.find((s) => s.id === 's_b_ship'); // to_node_id = 'ship'
     const unit = makeUnit({ material: 'BLANK', order_id: 'O', unit_number: 1 });
     launchOnSegment(flow, seg, unit, 0);
     const arrivals = applyArrivals(flow, cfg, 10);
@@ -42,7 +42,7 @@ describe('flow', () => {
   });
 
   test('FIFO order preserved across concurrent arrivals', () => {
-    const cfg = makeLinearLineFixture();
+    const cfg = makeCarrierLineFixture();
     const flow = makeFlowState(cfg);
     const seg = cfg.segments.find((s) => s.id === 's_in_a');
     const u1 = makeUnit({ material: 'BLANK', order_id: 'O', unit_number: 1, next_process: 'heat' });
